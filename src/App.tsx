@@ -5,29 +5,12 @@ import {
   CheckCircle2, Inbox, Search, Network, Cpu, BookOpen, Coins, Map, 
   Shield, CheckSquare, Award, BatteryCharging, Wrench, Play, ArrowLeft, 
   ChevronDown, Swords, Zap, Star, Trophy, Target, Sparkles, Plus,
-  ClipboardList, Handshake, TreePine, DollarSign
+  ClipboardList, Handshake, TreePine, DollarSign, Loader2
 } from 'lucide-react';
-import { CONTACT_EMAIL, mailtoHref } from './lib/email';
+import { CONTACT_EMAIL } from './lib/email';
+import { ContactProvider, ContactButton, useContact } from './components/ContactProvider';
 
 type Page = 'home' | 'map';
-
-function EmailButton({
-  subject,
-  body,
-  className,
-  children,
-}: {
-  subject: string;
-  body?: string;
-  className: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <a href={mailtoHref({ subject, body })} className={className}>
-      {children}
-    </a>
-  );
-}
 
 const homeSectors = [
   { title: 'Innovation Lab', icon: Hammer, description: 'A hands-on prototyping space for fabrication, regenerative builds, and engineering physical solutions to real-world community challenges.' },
@@ -162,7 +145,7 @@ const XPChip = ({ points }) => (
 
 function Home({ navigate }: { navigate: (page: Page) => void }) {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [showToast, setShowToast] = useState(false);
+  const { submitMessage, isSubmitting, contactPrefill, clearContactPrefill } = useContact();
 
   const [editableData, setEditableData] = useState({
     songs: [], posts: [], shows: [], merch: [], courses: [], expenses: [], income: []
@@ -179,31 +162,31 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
     return () => { document.documentElement.style.scrollBehavior = 'auto'; };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!contactPrefill) return;
+    setForm((prev) => ({
+      ...prev,
+      message: contactPrefill.message,
+    }));
+    clearContactPrefill();
+  }, [contactPrefill, clearContactPrefill]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = `Green Fire — message from ${form.name || 'website visitor'}`;
-    const body = `Name: ${form.name}\nReply-to: ${form.email}\n\n${form.message}`;
-    window.location.href = mailtoHref({ subject, body });
-    setShowToast(true);
-    setForm({ name: '', email: '', message: '' });
-    setTimeout(() => setShowToast(false), 4000);
+    const ok = await submitMessage({
+      name: form.name,
+      email: form.email,
+      subject: `Green Fire — message from ${form.name || 'website visitor'}`,
+      message: form.message,
+    });
+    if (ok) {
+      setForm({ name: '', email: '', message: '' });
+    }
   };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-stone-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-100 pb-10">
       
-      <AnimatePresence>
-        {showToast && (
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-950/90 px-5 py-4 text-emerald-100 shadow-2xl backdrop-blur-md">
-            <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-            <div>
-              <p className="text-sm font-semibold">Message Received</p>
-              <p className="text-xs text-emerald-300/80">Thank you for reaching out.</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-emerald-900/40">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.15),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(251,146,60,0.12),transparent_40%)]" />
@@ -238,13 +221,13 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
                 Green Fire turns real community problems into working prototypes and high-impact media. We are a rapid-response laboratory designed to design, build, document, and scale regenerative solutions.
               </p>
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <EmailButton
+                <ContactButton
                   subject="Green Fire — Become a Founding Member"
                   body="Hi Green Fire team,\n\nI'm interested in becoming a founding member.\n\n"
                   className="inline-flex items-center justify-center rounded-2xl bg-emerald-400 px-8 py-4 text-base font-semibold text-neutral-950 transition-all hover:bg-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.2)]"
                 >
                   Become a Founding Member <ArrowRight className="ml-2 h-5 w-5" />
-                </EmailButton>
+                </ContactButton>
                 <button onClick={() => navigate('map')} className="inline-flex items-center justify-center rounded-2xl border border-emerald-500/30 bg-neutral-900/50 px-8 py-4 text-base font-semibold text-emerald-100 transition-all hover:bg-neutral-800 backdrop-blur-sm">
                   Explore System Map
                 </button>
@@ -389,13 +372,13 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
           <p className="text-lg text-stone-400 mb-10 max-w-2xl mx-auto leading-relaxed">
             Whether you have a community problem to solve, an invention to incubate, or the skills to help us build, there is a place for you in the circle.
           </p>
-          <EmailButton
+          <ContactButton
             subject="Green Fire — Join Us"
             body="Hi Green Fire team,\n\nI'd like to join and contribute.\n\n"
             className="inline-flex items-center justify-center rounded-2xl bg-emerald-400 px-10 py-5 text-lg font-bold text-neutral-950 transition-all hover:bg-emerald-300 hover:scale-105 shadow-[0_0_30px_rgba(52,211,153,0.2)]"
           >
             Join Us <ArrowRight className="ml-2 h-6 w-6" />
-          </EmailButton>
+          </ContactButton>
         </div>
       </section>
 
@@ -416,6 +399,7 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
           <form onSubmit={handleSubmit} className="space-y-4 rounded-[2rem] border border-white/10 bg-neutral-950/80 p-8 shadow-2xl backdrop-blur-sm">
             <div className="grid sm:grid-cols-2 gap-4">
               <input
+                id="contact-name"
                 type="text"
                 required
                 placeholder="Your name"
@@ -424,6 +408,7 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
                 className="h-12 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-stone-500 focus:border-emerald-500/50 focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
               />
               <input
+                id="contact-email"
                 type="email"
                 required
                 placeholder="Your email"
@@ -433,6 +418,7 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
               />
             </div>
             <textarea
+              id="contact-message"
               required
               rows={5}
               placeholder="Your message"
@@ -442,12 +428,21 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
             />
             <button
               type="submit"
-              className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-8 py-4 text-base font-bold text-neutral-950 transition-all hover:bg-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.2)]"
+              disabled={isSubmitting}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-8 py-4 text-base font-bold text-neutral-950 transition-all hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-60 shadow-[0_0_20px_rgba(52,211,153,0.2)]"
             >
-              Send Message <Mail className="h-5 w-5" />
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" /> Sending…
+                </>
+              ) : (
+                <>
+                  Send Message <Mail className="h-5 w-5" />
+                </>
+              )}
             </button>
             <p className="text-center text-xs text-stone-500">
-              Opens your email app to send to{' '}
+              Messages are delivered to{' '}
               <a href={`mailto:${CONTACT_EMAIL}`} className="text-emerald-400 hover:text-emerald-300 transition-colors">
                 {CONTACT_EMAIL}
               </a>
@@ -584,20 +579,20 @@ function InnovationMap({ navigate }: { navigate: (page: Page) => void }) {
             <span className="px-3 py-1 bg-neutral-950 rounded-xl flex items-center gap-2 border border-white/5"><ArrowRight className="h-3 w-3 text-cyan-400" /> Story → Education</span>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
-            <EmailButton
+            <ContactButton
               subject="Green Fire — Submit a Community Need"
               body="Hi Green Fire team,\n\nI'd like to submit a community need.\n\nProblem or opportunity:\n\nWhat help is needed:\n\n"
               className="rounded-xl bg-emerald-400 px-8 py-4 text-sm font-bold text-neutral-950 hover:bg-emerald-300 transition-colors shadow-[0_0_20px_rgba(52,211,153,0.2)]"
             >
               Submit a Need
-            </EmailButton>
-            <EmailButton
+            </ContactButton>
+            <ContactButton
               subject="Green Fire — Join Founding Circle"
               body="Hi Green Fire team,\n\nI'd like to join the founding circle.\n\n"
               className="rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white hover:bg-white/10 transition-colors"
             >
               Join Founding Circle
-            </EmailButton>
+            </ContactButton>
             <button onClick={() => document.getElementById('system-map').scrollIntoView({behavior: 'smooth'})} className="rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white hover:bg-white/10 transition-colors">Explore Map</button>
           </div>
         </div>
@@ -679,13 +674,13 @@ function InnovationMap({ navigate }: { navigate: (page: Page) => void }) {
                      <div className="h-10 px-4 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center text-blue-400 text-sm font-medium"><Plus className="h-4 w-4 mr-1"/> Upload Docs/Photos</div>
                   </div>
                 </div>
-                <EmailButton
+                <ContactButton
                   subject="Green Fire — Submit a Community Need"
                   body="Hi Green Fire team,\n\nI'd like to submit a community need.\n\n"
                   className="w-full h-12 rounded-xl bg-blue-500/20 text-blue-400 font-bold mt-2 border border-blue-500/30 flex items-center justify-center"
                 >
                   Submit Need
-                </EmailButton>
+                </ContactButton>
               </div>
               <div className="mt-8 pt-6 border-t border-white/5">
                 <p className="text-xs font-bold uppercase text-stone-500 mb-3">Intake Outputs</p>
@@ -1028,13 +1023,13 @@ function InnovationMap({ navigate }: { navigate: (page: Page) => void }) {
                               <div><span className="block text-[10px] uppercase text-stone-500 font-bold tracking-wider mb-1">Proof Req.</span><span className="text-sm text-stone-300 leading-relaxed">{quest.proof}</span></div>
                             </div>
                           </div>
-                          <EmailButton
+                          <ContactButton
                             subject={`Green Fire — Join Quest: ${quest.title}`}
                             body={`Hi Green Fire team,\n\nI'd like to join the quest: ${quest.title}\n\n`}
                             className="w-full py-4 rounded-xl bg-neutral-800 text-white text-sm font-bold hover:bg-emerald-400 hover:text-neutral-950 transition-all border border-white/5 flex items-center justify-center gap-2 group shadow-lg"
                           >
                             Join Quest <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1"/>
-                          </EmailButton>
+                          </ContactButton>
                         </div>
                       ))}
                     </div>
@@ -1121,13 +1116,13 @@ function InnovationMap({ navigate }: { navigate: (page: Page) => void }) {
                     <p className="text-stone-400 italic leading-relaxed text-lg mb-10">
                       "Green Fire gamification is not fake points for empty activity. It is a visible trust, contribution, and collaboration system that helps people see where they fit, how they can help, and how their work can become recognized, funded, taught, and repeated."
                     </p>
-                    <EmailButton
+                    <ContactButton
                       subject="Green Fire — Join a Quest"
                       body="Hi Green Fire team,\n\nI'd like to join a quest.\n\n"
                       className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-10 py-5 text-lg font-bold text-neutral-950 shadow-[0_0_20px_rgba(52,211,153,0.2)] hover:bg-emerald-300 transition-all hover:scale-105"
                     >
                       <Swords className="h-6 w-6" /> Join a Quest
-                    </EmailButton>
+                    </ContactButton>
                   </div>
 
                 </div>
@@ -1412,34 +1407,34 @@ function InnovationMap({ navigate }: { navigate: (page: Page) => void }) {
             We don't need to wait for the full campus. The first Green Fire pilot starts now with a council circle, a small team, a camera, and one real community problem to solve.
           </p>
           <div className="flex flex-wrap justify-center gap-4 mb-16">
-             <EmailButton
+             <ContactButton
                subject="Green Fire — Donate to Pilot"
                body="Hi Green Fire team,\n\nI'd like to donate to the pilot.\n\n"
                className="rounded-2xl bg-orange-400 px-8 py-4 text-sm font-bold text-neutral-950 hover:bg-orange-300 transition-colors shadow-[0_0_20px_rgba(251,146,60,0.2)]"
              >
                Donate to Pilot
-             </EmailButton>
-             <EmailButton
+             </ContactButton>
+             <ContactButton
                subject="Green Fire — Become a Founder"
                body="Hi Green Fire team,\n\nI'd like to become a founder.\n\n"
                className="rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white hover:bg-white/10 transition-colors"
              >
                Become a Founder
-             </EmailButton>
-             <EmailButton
+             </ContactButton>
+             <ContactButton
                subject="Green Fire — Offer a Workshop"
                body="Hi Green Fire team,\n\nI'd like to offer a workshop.\n\n"
                className="rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white hover:bg-white/10 transition-colors"
              >
                Offer a Workshop
-             </EmailButton>
-             <EmailButton
+             </ContactButton>
+             <ContactButton
                subject="Green Fire — Submit a Community Need"
                body="Hi Green Fire team,\n\nI'd like to submit a community need.\n\n"
                className="rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white hover:bg-white/10 transition-colors"
              >
                Submit a Need
-             </EmailButton>
+             </ContactButton>
           </div>
           <p className="text-stone-500 text-sm uppercase tracking-widest font-bold">
             Green Fire begins when people gather.<br/>It grows when they build together.
@@ -1452,5 +1447,14 @@ function InnovationMap({ navigate }: { navigate: (page: Page) => void }) {
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  return currentPage === 'home' ? <Home navigate={setCurrentPage} /> : <InnovationMap navigate={setCurrentPage} />;
+
+  return (
+    <ContactProvider onNavigateHome={() => setCurrentPage('home')}>
+      {currentPage === 'home' ? (
+        <Home navigate={setCurrentPage} />
+      ) : (
+        <InnovationMap navigate={setCurrentPage} />
+      )}
+    </ContactProvider>
+  );
 }

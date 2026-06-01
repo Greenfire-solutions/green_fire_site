@@ -18,4 +18,8 @@ npm run dev
 5. Output directory: `dist`
 6. Deploy
 
-Contact and CTA buttons open an email to `civilizationexplorer@gmail.com`.
+## Contact form email (required)
+
+Submissions are sent to `civilizationexplorer@gmail.com` via Web3Forms.
+
+**You must add `WEB3FORMS_ACCESS_KEY` in Vercel** — see [EMAIL_SETUP.md](./EMAIL_SETUP.md) for step-by-step instructions.
