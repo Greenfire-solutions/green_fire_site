@@ -212,6 +212,14 @@ export function ContactProvider({ children, onNavigateHome }: ContactProviderPro
 
               <form onSubmit={submitModal} className="space-y-4">
                 <input
+                  type="checkbox"
+                  name="botcheck"
+                  className="hidden"
+                  style={{ display: 'none' }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+                <input
                   type="text"
                   required
                   placeholder="Your name"

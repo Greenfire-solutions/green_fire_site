@@ -397,6 +397,14 @@ function Home({ navigate }: { navigate: (page: Page) => void }) {
             </p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4 rounded-[2rem] border border-white/10 bg-neutral-950/80 p-8 shadow-2xl backdrop-blur-sm">
+            <input
+              type="checkbox"
+              name="botcheck"
+              className="hidden"
+              style={{ display: 'none' }}
+              tabIndex={-1}
+              autoComplete="off"
+            />
             <div className="grid sm:grid-cols-2 gap-4">
               <input
                 id="contact-name"

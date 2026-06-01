@@ -22,4 +22,4 @@ npm run dev
 
 Submissions are sent to `civilizationexplorer@gmail.com` via Web3Forms.
 
-**You must add `WEB3FORMS_ACCESS_KEY` in Vercel** — see [EMAIL_SETUP.md](./EMAIL_SETUP.md) for step-by-step instructions.
+**You must add `VITE_WEB3FORMS_ACCESS_KEY` in Vercel and redeploy** — see [EMAIL_SETUP.md](./EMAIL_SETUP.md).
