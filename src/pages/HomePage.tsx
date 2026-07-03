@@ -13,7 +13,6 @@ type Props = { onNavigate: (page: Page) => void };
 
 export function HomePage({ onNavigate }: Props) {
   const content = useSiteContent();
-  const { goToContact } = useContact();
   const { settings, pages } = content;
   const services = getVisibleOfferings(content, 'what_we_offer');
   const heroCtas = getVisibleOfferings(content, 'hero_cta');

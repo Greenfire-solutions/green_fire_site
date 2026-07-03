@@ -4,6 +4,7 @@ import {
   Users, Hammer, Heart, Music, Video, ArrowRight, Inbox, Search, Network, Cpu,
   BookOpen, Coins, Map, CheckSquare, Sprout, Play, ChevronDown, Swords, Zap, Star,
   Trophy, Target, Sparkles, Plus, CheckCircle2, Flame, Shield, Award, BatteryCharging,
+  ClipboardList, Handshake, DollarSign, TreePine,
 } from 'lucide-react';
 import { ContactButton } from '../components/ContactProvider';
 import { SectionLabel, SectionTitle, XPChip } from '../components/ui';
@@ -14,7 +15,7 @@ import {
 
 export function ProgramDeepDive() {
   const [activeNode, setActiveNode] = useState(systemNodes[0]);
-  const [expandedMaterial, setExpandedMaterial] = useState(null);
+  const [expandedMaterial, setExpandedMaterial] = useState<number | null>(null);
   const [showGameMechanics, setShowGameMechanics] = useState(false); 
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
