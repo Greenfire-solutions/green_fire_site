@@ -42,10 +42,10 @@ export function useContact() {
 
 type ContactProviderProps = {
   children: ReactNode;
-  onNavigateHome?: () => void;
+  onNavigateContact?: () => void;
 };
 
-export function ContactProvider({ children, onNavigateHome }: ContactProviderProps) {
+export function ContactProvider({ children, onNavigateContact }: ContactProviderProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -111,12 +111,12 @@ export function ContactProvider({ children, onNavigateHome }: ContactProviderPro
         defaultMessage ||
         `Hi Green Fire team,\n\nI'm reaching out about: ${subject}\n\n`;
       setContactPrefill({ subject, message });
-      onNavigateHome?.();
+      onNavigateContact?.();
       window.setTimeout(() => {
         document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
       }, 200);
     },
-    [onNavigateHome],
+    [onNavigateContact],
   );
 
   const submitModal = async (e: FormEvent) => {

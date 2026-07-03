@@ -18,6 +18,12 @@ npm run dev
 5. Output directory: `dist`
 6. Deploy
 
+## Admin CMS
+
+Edit packages, pricing, media, and site copy at **`/admin`**.
+
+See [ADMIN_SETUP.md](./ADMIN_SETUP.md) for password, GitHub, and Vercel deploy hook configuration.
+
 ## Contact form email (required)
 
 Submissions are sent to `civilizationexplorer@gmail.com` via Web3Forms.
