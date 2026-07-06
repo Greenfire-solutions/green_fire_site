@@ -2,93 +2,98 @@
 
 Private content editor at **`/admin`** on your live site.
 
-## Required environment variables
+## Publish live (required one-time setup)
 
-### Admin login (server-side only — never commit)
+**Recommended — Vercel Blob (instant updates, no GitHub token):**
+
+1. [vercel.com](https://vercel.com) → your **Green Fire** project
+2. **Storage** tab → **Create Database** → **Blob** → **Continue**
+3. Name it (e.g. `green-fire-content`) → **Create**
+4. **Connect to Project** → select your site → **Connect**
+5. Vercel adds `BLOB_READ_WRITE_TOKEN` automatically
+6. **Deployments** → **Redeploy** the latest deployment
+7. Go to `/admin` → **Publish Live** — changes appear immediately on the public site
+
+No GitHub token needed for this path.
+
+---
+
+## Optional: GitHub backup
+
+Commits `src/data/siteContent.json` to your repo when you publish.
 
 | Variable | Where | Description |
 |----------|--------|-------------|
-| `ADMIN_PASSWORD` | Vercel + `.env.local` | Your private admin password |
+| `GITHUB_TOKEN` | Vercel only | Fine-grained PAT with **Contents: Read and write** |
+| `GITHUB_REPO_OWNER` | Optional | Auto-detected from Vercel (`VERCEL_GIT_REPO_OWNER`) |
+| `GITHUB_REPO_NAME` | Optional | Auto-detected from Vercel (`VERCEL_GIT_REPO_SLUG`) |
+| `VERCEL_DEPLOY_HOOK_URL` | Optional | Faster redeploy after GitHub commit |
 
-Optional: `ADMIN_SESSION_SECRET` — separate secret for session tokens (defaults to `ADMIN_PASSWORD`).
+Your repo: **Greenfire-solutions/green_fire_site**
 
-### Contact form (client build-time)
-
-| Variable | Where | Description |
-|----------|--------|-------------|
-| `VITE_WEB3FORMS_ACCESS_KEY` | Vercel + `.env.local` | Web3Forms key for contact submissions |
-
-### Publish to live site (server-side only)
-
-| Variable | Where | Description |
-|----------|--------|-------------|
-| `GITHUB_TOKEN` | Vercel only | Fine-grained PAT with **Contents: Read and write** on your repo |
-| `GITHUB_REPO_OWNER` | Vercel only | GitHub username or org |
-| `GITHUB_REPO_NAME` | Vercel only | Repository name (e.g. `Green_Fire`) |
-| `GITHUB_BRANCH` | Vercel only | Branch to commit to (default: `main`) |
-| `VERCEL_DEPLOY_HOOK_URL` | Vercel only | Deploy hook URL from Vercel project settings |
-
-## Local development
-
-Create `.env.local` in the project root (never commit):
-
-```env
-ADMIN_PASSWORD=your_private_password_here
-VITE_WEB3FORMS_ACCESS_KEY=your_web3forms_key
-```
-
-For **Publish Live** locally, also add GitHub + deploy hook vars, or use **Save Draft** (stores in browser localStorage only).
-
-Run the dev server:
-
-```bash
-npm install
-npm run dev
-```
-
-Visit `http://localhost:5173/admin`
-
-> API routes (`/api/admin/*`) work on Vercel production. For full local API testing, run `npx vercel dev`.
-
-## GitHub token setup
+### GitHub token
 
 1. GitHub → **Settings** → **Developer settings** → **Fine-grained tokens**
-2. Create token with access to your Green Fire repository
+2. Repository access: **green_fire_site**
 3. Permission: **Contents** → Read and write
-4. Add as `GITHUB_TOKEN` in Vercel
+4. Add as `GITHUB_TOKEN` in Vercel → **Redeploy**
 
-## Vercel Deploy Hook
+---
 
-1. Vercel project → **Settings** → **Git** → **Deploy Hooks**
-2. Create hook for branch `main`
-3. Copy URL → add as `VERCEL_DEPLOY_HOOK_URL` in Vercel env vars
+## Admin login
+
+| Variable | Where |
+|----------|--------|
+| `ADMIN_PASSWORD` | Vercel + `.env.local` |
+
+Optional: `ADMIN_SESSION_SECRET`
+
+---
+
+## Contact form
+
+| Variable | Where |
+|----------|--------|
+| `VITE_WEB3FORMS_ACCESS_KEY` | Vercel + `.env.local` |
+
+See [EMAIL_SETUP.md](./EMAIL_SETUP.md).
+
+---
 
 ## How publishing works
 
-1. You edit content in `/admin`
-2. **Save Draft** → validates + saves to browser localStorage
-3. **Publish Live** → commits `src/data/siteContent.json` to GitHub via API → triggers Vercel redeploy
-4. Live site updates after deploy completes (~1–2 min)
+1. Edit content in `/admin`
+2. **Save Draft** → saves to browser (local backup)
+3. **Publish Live** → writes to **Vercel Blob** (live site reads this immediately)
+4. If `GITHUB_TOKEN` is set → also commits to GitHub as backup
 
-## Content file
+The public site loads content from `/api/content/public` (Blob → GitHub → bundled file).
 
-All editable content lives in:
+---
 
-`src/data/siteContent.json`
+## Local development
 
-The public site reads this file at build time. After publish + redeploy, changes appear on the live site.
+```env
+# .env.local (never commit)
+ADMIN_PASSWORD=your_password
+VITE_WEB3FORMS_ACCESS_KEY=your_key
+```
 
-## Security notes
+For full API + publish testing locally:
 
-- `ADMIN_PASSWORD` is verified **only on the server** — never put it in a `VITE_` variable
-- Do not commit `.env.local` or your password to GitHub
-- Admin session token is stored in browser localStorage (7-day expiry)
-- Rotate `ADMIN_PASSWORD` if you suspect it was exposed
+```bash
+npx vercel dev
+```
 
-## Testing checklist
+Plain `npm run dev` serves the UI but API routes need `vercel dev` or production deploy.
 
-1. Open `/admin` → login with your password
-2. Edit a package title → **Save Draft** → refresh → draft persists
-3. **Publish Live** (with GitHub + deploy hook configured)
-4. Wait for Vercel deploy → verify change on public site
-5. Confirm `/admin` logout works
+---
+
+## Troubleshooting
+
+| Error | Fix |
+|-------|-----|
+| Publishing requires GITHUB_TOKEN… | Connect **Vercel Blob** (see above) and redeploy |
+| Published but site unchanged | Hard-refresh the public site; Blob updates are instant |
+| Login fails | Set `ADMIN_PASSWORD` in Vercel and redeploy |
+| API 404 locally | Use `npx vercel dev` instead of `npm run dev` |

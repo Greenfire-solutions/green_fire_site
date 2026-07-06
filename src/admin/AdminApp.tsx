@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import type { SiteContent, OfferingItem, AdminSection } from '../types/content';
 import {
   adminLogin, getAdminToken, clearAdminToken, publishSiteContent,
-  saveDraftLocally, loadDraftLocally, clearDraftLocally,
+  saveDraftLocally, loadDraftLocally, clearDraftLocally, fetchPublishStatus,
 } from '../lib/adminApi';
 import { validateContent, newOfferingId, duplicateOffering, getVisibleOfferings } from '../lib/contentHelpers';
 import { PublicPackageCard, OfferingMedia } from '../components/ContentButton';
@@ -189,10 +189,23 @@ function AdminDashboard() {
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [publishReady, setPublishReady] = useState<boolean | null>(null);
+  const [setupSteps, setSetupSteps] = useState<string[]>([]);
 
   useEffect(() => {
     const draft = loadDraftLocally() as SiteContent | null;
     if (draft) setContent(draft);
+  }, []);
+
+  useEffect(() => {
+    fetchPublishStatus()
+      .then((status) => {
+        setPublishReady(status.canPublish);
+        setSetupSteps(status.setupSteps || []);
+      })
+      .catch(() => {
+        setPublishReady(null);
+      });
   }, []);
 
   const showMsg = (type: 'ok' | 'err', text: string) => {
@@ -268,9 +281,18 @@ function AdminDashboard() {
       saveDraftLocally(content);
       const result = await publishSiteContent(content);
       clearDraftLocally();
+      setPublishReady(true);
+      setSetupSteps([]);
       showMsg('ok', result.message || 'Published successfully.');
     } catch (err) {
-      showMsg('err', err instanceof Error ? err.message : 'Publish failed');
+      const text = err instanceof Error ? err.message : 'Publish failed';
+      showMsg('err', text);
+      fetchPublishStatus()
+        .then((status) => {
+          setPublishReady(status.canPublish);
+          setSetupSteps(status.setupSteps || []);
+        })
+        .catch(() => undefined);
     } finally {
       setBusy(false);
     }
@@ -313,6 +335,14 @@ function AdminDashboard() {
       </aside>
 
       <main className="flex-1 p-4 md:p-8 overflow-auto max-h-screen">
+        {publishReady === false && setupSteps.length > 0 && (
+          <div className="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-4 text-sm text-amber-100 space-y-2">
+            <p className="font-bold text-amber-200">One-time setup required to publish live</p>
+            {setupSteps.map((step) => (
+              <p key={step} className="text-amber-100/90 leading-relaxed">{step}</p>
+            ))}
+          </div>
+        )}
         {message && (
           <div className={`mb-4 rounded-xl px-4 py-3 text-sm ${message.type === 'ok' ? 'bg-emerald-500/15 text-emerald-200' : 'bg-rose-500/15 text-rose-200'}`}>
             {message.text}

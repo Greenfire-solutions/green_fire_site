@@ -23,7 +23,11 @@ async function adminFetch(path: string, init?: RequestInit) {
   const res = await fetch(path, { ...init, headers });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error(data.error || `Request failed (${res.status})`);
+    const parts = [data.error || `Request failed (${res.status})`];
+    if (Array.isArray(data.setupSteps) && data.setupSteps.length) {
+      parts.push(data.setupSteps.join(' '));
+    }
+    throw new Error(parts.join(' '));
   }
   return data;
 }
@@ -39,6 +43,10 @@ export async function adminLogin(password: string) {
 
 export async function fetchSiteContent() {
   return adminFetch('/api/admin/content');
+}
+
+export async function fetchPublishStatus() {
+  return adminFetch('/api/admin/status');
 }
 
 export async function publishSiteContent(content: unknown) {

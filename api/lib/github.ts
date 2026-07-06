@@ -7,18 +7,47 @@ type GitHubFileResponse = {
 
 function githubConfig() {
   const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.GITHUB_REPO_OWNER;
-  const repo = process.env.GITHUB_REPO_NAME;
-  const branch = process.env.GITHUB_BRANCH || 'main';
+  const owner =
+    process.env.GITHUB_REPO_OWNER ||
+    process.env.VERCEL_GIT_REPO_OWNER ||
+    '';
+  const repo =
+    process.env.GITHUB_REPO_NAME ||
+    process.env.VERCEL_GIT_REPO_SLUG ||
+    '';
+  const branch =
+    process.env.GITHUB_BRANCH ||
+    process.env.VERCEL_GIT_COMMIT_REF ||
+    'main';
+
   if (!token || !owner || !repo) {
     return null;
   }
   return { token, owner, repo, branch };
 }
 
+export function getGitHubConfigStatus() {
+  const cfg = githubConfig();
+  return {
+    configured: Boolean(cfg),
+    hasToken: Boolean(process.env.GITHUB_TOKEN),
+    owner: cfg?.owner || process.env.VERCEL_GIT_REPO_OWNER || null,
+    repo: cfg?.repo || process.env.VERCEL_GIT_REPO_SLUG || null,
+    branch: cfg?.branch || process.env.VERCEL_GIT_COMMIT_REF || 'main',
+    autoDetectedRepo: Boolean(
+      !process.env.GITHUB_REPO_OWNER &&
+        !process.env.GITHUB_REPO_NAME &&
+        process.env.VERCEL_GIT_REPO_OWNER &&
+        process.env.VERCEL_GIT_REPO_SLUG,
+    ),
+  };
+}
+
 async function githubFetch(path: string, init?: RequestInit) {
   const cfg = githubConfig();
-  if (!cfg) throw new Error('GitHub is not configured. Set GITHUB_TOKEN, GITHUB_REPO_OWNER, and GITHUB_REPO_NAME.');
+  if (!cfg) {
+    throw new Error('GitHub is not configured. Set GITHUB_TOKEN in Vercel (repo is auto-detected).');
+  }
   const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}?ref=${cfg.branch}`;
   const res = await fetch(url, {
     ...init,
@@ -51,7 +80,7 @@ export async function readContentFromGitHub(): Promise<{ content: string; sha?: 
 export async function writeContentToGitHub(contentJson: string, message: string) {
   const cfg = githubConfig();
   if (!cfg) {
-    throw new Error('GitHub is not configured. Set GITHUB_TOKEN, GITHUB_REPO_OWNER, and GITHUB_REPO_NAME in Vercel.');
+    throw new Error('GitHub is not configured. Set GITHUB_TOKEN in Vercel (repo is auto-detected).');
   }
 
   let sha: string | undefined;

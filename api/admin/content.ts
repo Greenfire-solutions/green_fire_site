@@ -1,30 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { handleOptions, requireAdmin } from '../lib/auth.js';
-import { readContentFromGitHub, isGitHubConfigured } from '../lib/github.js';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-
-function readBundledContent(): string {
-  try {
-    const path = join(process.cwd(), 'src/data/siteContent.json');
-    return readFileSync(path, 'utf8');
-  } catch {
-    return '{}';
-  }
-}
+import { readLiveContentJson } from '../lib/contentSource.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (handleOptions(req, res)) return;
 
   if (req.method === 'GET') {
     try {
-      if (isGitHubConfigured()) {
-        const remote = await readContentFromGitHub();
-        if (remote?.content) {
-          return res.status(200).json(JSON.parse(remote.content));
-        }
-      }
-      return res.status(200).json(JSON.parse(readBundledContent()));
+      const json = await readLiveContentJson();
+      return res.status(200).json(JSON.parse(json));
     } catch (err) {
       return res.status(500).json({ error: err instanceof Error ? err.message : 'Failed to load content.' });
     }
