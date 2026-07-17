@@ -1,14 +1,10 @@
-import type { Page } from '../types';
 import { SectionLabel, SectionTitle } from '../components/ui';
 import { PublicPackageCard } from '../components/ContentButton';
-import { ContentButton } from '../components/ContentButton';
 import { useSiteContent } from '../context/ContentContext';
 import { getVisibleOfferings } from '../lib/contentHelpers';
 import { useContact } from '../components/ContactProvider';
 
-type Props = { onNavigate: (page: Page) => void };
-
-export function PackagesPage({ onNavigate }: Props) {
+export function PackagesPage() {
   const content = useSiteContent();
   const { goToContact } = useContact();
   const packages = getVisibleOfferings(content, 'service_package');

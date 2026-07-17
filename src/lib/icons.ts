@@ -1,11 +1,12 @@
 import {
   Video, Scissors, Mic, Music, Palette, Image, Globe, Settings, Layout,
-  Compass, Radio, Film, Bot, GraduationCap, type LucideIcon,
+  Compass, Radio, Film, Bot, GraduationCap, Hammer, BookOpen, Calendar,
+  type LucideIcon,
 } from 'lucide-react';
 
 const ICON_MAP: Record<string, LucideIcon> = {
   Video, Scissors, Mic, Music, Palette, Image, Globe, Settings, Layout,
-  Compass, Radio, Film, Bot, GraduationCap,
+  Compass, Radio, Film, Bot, GraduationCap, Hammer, BookOpen, Calendar,
 };
 
 export function getServiceIcon(name?: string): LucideIcon {

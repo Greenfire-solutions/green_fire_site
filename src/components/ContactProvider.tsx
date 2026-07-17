@@ -6,6 +6,7 @@ import React, {
   type FormEvent,
   type ReactNode,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Mail, X, AlertCircle, Loader2 } from 'lucide-react';
 import { CONTACT_EMAIL } from '../lib/email';
@@ -42,10 +43,10 @@ export function useContact() {
 
 type ContactProviderProps = {
   children: ReactNode;
-  onNavigateContact?: () => void;
 };
 
-export function ContactProvider({ children, onNavigateContact }: ContactProviderProps) {
+export function ContactProvider({ children }: ContactProviderProps) {
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -111,12 +112,12 @@ export function ContactProvider({ children, onNavigateContact }: ContactProvider
         defaultMessage ||
         `Hi Green Fire team,\n\nI'm reaching out about: ${subject}\n\n`;
       setContactPrefill({ subject, message });
-      onNavigateContact?.();
+      navigate('/contact');
       window.setTimeout(() => {
-        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-      }, 200);
+        window.scrollTo(0, 0);
+      }, 100);
     },
-    [onNavigateContact],
+    [navigate],
   );
 
   const submitModal = async (e: FormEvent) => {

@@ -2,11 +2,8 @@ import { SectionLabel, SectionTitle } from '../components/ui';
 import { ContentButton } from '../components/ContentButton';
 import { useSiteContent } from '../context/ContentContext';
 import { getVisibleOfferings } from '../lib/contentHelpers';
-import type { Page } from '../types';
 
-type Props = { onNavigate: (page: Page) => void };
-
-export function WorkshopsPage({ onNavigate }: Props) {
+export function WorkshopsPage() {
   const content = useSiteContent();
   const topics = getVisibleOfferings(content, 'workshop_topic');
   const audiences = getVisibleOfferings(content, 'workshop_audience');
@@ -50,11 +47,9 @@ export function WorkshopsPage({ onNavigate }: Props) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <ContentButton
               offering={{ id: 'ws-book', title: 'Workshop', description: '', price: '', category: 'contact_cta', includes: [], bestFor: [], addOns: [], buttonLabel: 'Book a Workshop', buttonActionType: 'contact_form', buttonSubject: 'Green Fire — Book a Workshop', featured: false, order: 0, visible: true }}
-              onNavigate={onNavigate}
             />
             <ContentButton
               offering={{ id: 'lesson-book', title: 'Lesson', description: '', price: '', category: 'contact_cta', includes: [], bestFor: [], addOns: [], buttonLabel: 'Take a Private Lesson', buttonActionType: 'contact_form', buttonSubject: 'Green Fire — Private Lesson', featured: false, order: 1, visible: true }}
-              onNavigate={onNavigate}
               variant="secondary"
             />
           </div>

@@ -3,11 +3,8 @@ import { PublicPackageCard, ContentButton } from '../components/ContentButton';
 import { useSiteContent } from '../context/ContentContext';
 import { getVisibleOfferings } from '../lib/contentHelpers';
 import { useContact } from '../components/ContactProvider';
-import type { Page } from '../types';
 
-type Props = { onNavigate: (page: Page) => void };
-
-export function CinematicPage({ onNavigate }: Props) {
+export function CinematicPage() {
   const content = useSiteContent();
   const { goToContact } = useContact();
   const packages = getVisibleOfferings(content, 'cinematic');
@@ -73,7 +70,6 @@ export function CinematicPage({ onNavigate }: Props) {
               order: 0,
               visible: true,
             }}
-            onNavigate={onNavigate}
             variant="premium"
           />
         </div>

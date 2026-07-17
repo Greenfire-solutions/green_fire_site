@@ -2,5 +2,13 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/((?!api/)(?!assets/).*)", "destination": "/index.html" }
+  ],
+  "redirects": [
+    { "source": "/packages", "destination": "/offerings/packages", "permanent": true },
+    { "source": "/cinematic", "destination": "/offerings/cinematic", "permanent": true },
+    { "source": "/studio", "destination": "/offerings/studio", "permanent": true },
+    { "source": "/workshops", "destination": "/offerings/workshops", "permanent": true },
+    { "source": "/utah-bolt", "destination": "/offerings/utah-bolt", "permanent": true },
+    { "source": "/program", "destination": "/how-it-works", "permanent": true }
   ]
 }

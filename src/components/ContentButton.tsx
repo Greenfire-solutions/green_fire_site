@@ -1,5 +1,5 @@
+import { useNavigate } from 'react-router-dom';
 import type { OfferingItem } from '../types/content';
-import type { Page } from '../types';
 import { resolveButtonAction, youtubeToEmbedUrl, getOfferingPrice } from '../lib/contentHelpers';
 import { useSiteContent } from '../context/ContentContext';
 import { useContact } from './ContactProvider';
@@ -7,15 +7,15 @@ import { ArrowRight } from 'lucide-react';
 
 type Props = {
   offering: OfferingItem;
-  onNavigate?: (page: Page) => void;
   variant?: 'primary' | 'secondary' | 'premium';
   className?: string;
   showArrow?: boolean;
 };
 
-export function ContentButton({ offering, onNavigate, variant = 'primary', className = '', showArrow }: Props) {
+export function ContentButton({ offering, variant = 'primary', className = '', showArrow }: Props) {
   const content = useSiteContent();
   const { goToContact } = useContact();
+  const navigate = useNavigate();
   const action = resolveButtonAction(offering, {
     email: content.settings.defaultBookingEmail || content.settings.contactEmail,
     internalPage: content.settings.defaultInternalPage || 'contact',
@@ -39,16 +39,21 @@ export function ContentButton({ offering, onNavigate, variant = 'primary', class
       window.location.href = action.href;
       return;
     }
-    if (action.type === 'internal_page' || action.type === 'scroll_contact' || action.type === 'contact_form') {
-      const page = (action.page || 'contact') as Page;
+    if (action.type === 'internal_page' && action.path) {
+      navigate(action.path);
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (action.type === 'scroll_contact' || action.type === 'contact_form') {
       if (action.contactSubject || action.contactMessage) {
-        goToContact(action.contactSubject || `Green Fire — ${offering.title}`, action.contactMessage);
-      } else if (onNavigate) {
-        onNavigate(page);
+        goToContact(action.contactSubject || `Greenfire — ${offering.title}`, action.contactMessage);
+      } else if (action.path) {
+        navigate(action.path);
+        window.scrollTo(0, 0);
       }
       return;
     }
-    goToContact(`Green Fire — ${offering.title}`);
+    goToContact(`Greenfire — ${offering.title}`);
   };
 
   if (!label) return null;

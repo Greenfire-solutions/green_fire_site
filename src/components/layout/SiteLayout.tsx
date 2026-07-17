@@ -1,75 +1,76 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Flame, Mail, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { Page } from '../../types';
-import { NAV_ITEMS } from '../../types';
 import { useSiteContent } from '../../context/ContentContext';
+import { siteConfig } from '../../config/siteConfig';
+import { PRIMARY_NAV, FOOTER_NAV, ROUTES } from '../../lib/routes';
 
 type SiteLayoutProps = {
-  currentPage: Page;
-  onNavigate: (page: Page) => void;
   children: React.ReactNode;
 };
 
-export function SiteLayout({ currentPage, onNavigate, children }: SiteLayoutProps) {
+export function SiteLayout({ children }: SiteLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { settings } = useSiteContent();
-  const contactEmail = settings.contactEmail;
+  const location = useLocation();
+  const contactEmail = settings.contactEmail || siteConfig.contactEmail;
 
-  const go = (page: Page) => {
-    setMobileOpen(false);
-    onNavigate(page);
-    window.scrollTo(0, 0);
+  const isActive = (path: string) => {
+    if (path === ROUTES.home) return location.pathname === '/';
+    if (path === ROUTES.offerings) {
+      return location.pathname === '/offerings' || location.pathname.startsWith('/offerings/');
+    }
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-stone-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-100">
       <header className="sticky top-0 z-50 border-b border-white/5 bg-neutral-950/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <button
-            type="button"
-            onClick={() => go('home')}
-            className="flex items-center gap-3 group shrink-0"
-          >
+          <Link to={ROUTES.home} className="flex items-center gap-3 group shrink-0">
             <div className="rounded-full bg-emerald-500/10 p-2.5 ring-1 ring-emerald-400/30 transition-all group-hover:bg-emerald-500/20">
               <Flame className="h-6 w-6 text-emerald-400" />
             </div>
             <div className="text-left">
-              <span className="block text-lg font-bold tracking-wide text-white leading-tight">{settings.siteTitle.split(' ')[0]} {settings.siteTitle.split(' ').slice(1).join(' ') || 'Media Hub'}</span>
-              <span className="block text-[10px] font-bold uppercase tracking-widest text-emerald-400/80">{settings.siteTagline.split('•')[0]?.trim() || 'Media Hub'}</span>
+              <span className="block text-sm md:text-lg font-bold tracking-wide text-white leading-tight">
+                {siteConfig.organizationName}
+              </span>
+              <span className="block text-[10px] font-bold uppercase tracking-widest text-emerald-400/80 hidden sm:block">
+                {siteConfig.tagline}
+              </span>
             </div>
-          </button>
+          </Link>
 
-          <nav className="hidden items-center gap-1 xl:flex">
-            {NAV_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => go(item.id)}
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+            {PRIMARY_NAV.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
                 className={`rounded-full px-3 py-2 text-xs font-semibold transition-colors ${
-                  currentPage === item.id
+                  isActive(item.path)
                     ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/25'
                     : 'text-stone-400 hover:text-emerald-300 hover:bg-white/5'
                 }`}
               >
                 {item.label}
-              </button>
+              </Link>
             ))}
           </nav>
 
-          <button
-            type="button"
-            onClick={() => go('contact')}
+          <Link
+            to={ROUTES.getInvolved}
             className="hidden md:inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300 transition-colors shrink-0"
           >
-            Book Now
-          </button>
+            Share a Need
+          </Link>
 
           <button
             type="button"
             aria-label="Menu"
+            aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="xl:hidden rounded-lg p-2 text-stone-300 hover:bg-white/5"
+            className="lg:hidden rounded-lg p-2 text-stone-300 hover:bg-white/5"
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -81,31 +82,31 @@ export function SiteLayout({ currentPage, onNavigate, children }: SiteLayoutProp
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="xl:hidden border-t border-white/5 bg-neutral-950 px-4 py-4"
+              className="lg:hidden border-t border-white/5 bg-neutral-950 px-4 py-4"
             >
               <div className="grid grid-cols-2 gap-2">
-                {NAV_ITEMS.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => go(item.id)}
+                {PRIMARY_NAV.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setMobileOpen(false)}
                     className={`rounded-xl px-3 py-3 text-left text-sm font-medium ${
-                      currentPage === item.id
+                      isActive(item.path)
                         ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/25'
                         : 'text-stone-300 bg-white/5'
                     }`}
                   >
                     {item.label}
-                  </button>
+                  </Link>
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={() => go('contact')}
-                className="mt-3 w-full rounded-xl bg-emerald-400 py-3 text-sm font-bold text-neutral-950"
+              <Link
+                to={ROUTES.getInvolved}
+                onClick={() => setMobileOpen(false)}
+                className="mt-3 block w-full rounded-xl bg-emerald-400 py-3 text-center text-sm font-bold text-neutral-950"
               >
-                Book Now
-              </button>
+                Share a Need
+              </Link>
             </motion.div>
           )}
         </AnimatePresence>
@@ -113,19 +114,33 @@ export function SiteLayout({ currentPage, onNavigate, children }: SiteLayoutProp
 
       <main>{children}</main>
 
-      <footer className="border-t border-white/5 bg-neutral-950 px-6 py-12 text-center text-sm text-stone-500">
+      <footer className="border-t border-white/5 bg-neutral-950 px-6 py-12 text-sm text-stone-500">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-6 flex items-center justify-center gap-3">
-            <Flame className="h-6 w-6 text-emerald-500/50" />
-            <span className="text-lg font-semibold text-stone-300 tracking-wide">{settings.siteTitle}</span>
+          <div className="mb-8 flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <Flame className="h-6 w-6 text-emerald-500/50" />
+                <span className="text-lg font-semibold text-stone-300">{siteConfig.organizationName}</span>
+              </div>
+              <p className="text-xs uppercase tracking-widest text-emerald-500/50 mb-2">{settings.footerTagline}</p>
+              <p className="text-xs text-stone-600 max-w-sm">{siteConfig.poweredByStatement}</p>
+            </div>
+            <nav className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-2" aria-label="Footer">
+              {FOOTER_NAV.map((item) => (
+                <Link key={`${item.path}-${item.label}`} to={item.path} className="text-stone-400 hover:text-emerald-300 text-xs">
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
           </div>
-          <p className="uppercase tracking-widest text-xs font-bold text-emerald-500/50 mb-6">{settings.footerTagline}</p>
-          <p className="mb-4">
-            <a href={`mailto:${contactEmail}`} className="text-emerald-400/80 hover:text-emerald-300 transition-colors inline-flex items-center justify-center gap-2">
-              <Mail className="h-4 w-4" /> {contactEmail}
-            </a>
-          </p>
-          <p>© {new Date().getFullYear()} {settings.footerCopy}</p>
+          <div className="border-t border-white/5 pt-6 text-center">
+            <p className="mb-4">
+              <a href={`mailto:${contactEmail}`} className="text-emerald-400/80 hover:text-emerald-300 inline-flex items-center justify-center gap-2">
+                <Mail className="h-4 w-4" /> {contactEmail}
+              </a>
+            </p>
+            <p>© {new Date().getFullYear()} {settings.footerCopy}</p>
+          </div>
         </div>
       </footer>
     </div>

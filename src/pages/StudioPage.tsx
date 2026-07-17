@@ -3,11 +3,8 @@ import { SectionLabel, SectionTitle } from '../components/ui';
 import { ContentButton } from '../components/ContentButton';
 import { useSiteContent } from '../context/ContentContext';
 import { getVisibleOfferings } from '../lib/contentHelpers';
-import type { Page } from '../types';
 
-type Props = { onNavigate: (page: Page) => void };
-
-export function StudioPage({ onNavigate }: Props) {
+export function StudioPage() {
   const content = useSiteContent();
   const sessions = getVisibleOfferings(content, 'studio_session');
 
@@ -64,7 +61,6 @@ export function StudioPage({ onNavigate }: Props) {
                 order: 0,
                 visible: true,
               }}
-              onNavigate={onNavigate}
               className="w-full"
             />
           </div>

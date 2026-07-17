@@ -3,11 +3,8 @@ import { SectionLabel, SectionTitle } from '../components/ui';
 import { ContentButton } from '../components/ContentButton';
 import { useSiteContent } from '../context/ContentContext';
 import { getVisibleOfferings } from '../lib/contentHelpers';
-import type { Page } from '../types';
 
-type Props = { onNavigate: (page: Page) => void };
-
-export function UtahBoltPage({ onNavigate }: Props) {
+export function UtahBoltPage() {
   const content = useSiteContent();
   const idealFor = getVisibleOfferings(content, 'utah_bolt_ideal');
 
@@ -59,7 +56,6 @@ export function UtahBoltPage({ onNavigate }: Props) {
                 order: 0,
                 visible: true,
               }}
-              onNavigate={onNavigate}
               variant="premium"
               className="w-full"
             />

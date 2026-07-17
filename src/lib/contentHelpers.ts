@@ -1,4 +1,5 @@
 import type { ButtonActionType, OfferingItem, SiteContent } from '../types/content';
+import { resolvePath } from './routes';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const URL_RE = /^https?:\/\/.+/i;
@@ -84,7 +85,7 @@ export function resolveButtonAction(
 ): {
   type: ButtonActionType;
   href?: string;
-  page?: string;
+  path?: string;
   contactSubject?: string;
   contactMessage?: string;
 } {
@@ -106,15 +107,15 @@ export function resolveButtonAction(
         ),
       };
     case 'internal_page':
-      return { type, page: offering.internalPage || defaults.internalPage };
+      return { type, path: resolvePath(offering.internalPage || defaults.internalPage) };
     case 'scroll_contact':
-      return { type, page: 'contact' };
+      return { type, path: resolvePath('contact') };
     case 'contact_form':
     default:
       return {
         type: 'contact_form',
-        page: 'contact',
-        contactSubject: offering.buttonSubject || `Green Fire — ${offering.title || 'Inquiry'}`,
+        path: resolvePath('contact'),
+        contactSubject: offering.buttonSubject || `Greenfire — ${offering.title || 'Inquiry'}`,
         contactMessage: offering.buttonMessage || '',
       };
   }
