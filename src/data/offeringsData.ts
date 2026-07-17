@@ -1,31 +1,14 @@
 import { statusItem } from '../config/statusConfig';
+import { elderGuidance } from './elderGuidanceData';
 
+/** @deprecated Prefer elderGuidance — kept for existing How It Works imports */
 export const elderProtocol = {
-  headline: 'Indigenous Elders, Knowledge Keepers, and Local Elders',
-  intro:
-    'Greenfire may seek guidance from Indigenous Elders, named tribal representatives, cultural knowledge holders, local Elders, historians, land stewards, and long-term residents when those relationships are relevant and appropriately established.',
-  statement:
-    'Greenfire seeks guidance through relationships built on clear invitation, consent, compensation, cultural protocol, and continued accountability. Knowledge holders determine what may be recorded, shared, archived, commercialized, or kept private.',
-  status: statusItem('vision', 'Elder advisory relationships are aspirational until formally established.'),
-  principles: [
-    'Relationship before request',
-    'Clear invitation',
-    'Informed consent',
-    'Fair compensation',
-    'Cultural boundaries',
-    'Review before sensitive publication',
-    'The ability to withdraw or restrict material',
-    'Benefit sharing',
-    'Protection from unauthorized AI or data use',
-    'Continued relationship after the project',
-  ],
-  doNot: [
-    'Do not state that all Indigenous people share one worldview',
-    'Do not imply tribal endorsement without written confirmation',
-    'Do not use Indigenous culture as marketing aesthetic',
-    'Do not record ceremonies automatically',
-    'Do not enter private knowledge into AI systems without consent',
-  ],
+  headline: elderGuidance.headline,
+  intro: elderGuidance.subheadline,
+  statement: elderGuidance.statement,
+  status: elderGuidance.status,
+  principles: elderGuidance.principles,
+  doNot: elderGuidance.doNot,
 };
 
 export const conflictSection = {

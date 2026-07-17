@@ -32,11 +32,19 @@ Use this document before publishing website updates. It distinguishes verified f
 - Donation URL integration
 - Chapter certification standards
 
+## Indigenous Elders (prominent commitment; careful claims)
+
+- Site presents Indigenous Elders **at the forefront** as a core Greenfire commitment
+- Pathways described: bioregional Elders, Elders from other bioregions (travel in), traveling to Elders
+- Guidance may shape values, morals, stories, solutions, and media — **with consent and compensation**
+- Do **not** claim named Elders, tribal endorsement, or a formal advisory board until confirmed in writing
+- Status label: **Pilot Development** (relationships being built) — update when real partnerships exist
+
 ## Long-term vision (do not present as current)
 
 - Multi-community chapter network
 - Formal tribal partnerships (unless written confirmation exists)
-- Named Elder advisory board
+- Named Elder advisory board (until relationships are established in writing)
 - Published open-source license and repository
 - Functioning credit ledger / wallet
 - AI-assisted governance (decisions remain human)

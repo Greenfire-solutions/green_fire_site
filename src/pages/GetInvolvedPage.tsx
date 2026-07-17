@@ -17,6 +17,7 @@ export function GetInvolvedPage() {
     need: 'Greenfire — Community Need',
     skill: 'Greenfire — Offer a Skill',
     partner: 'Greenfire — Partnership Inquiry',
+    elder: 'Greenfire — Indigenous Elder Guidance & Partnership',
     support: 'Greenfire — Project Support',
     media: 'Greenfire — Community Media Space Inquiry',
     youth: 'Greenfire — Youth Program Interest (Guardian/Organization)',
@@ -46,12 +47,21 @@ export function GetInvolvedPage() {
 
       <section className="border-b border-white/5 py-16 px-6">
         <div className="mx-auto max-w-4xl grid sm:grid-cols-2 gap-4 mb-16">
-          {participationPathways.map((path) => (
-            <div key={path.id} id={path.id === 'need' ? 'bring-a-need' : path.id === 'skill' ? 'offer-a-skill' : path.id === 'partner' ? 'host-partner' : path.id === 'support' ? 'support' : undefined} className="rounded-2xl border border-white/10 bg-neutral-950 p-6 scroll-mt-24">
-              <h3 className="font-bold text-white mb-2">{path.title}</h3>
-              <p className="text-sm text-stone-400">{path.description}</p>
-            </div>
-          ))}
+            {participationPathways.map((path) => {
+            const anchor =
+              path.id === 'need' ? 'bring-a-need'
+              : path.id === 'skill' ? 'offer-a-skill'
+              : path.id === 'partner' ? 'host-partner'
+              : path.id === 'support' ? 'support'
+              : path.id === 'elder' ? 'elder-guidance'
+              : undefined;
+            return (
+              <div key={path.id} id={anchor} className="rounded-2xl border border-white/10 bg-neutral-950 p-6 scroll-mt-24">
+                <h3 className="font-bold text-white mb-2">{path.title}</h3>
+                <p className="text-sm text-stone-400">{path.description}</p>
+              </div>
+            );
+          })}
         </div>
 
         <div className="mx-auto max-w-xl">
@@ -84,6 +94,7 @@ export function GetInvolvedPage() {
                 <option value="need">Bring a Need</option>
                 <option value="skill">Offer a Skill</option>
                 <option value="partner">Host or Partner</option>
+                <option value="elder">Elder Guidance / Indigenous Partnership</option>
                 <option value="support">Support a Project</option>
                 <option value="media">Community Media Space</option>
                 <option value="youth">Youth Interest (Guardian/Organization)</option>

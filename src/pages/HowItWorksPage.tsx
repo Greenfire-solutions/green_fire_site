@@ -7,7 +7,8 @@ import { useSiteContent } from '../context/ContentContext';
 import { tenStageSystem } from '../data/completeSystemData';
 import { coreCapacities, eventsSection } from '../data/capacitiesData';
 import { youthSection, jobsSection, creditsSection, aiSection } from '../data/participationData';
-import { elderProtocol, conflictSection } from '../data/offeringsData';
+import { conflictSection } from '../data/offeringsData';
+import { elderGuidance } from '../data/elderGuidanceData';
 import { impactCategories } from '../data/impactMetricsData';
 import { siteConfig } from '../config/siteConfig';
 import { usePageMeta } from '../lib/usePageMeta';
@@ -177,13 +178,37 @@ export function HowItWorksPage() {
             <p className="text-sm mb-3">{aiSection.dataStatement}</p>
             <StatusNote item={aiSection.status} />
           </Expandable>
-          <Expandable title={elderProtocol.headline} status={elderProtocol.status}>
-            <p className="text-sm mb-4 italic">{elderProtocol.statement}</p>
-            <ol className="list-decimal list-inside text-sm space-y-1 mb-4">
-              {elderProtocol.principles.map((p) => <li key={p}>{p}</li>)}
-            </ol>
-            <StatusNote item={elderProtocol.status} />
-          </Expandable>
+          <div id="elder-guidance" className="scroll-mt-24">
+            <Expandable title={elderGuidance.headline} status={elderGuidance.status} defaultOpen>
+              <p className="text-sm mb-4 font-medium text-stone-300">{elderGuidance.subheadline}</p>
+              <p className="text-sm mb-4 italic text-emerald-300/90">{elderGuidance.statement}</p>
+              <p className="text-xs font-bold uppercase text-stone-500 mb-2">{elderGuidance.howWeBringElders.title}</p>
+              <p className="text-sm mb-4">{elderGuidance.howWeBringElders.intro}</p>
+              <ul className="space-y-3 mb-6">
+                {elderGuidance.howWeBringElders.pathways.map((path) => (
+                  <li key={path.title} className="rounded-xl border border-white/5 bg-neutral-900 p-4">
+                    <span className="font-bold text-white text-sm block mb-1">{path.title}</span>
+                    <span className="text-sm">{path.detail}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-xs font-bold uppercase text-stone-500 mb-2">{elderGuidance.whatGuidanceShapes.title}</p>
+              <p className="text-sm mb-3">{elderGuidance.whatGuidanceShapes.intro}</p>
+              <ul className="text-sm space-y-1 mb-6 list-disc list-inside">
+                {elderGuidance.whatGuidanceShapes.outcomes.map((o) => <li key={o}>{o}</li>)}
+              </ul>
+              <p className="text-xs font-bold uppercase text-stone-500 mb-2">{elderGuidance.supportCommitments.title}</p>
+              <p className="text-sm mb-3">{elderGuidance.supportCommitments.intro}</p>
+              <ul className="text-sm space-y-1 mb-6 list-disc list-inside">
+                {elderGuidance.supportCommitments.commitments.map((c) => <li key={c}>{c}</li>)}
+              </ul>
+              <p className="text-xs font-bold uppercase text-stone-500 mb-2">Protocol principles</p>
+              <ol className="list-decimal list-inside text-sm space-y-1 mb-4">
+                {elderGuidance.principles.map((p) => <li key={p}>{p}</li>)}
+              </ol>
+              <StatusNote item={elderGuidance.status} />
+            </Expandable>
+          </div>
           <Expandable title={conflictSection.headline} status={conflictSection.status}>
             <p className="text-sm mb-3">{conflictSection.intro}</p>
             <p className="text-xs text-stone-500">{conflictSection.note}</p>
@@ -220,12 +245,14 @@ function Expandable({
   title,
   status,
   children,
+  defaultOpen = false,
 }: {
   title: string;
   status: { statusLabel: string; status: string; description?: string };
   children: ReactNode;
+  defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="rounded-2xl border border-white/10 bg-neutral-950 overflow-hidden">
       <button

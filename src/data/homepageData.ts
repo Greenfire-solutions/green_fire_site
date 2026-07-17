@@ -4,7 +4,7 @@ export const homepageHero = {
   label: 'Greenfire Innovation Center',
   headline: 'Where Community Wisdom Becomes Local Solutions',
   subheadline:
-    'Greenfire brings community members, youth, Elders, artists, makers, land stewards, researchers, and local partners together to identify real needs, create practical responses, tell the story, gather support, and build what the community actually needs.',
+    'Greenfire brings community members, youth, Indigenous Elders, artists, makers, land stewards, researchers, and local partners together to identify real needs, create practical responses, tell the story, gather support, and build what the community actually needs — with Indigenous Elders at the forefront of values, morals, stories, and guidance.',
   primaryCta: { label: 'Share a Community Need', subject: 'Greenfire — Community Need' },
   secondaryCta: { label: 'See How Greenfire Works', path: '/how-it-works' as const },
   tertiaryCta: { label: 'Explore Our Offerings', path: '/offerings' as const },
@@ -23,6 +23,7 @@ export const whatIsSection = {
   paragraphs: [
     'Greenfire Innovation Center is a place where community needs can become media campaigns, youth projects, maker prototypes, public events, ecological action, paid opportunities, and locally owned value.',
     'Its operating model, Greenfire Creator Commons, connects community listening, bioregional understanding, creative production, practical building, cultural gathering, transparent exchange, and impact reporting into one repeating process.',
+    'A big part of that process is inviting Indigenous Elders — from the local bioregion or from other places — to guide values, morals, and stories that can shape solutions and media, always with consent, compensation, and cultural protocol, and always looking for ways to support Indigenous people.',
   ],
 };
 

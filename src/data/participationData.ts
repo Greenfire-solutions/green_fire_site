@@ -21,6 +21,17 @@ export const participationPathways = [
     cta: { label: 'Partner With Greenfire', subject: 'Greenfire — Partnership Inquiry', path: '/get-involved#host-partner' },
   },
   {
+    id: 'elder',
+    title: 'Elder Guidance & Indigenous Partnership',
+    description:
+      'Invite Indigenous Elder guidance, travel support, cultural protocol conversations, or ways to put Elders and Indigenous communities at the forefront of a project.',
+    cta: {
+      label: 'Connect About Elder Guidance',
+      subject: 'Greenfire — Indigenous Elder Guidance & Partnership',
+      path: '/get-involved#elder-guidance',
+    },
+  },
+  {
     id: 'support',
     title: 'Support a Project',
     description: 'Donate, sponsor, volunteer, attend an event, provide materials, or help fund a visible prototype.',

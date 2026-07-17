@@ -5,10 +5,11 @@ export const coreCapacities = [
     id: 'listening',
     title: 'Community Listening and Council',
     purpose:
-      'To receive community needs, clarify them, understand who is affected, map available assets, review feasibility, and determine an appropriate next step.',
+      'To receive community needs, clarify them, understand who is affected, map available assets, review feasibility, and determine an appropriate next step — with Indigenous Elders invited to the forefront of guidance when relationships are established.',
     mayInclude: [
       'Community intake',
       'Listening circles',
+      'Indigenous Elder guidance and council invitation',
       'Project proposals',
       'Public meetings',
       'Consent-based decision-making',
@@ -17,7 +18,7 @@ export const coreCapacities = [
     ],
     output: 'Clear community needs, selected projects, public updates, transparent decisions, defined responsibilities.',
     status: statusItem('pilot', 'Formal council and participatory budget are pilot governance concepts — not yet operating.'),
-    pullQuote: null,
+    pullQuote: 'Indigenous Elders guide values and morals; the community names the need.',
   },
   {
     id: 'bioregional',

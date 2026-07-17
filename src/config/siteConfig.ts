@@ -17,6 +17,6 @@ export const siteConfig = {
     getInvolvedTitle: 'Get Involved | Greenfire Innovation Center',
   },
   poweredByStatement:
-    'Greenfire Innovation Center is powered by the Greenfire Creator Commons, an open and locally adaptable model for turning community needs into creative projects, practical solutions, public events, local jobs, and measurable ecological and social impact.',
-  pullStatement: 'Greenfire does not begin with a predetermined answer. It begins by listening.',
+    'Greenfire Innovation Center is powered by the Greenfire Creator Commons, an open and locally adaptable model for turning community needs into creative projects, practical solutions, public events, local jobs, and measurable ecological and social impact — with Indigenous Elders invited to the forefront of values, morals, stories, and guidance.',
+  pullStatement: 'Greenfire does not begin with a predetermined answer. It begins by listening — including to Indigenous Elders.',
 } as const;

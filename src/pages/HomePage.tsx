@@ -17,6 +17,7 @@ import { condensedReplication } from '../data/greenfireLoopData';
 import { PageHero, SectionLabel, SectionTitle, BookButton } from '../components/ui';
 import { PublicGreenfireLoop } from '../components/home/PublicGreenfireLoop';
 import { CoreCapacitiesSection } from '../components/home/CoreCapacitiesSection';
+import { ElderGuidanceSection } from '../components/home/ElderGuidanceSection';
 import { StatusBadge, StatusNote } from '../components/StatusBadge';
 import { usePageMeta } from '../lib/usePageMeta';
 import { getServiceIcon } from '../lib/icons';
@@ -71,6 +72,8 @@ export function HomePage() {
       </section>
 
       <PublicGreenfireLoop />
+
+      <ElderGuidanceSection />
 
       <CoreCapacitiesSection />
 

@@ -17,14 +17,14 @@ export const publicLoop = {
       id: 'understand',
       title: 'Understand the Place',
       description:
-        'Greenfire considers who is affected and examines relevant local conditions such as water, heat, soil, food, energy, materials, infrastructure, history, culture, and existing community assets.',
+        'Greenfire considers who is affected and examines relevant local conditions such as water, heat, soil, food, energy, materials, infrastructure, history, culture, and existing community assets — including inviting Indigenous Elder guidance for the bioregion when relationships and consent allow.',
       status: statusItem('pilot'),
     },
     {
       id: 'design',
       title: 'Choose and Design Together',
       description:
-        'Community input, local knowledge, feasibility, urgency, available resources, and ecological relevance help shape a project that is safe and useful enough to test.',
+        'Community input, Indigenous Elder guidance on values and morals, local knowledge, feasibility, urgency, available resources, and ecological relevance help shape a project that is safe and useful enough to test.',
       status: statusItem('pilot'),
     },
     {
