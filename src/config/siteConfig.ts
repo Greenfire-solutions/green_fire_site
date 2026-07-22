@@ -1,22 +1,22 @@
 /** Official public naming and site-wide defaults */
 export const siteConfig = {
-  organizationName: 'Greenfire Innovation Center',
+  organizationName: 'Green Fire Research and Innovation Center',
   operatingModelName: 'Greenfire Creator Commons',
   eventsName: 'Greenfire Sessions',
-  shortName: 'Greenfire',
-  tagline: 'Where community wisdom becomes local solutions',
+  shortName: 'Green Fire',
+  tagline: 'Council, creativity, regeneration, and community solutions',
   location: 'Pilot development — location to be announced',
   contactEmail: 'civilizationexplorer@gmail.com',
   seo: {
-    homeTitle: 'Greenfire Innovation Center | Community Innovation, Media, Making, and Bioregional Action',
+    homeTitle: 'Green Fire Research and Innovation Center | Council, Creativity & Community Solutions',
     homeDescription:
-      'Greenfire Innovation Center helps communities listen, create, build, gather, measure, and share practical local solutions through media, maker innovation, youth pathways, events, and bioregional understanding.',
-    offeringsTitle: 'Offerings | Greenfire Innovation Center',
+      'Green Fire is a living center for council, creativity, regeneration, and community solutions — gathering people to solve real problems together.',
+    offeringsTitle: 'Offerings | Green Fire Research and Innovation Center',
     howItWorksTitle: 'How It Works | Greenfire Creator Commons',
     openSourceTitle: 'Open Source | Greenfire Creator Commons',
-    getInvolvedTitle: 'Get Involved | Greenfire Innovation Center',
+    getInvolvedTitle: 'Get Involved | Green Fire',
   },
   poweredByStatement:
-    'Greenfire Innovation Center is powered by the Greenfire Creator Commons, an open and locally adaptable model for turning community needs into creative projects, practical solutions, public events, local jobs, and measurable ecological and social impact — with Indigenous Elders invited to the forefront of values, morals, stories, and guidance.',
-  pullStatement: 'Greenfire does not begin with a predetermined answer. It begins by listening — including to Indigenous Elders.',
+    'Green Fire Research and Innovation Center is powered by the Greenfire Creator Commons, an open and locally adaptable model for turning community needs into creative projects, practical solutions, public events, local jobs, and measurable ecological and social impact — with Indigenous Elders invited to the forefront of values, morals, stories, and guidance.',
+  pullStatement: 'Green Fire does not begin with a predetermined answer. It begins by listening — including to Indigenous Elders.',
 } as const;
