@@ -1,8 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { SiteContent } from '../types/content';
 import bundledContent from '../data/siteContent.json';
+import { ensureMediaShowcases } from '../lib/contentHelpers';
 
-const ContentContext = createContext<SiteContent>(bundledContent as SiteContent);
+const ContentContext = createContext<SiteContent>(
+  ensureMediaShowcases(bundledContent as SiteContent),
+);
 
 export function ContentProvider({
   children,
@@ -20,7 +23,7 @@ export function ContentProvider({
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && typeof data === 'object') {
-          setLiveContent(data as SiteContent);
+          setLiveContent(ensureMediaShowcases(data as SiteContent));
         }
       })
       .catch(() => {
@@ -29,7 +32,7 @@ export function ContentProvider({
   }, [content]);
 
   const value = useMemo(
-    () => content || liveContent || (bundledContent as SiteContent),
+    () => ensureMediaShowcases(content || liveContent || (bundledContent as SiteContent)),
     [content, liveContent],
   );
 

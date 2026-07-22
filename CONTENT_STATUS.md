@@ -2,6 +2,20 @@
 
 Use this document before publishing website updates. It distinguishes verified facts from pilot, planned, and vision language.
 
+## CMS edit coverage (`/admin`)
+
+| Area | Editable in Admin? | Notes |
+|------|-------------------|--------|
+| Offerings hero / global site title / emails / footer | Yes | Global Settings |
+| **Media Showcase** (Social / Brand / Cinematic + YouTube) | Yes | Media Showcase section — paste YouTube URL, upload image |
+| Packages, Cinematic, Studio, Workshops, Utah Bolt | Yes | Each has its own admin section |
+| Contact form copy + CTAs | Yes | Contact / CTAs |
+| How It Works / Program intro copy | Yes | Program section |
+| Footer social links | Yes | Global Settings → Social links |
+| Image / video file upload | Yes | Upload button on media fields (needs Vercel Blob) |
+| Public homepage vision one-pager + Learn more panels | **Code files** | `src/data/homepageData.ts`, elder/loop/capacity data — not CMS yet |
+| ProgramDeepDive interactive OS explorer | **Code** | `src/program/ProgramDeepDive.tsx` |
+
 ## Verified active statements
 
 - **Greenfire Innovation Center** is the public-facing name for this website and pilot initiative.

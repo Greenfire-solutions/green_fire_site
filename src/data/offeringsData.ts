@@ -65,4 +65,4 @@ export const offeringsCategories = [
 ];
 
 export const offeringsStatement =
-  'Revenue from Greenfire offerings helps support community listening, equipment access, youth pathways, Elder compensation, project development, documentation, and accessible public programming.';
+  'Green Fire media offerings — social, brand, and cinematic — help fund the wider Innovation Center: community listening, equipment access, youth pathways, Elder compensation, project development, and public programming.';

@@ -1,37 +1,45 @@
 import { Link } from 'react-router-dom';
-import { Search, Hammer, Video, Network, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Search, Hammer, Video, Network } from 'lucide-react';
 import { PageHero, SectionLabel, SectionTitle } from '../components/ui';
-import { ContentButton } from '../components/ContentButton';
+import { ContentButton, OfferingMedia } from '../components/ContentButton';
 import { useSiteContent } from '../context/ContentContext';
 import { getVisibleOfferings } from '../lib/contentHelpers';
-import { getServiceIcon } from '../lib/icons';
-import { offeringsCategories, offeringsStatement } from '../data/offeringsData';
+import { offeringsStatement } from '../data/offeringsData';
 import { siteConfig } from '../config/siteConfig';
 import { usePageMeta } from '../lib/usePageMeta';
 import { ROUTES } from '../lib/routes';
+import { useContact } from '../components/ContactProvider';
 
 const STEP_ICONS = [Search, Hammer, Video, Network];
 
 export function OfferingsPage() {
-  usePageMeta(siteConfig.seo.offeringsTitle, 'Professional media, studio, events, maker, and consulting services that help sustain the Greenfire mission.');
+  usePageMeta(
+    siteConfig.seo.offeringsTitle,
+    'Social media, brand building, and cinematic production from Green Fire Media.',
+  );
 
   const content = useSiteContent();
+  const { goToContact } = useContact();
   const { settings, pages } = content;
-  const services = getVisibleOfferings(content, 'what_we_offer');
   const heroCtas = getVisibleOfferings(content, 'hero_cta');
+  const showcases = getVisibleOfferings(content, 'media_showcase');
   const combined = getVisibleOfferings(content, 'combined');
 
   return (
     <>
       <PageHero
-        label={settings.heroLabel || 'Offerings'}
+        label={settings.heroLabel || 'Media & Story Production'}
         title={settings.heroHeadline}
         subtitle={settings.heroSubheadline}
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
           {heroCtas.map((cta) => (
-            <ContentButton key={cta.id} offering={cta} variant={cta.order === 0 ? 'primary' : 'secondary'} showArrow={cta.order === 0} />
+            <ContentButton
+              key={cta.id}
+              offering={cta}
+              variant={cta.order === 0 ? 'primary' : 'secondary'}
+              showArrow={cta.order === 0}
+            />
           ))}
         </div>
       </PageHero>
@@ -42,57 +50,71 @@ export function OfferingsPage() {
         </div>
       </section>
 
+      {/* Three admin-editable media showcases with YouTube */}
       <section className="border-b border-white/5 py-20 px-6">
         <div className="mx-auto max-w-7xl">
-          <SectionLabel text="Service Categories" />
-          <SectionTitle title="What We Offer" />
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-12">
-            {offeringsCategories.map((cat) => (
-              <Link
-                key={cat.id}
-                to={cat.path}
-                className="group rounded-[2rem] border border-white/10 bg-neutral-950 p-6 hover:border-emerald-500/30 transition-colors"
+          <SectionLabel text="Media & Story Production" />
+          <SectionTitle title="See the work. Book the path." />
+          <p className="text-stone-400 max-w-2xl mb-12 text-sm leading-relaxed">
+            Three ways we help you show up on screen — social media, brand building, and cinematic production.
+            Paste a YouTube link in Admin → Media Showcase to feature your latest examples.
+          </p>
+
+          <div className="grid gap-8 lg:grid-cols-3">
+            {showcases.map((item) => (
+              <article
+                key={item.id}
+                className={`rounded-[2rem] border p-6 flex flex-col ${
+                  item.premium
+                    ? 'border-orange-500/25 bg-gradient-to-b from-orange-500/5 to-neutral-950'
+                    : 'border-white/10 bg-neutral-950'
+                }`}
               >
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-emerald-300">{cat.title}</h3>
-                <p className="text-sm text-stone-400 mb-4">{cat.description}</p>
-                <ul className="text-xs text-stone-500 space-y-1 mb-4">
-                  {cat.items.slice(0, 4).map((item) => (
-                    <li key={item}>• {item}</li>
-                  ))}
-                </ul>
-                <span className="text-xs font-bold text-emerald-400 inline-flex items-center gap-1">
-                  Explore <ArrowRight className="h-3 w-3" />
-                </span>
-              </Link>
+                <OfferingMedia offering={item} />
+                {!item.youtubeUrl && !item.thumbnailUrl && !item.videoUrl && (
+                  <div className="mb-6 flex aspect-video items-center justify-center rounded-2xl border border-dashed border-white/15 bg-neutral-900 text-center px-4">
+                    <p className="text-xs text-stone-500">
+                      Add a YouTube URL in Admin → Media Showcase to show a video here.
+                    </p>
+                  </div>
+                )}
+                <h3 className="text-xl font-bold text-white mb-1">{item.title}</h3>
+                {item.subtitle && (
+                  <p className="text-emerald-300/80 text-sm mb-3">{item.subtitle}</p>
+                )}
+                <p className="text-sm text-stone-400 leading-relaxed mb-4 flex-grow">{item.description}</p>
+                {item.includes.length > 0 && (
+                  <ul className="text-xs text-stone-500 space-y-1 mb-6">
+                    {item.includes.slice(0, 4).map((line) => (
+                      <li key={line}>• {line}</li>
+                    ))}
+                  </ul>
+                )}
+                <button
+                  type="button"
+                  onClick={() =>
+                    goToContact(
+                      item.buttonSubject || `Green Fire — ${item.title}`,
+                      item.buttonMessage,
+                    )
+                  }
+                  className={`w-full rounded-2xl px-6 py-3.5 text-sm font-bold transition-all ${
+                    item.premium
+                      ? 'bg-orange-400 text-neutral-950 hover:bg-orange-300'
+                      : 'bg-emerald-400 text-neutral-950 hover:bg-emerald-300'
+                  }`}
+                >
+                  {item.buttonLabel || 'Book Now'}
+                </button>
+              </article>
             ))}
           </div>
-        </div>
-      </section>
 
-      <section className="border-b border-white/5 py-20 px-6">
-        <div className="mx-auto max-w-7xl">
-          <SectionLabel text="Services" />
-          <SectionTitle title={pages.home.whatWeOfferTitle} />
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((service, i) => {
-              const Icon = getServiceIcon(service.icon);
-              return (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.03 }}
-                  className="flex items-center gap-3 rounded-2xl border border-white/5 bg-neutral-900/40 p-4 hover:border-emerald-500/20 transition-colors"
-                >
-                  <div className="rounded-xl bg-emerald-500/10 p-2.5 text-emerald-400">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm font-medium text-stone-200">{service.title}</span>
-                </motion.div>
-              );
-            })}
-          </div>
+          {showcases.length === 0 && (
+            <p className="text-stone-500 text-sm">
+              No media showcases yet. Add them in Admin → Media Showcase, then Publish Live.
+            </p>
+          )}
         </div>
       </section>
 
@@ -119,7 +141,7 @@ export function OfferingsPage() {
 
       <section className="border-b border-white/5 py-20 px-6">
         <div className="mx-auto max-w-7xl">
-          <SectionLabel text="Popular Paths" />
+          <SectionLabel text="Packages" />
           <SectionTitle title={pages.home.combinedSectionTitle} />
           <div className="grid gap-6 md:grid-cols-2">
             {combined.map((pkg) => (
@@ -131,8 +153,17 @@ export function OfferingsPage() {
             ))}
           </div>
           <div className="mt-10 flex flex-wrap gap-4 justify-center">
-            <Link to={ROUTES.offeringsPackages} className="rounded-2xl bg-emerald-400 px-8 py-4 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+            <Link
+              to={ROUTES.offeringsPackages}
+              className="rounded-2xl bg-emerald-400 px-8 py-4 text-sm font-bold text-neutral-950 hover:bg-emerald-300"
+            >
               View All Packages
+            </Link>
+            <Link
+              to={ROUTES.offeringsCinematic}
+              className="rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white hover:bg-white/10"
+            >
+              Cinematic Packages
             </Link>
             <ContentButton
               offering={{
@@ -146,7 +177,7 @@ export function OfferingsPage() {
                 addOns: [],
                 buttonLabel: 'Ask About a Custom Package',
                 buttonActionType: 'contact_form',
-                buttonSubject: 'Greenfire — Custom Package Inquiry',
+                buttonSubject: 'Green Fire — Custom Package Inquiry',
                 featured: false,
                 order: 0,
                 visible: true,

@@ -133,3 +133,82 @@ export function duplicateOffering(item: OfferingItem): OfferingItem {
     order: item.order + 1,
   };
 }
+
+const DEFAULT_MEDIA_SHOWCASES: OfferingItem[] = [
+  {
+    id: 'media-showcase-social',
+    title: 'Social Media',
+    subtitle: 'Short-form content that grows your audience',
+    description:
+      'Reels, shorts, stories, and platform-ready content designed to capture attention and build consistent presence across social channels.',
+    price: 'Custom quote',
+    category: 'media_showcase',
+    includes: ['Short-form video', 'Platform-ready edits', 'Captions & hooks', 'Content series planning'],
+    bestFor: ['Creators', 'Brands', 'Local businesses', 'Artists'],
+    addOns: [],
+    youtubeUrl: '',
+    order: 0,
+    visible: true,
+    featured: true,
+    buttonLabel: 'Book Now',
+    buttonActionType: 'contact_form',
+    buttonSubject: 'Green Fire — Social Media Production',
+    buttonMessage: 'Hi Green Fire team,\n\nI am interested in Social Media production.\n\n',
+    internalPage: 'contact',
+  },
+  {
+    id: 'media-showcase-brand',
+    title: 'Brand Building',
+    subtitle: 'Visual identity and story that stick',
+    description:
+      'Brand films, lookbooks, campaign assets, and narrative content that define how your project or business shows up in the world.',
+    price: 'Custom quote',
+    category: 'media_showcase',
+    includes: ['Brand story films', 'Campaign assets', 'Visual identity support', 'Launch-ready deliverables'],
+    bestFor: ['Startups', 'Nonprofits', 'Artists', 'Product launches'],
+    addOns: [],
+    youtubeUrl: '',
+    order: 1,
+    visible: true,
+    featured: true,
+    buttonLabel: 'Book Now',
+    buttonActionType: 'contact_form',
+    buttonSubject: 'Green Fire — Brand Building Media',
+    buttonMessage: 'Hi Green Fire team,\n\nI am interested in Brand Building media.\n\n',
+    internalPage: 'contact',
+  },
+  {
+    id: 'media-showcase-cinematic',
+    title: 'Cinematic Production',
+    subtitle: 'Premium motion for films, music, and campaigns',
+    description:
+      'High-end cinematic production for music videos, documentaries, commercials, and hero films — including Utah Bolt precision camera movement when needed.',
+    price: 'Custom quote',
+    category: 'media_showcase',
+    includes: ['Cinematic direction', 'Premium camera work', 'Color & sound polish', 'Delivery for film & web'],
+    bestFor: ['Music artists', 'Agencies', 'Documentaries', 'Premium brands'],
+    addOns: [],
+    youtubeUrl: '',
+    order: 2,
+    visible: true,
+    featured: true,
+    premium: true,
+    buttonLabel: 'Book Now',
+    buttonActionType: 'contact_form',
+    buttonSubject: 'Green Fire — Cinematic Production',
+    buttonMessage: 'Hi Green Fire team,\n\nI am interested in Cinematic Production.\n\n',
+    internalPage: 'contact',
+  },
+];
+
+/** Ensure the three Media Showcase slots exist (for older published content). */
+export function ensureMediaShowcases(content: SiteContent): SiteContent {
+  const existing = content.offerings.filter((o) => o.category === 'media_showcase');
+  if (existing.length >= 3) return content;
+  const have = new Set(existing.map((o) => o.id));
+  const missing = DEFAULT_MEDIA_SHOWCASES.filter((d) => !have.has(d.id));
+  return {
+    ...content,
+    offerings: [...content.offerings, ...missing],
+  };
+}

@@ -56,6 +56,17 @@ export async function publishSiteContent(content: unknown) {
   });
 }
 
+export async function uploadAdminMedia(payload: {
+  filename: string;
+  contentType: string;
+  data: string;
+}): Promise<{ url: string }> {
+  return adminFetch('/api/admin/upload', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
 export const DRAFT_STORAGE_KEY = 'gf_admin_draft_content';
 
 export function saveDraftLocally(content: unknown) {

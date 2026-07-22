@@ -134,6 +134,23 @@ export function SiteLayout({ children }: SiteLayoutProps) {
             </nav>
           </div>
           <div className="border-t border-white/5 pt-6 text-center">
+            {(settings.socialLinks || []).filter((l) => l.label && l.url).length > 0 && (
+              <div className="flex flex-wrap justify-center gap-4 mb-4">
+                {settings.socialLinks
+                  .filter((l) => l.label && l.url)
+                  .map((link) => (
+                    <a
+                      key={`${link.label}-${link.url}`}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-bold text-emerald-400/80 hover:text-emerald-300"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+              </div>
+            )}
             <p className="mb-4">
               <a href={`mailto:${contactEmail}`} className="text-emerald-400/80 hover:text-emerald-300 inline-flex items-center justify-center gap-2">
                 <Mail className="h-4 w-4" /> {contactEmail}

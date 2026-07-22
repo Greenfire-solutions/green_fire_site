@@ -5,21 +5,23 @@ import {
   adminLogin, getAdminToken, clearAdminToken, publishSiteContent,
   saveDraftLocally, loadDraftLocally, clearDraftLocally, fetchPublishStatus,
 } from '../lib/adminApi';
-import { validateContent, newOfferingId, duplicateOffering, getVisibleOfferings } from '../lib/contentHelpers';
+import { validateContent, newOfferingId, duplicateOffering, ensureMediaShowcases } from '../lib/contentHelpers';
 import { PublicPackageCard, OfferingMedia } from '../components/ContentButton';
+import { MediaField } from './MediaField';
 import bundledContent from '../data/siteContent.json';
 import { ICON_OPTIONS } from '../lib/icons';
 
 const SECTIONS: { id: AdminSection; label: string; category?: OfferingItem['category'] }[] = [
   { id: 'settings', label: 'Global Settings' },
-  { id: 'home', label: 'Homepage Hero' },
-  { id: 'what_we_offer', label: 'What We Offer', category: 'what_we_offer' },
+  { id: 'home', label: 'Offerings Hero / Home Copy' },
+  { id: 'media_showcase', label: 'Media Showcase (YouTube)', category: 'media_showcase' },
   { id: 'packages', label: 'Packages', category: 'service_package' },
   { id: 'cinematic', label: 'Cinematic', category: 'cinematic' },
   { id: 'studio', label: 'Studio', category: 'studio_session' },
   { id: 'workshops', label: 'Workshops', category: 'workshop_topic' },
   { id: 'utah_bolt', label: 'Utah Bolt', category: 'utah_bolt_ideal' },
-  { id: 'program', label: 'Program Page' },
+  { id: 'what_we_offer', label: 'Service Chips (legacy)', category: 'what_we_offer' },
+  { id: 'program', label: 'How It Works / Program' },
   { id: 'contact', label: 'Contact / CTAs', category: 'contact_cta' },
 ];
 
@@ -104,10 +106,32 @@ function OfferingEditor({
       </div>
       <input placeholder="Subtitle" value={item.subtitle || ''} onChange={(e) => set('subtitle', e.target.value)} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
       <textarea placeholder="Description" value={item.description} onChange={(e) => set('description', e.target.value)} rows={3} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
-      <div className="grid sm:grid-cols-3 gap-3">
-        <input placeholder="Thumbnail URL" value={item.thumbnailUrl || ''} onChange={(e) => set('thumbnailUrl', e.target.value)} className="rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
-        <input placeholder="Video URL" value={item.videoUrl || ''} onChange={(e) => set('videoUrl', e.target.value)} className="rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
-        <input placeholder="YouTube URL" value={item.youtubeUrl || ''} onChange={(e) => set('youtubeUrl', e.target.value)} className="rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
+      <div className="space-y-4 rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
+        <p className="text-xs font-bold uppercase text-emerald-400">Media (YouTube, image, or video link)</p>
+        <MediaField
+          label="YouTube URL"
+          value={item.youtubeUrl || ''}
+          onChange={(v) => set('youtubeUrl', v)}
+          placeholder="https://www.youtube.com/watch?v=…"
+          hint="Paste a YouTube link — it embeds on the Offerings page. Prefer this for Media Showcase."
+          allowUpload={false}
+        />
+        <MediaField
+          label="Thumbnail / Image"
+          value={item.thumbnailUrl || ''}
+          onChange={(v) => set('thumbnailUrl', v)}
+          placeholder="https://… or Upload"
+          hint="Upload an image (requires Vercel Blob) or paste an image URL."
+          previewImage
+        />
+        <MediaField
+          label="Direct video file URL"
+          value={item.videoUrl || ''}
+          onChange={(v) => set('videoUrl', v)}
+          placeholder="https://….mp4"
+          hint="Optional: MP4/WebM link or upload."
+          accept="video/mp4,video/webm"
+        />
       </div>
       {item.icon !== undefined && (
         <select value={item.icon || 'Video'} onChange={(e) => set('icon', e.target.value)} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white">
@@ -194,7 +218,8 @@ function AdminDashboard() {
 
   useEffect(() => {
     const draft = loadDraftLocally() as SiteContent | null;
-    if (draft) setContent(draft);
+    const base = draft || (bundledContent as SiteContent);
+    setContent(ensureMediaShowcases(base));
   }, []);
 
   useEffect(() => {
@@ -352,6 +377,9 @@ function AdminDashboard() {
         {section === 'settings' && (
           <div className="space-y-4 max-w-2xl">
             <h2 className="text-2xl font-bold text-white">Global Settings</h2>
+            <p className="text-sm text-stone-400">
+              Site name, Offerings page hero text, contact email, and footer. Social links appear in the footer when added.
+            </p>
             {(['siteTitle', 'siteTagline', 'heroLabel', 'heroHeadline', 'heroSubheadline', 'contactEmail', 'defaultBookingEmail', 'footerTagline', 'footerCopy'] as const).map((key) => (
               <div key={key}>
                 <label className="text-xs text-stone-500 uppercase font-bold">{key}</label>
@@ -362,13 +390,85 @@ function AdminDashboard() {
                 />
               </div>
             ))}
+            <div className="pt-4 border-t border-white/10 space-y-3">
+              <p className="text-xs font-bold uppercase text-stone-500">Social / external links</p>
+              {(content.settings.socialLinks || []).map((link, i) => (
+                <div key={i} className="flex gap-2">
+                  <input
+                    placeholder="Label (e.g. Instagram)"
+                    value={link.label}
+                    onChange={(e) => {
+                      const next = [...content.settings.socialLinks];
+                      next[i] = { ...next[i], label: e.target.value };
+                      setContent({ ...content, settings: { ...content.settings, socialLinks: next } });
+                    }}
+                    className="w-1/3 rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white"
+                  />
+                  <input
+                    placeholder="https://…"
+                    value={link.url}
+                    onChange={(e) => {
+                      const next = [...content.settings.socialLinks];
+                      next[i] = { ...next[i], url: e.target.value };
+                      setContent({ ...content, settings: { ...content.settings, socialLinks: next } });
+                    }}
+                    className="flex-1 rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setContent({
+                        ...content,
+                        settings: {
+                          ...content.settings,
+                          socialLinks: content.settings.socialLinks.filter((_, j) => j !== i),
+                        },
+                      })
+                    }
+                    className="rounded-lg bg-rose-500/20 px-3 text-rose-300 text-sm"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() =>
+                  setContent({
+                    ...content,
+                    settings: {
+                      ...content.settings,
+                      socialLinks: [...(content.settings.socialLinks || []), { label: '', url: '' }],
+                    },
+                  })
+                }
+                className="text-xs font-bold text-emerald-400"
+              >
+                + Add link
+              </button>
+            </div>
+          </div>
+        )}
+
+        {section === 'media_showcase' && (
+          <div className="mb-6 max-w-3xl rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 text-sm text-stone-300 space-y-2">
+            <p className="font-bold text-emerald-300">Media Showcase — Offerings page videos</p>
+            <p>
+              Edit the three spots: <strong className="text-white">Social Media</strong>,{' '}
+              <strong className="text-white">Brand Building</strong>, and{' '}
+              <strong className="text-white">Cinematic Production</strong>. Paste a YouTube URL for each,
+              update the description, and set Book Now. Then Save Draft → Publish Live.
+            </p>
           </div>
         )}
 
         {section === 'home' && (
           <div className="space-y-4 max-w-2xl">
-            <h2 className="text-2xl font-bold text-white">Homepage</h2>
-            <p className="text-sm text-stone-400">Hero uses Global Settings. Edit section copy below.</p>
+            <h2 className="text-2xl font-bold text-white">Offerings / Home CMS Copy</h2>
+            <p className="text-sm text-stone-400">
+              Offerings page hero uses <strong className="text-stone-300">Global Settings</strong> (heroLabel, heroHeadline, heroSubheadline).
+              Section titles below appear on the Offerings page. The public homepage vision story is edited in code data files — see CONTENT_STATUS.md.
+            </p>
             {(['whatWeOfferTitle', 'howItWorksTitle', 'combinedSectionTitle', 'bottomCtaTitle', 'bottomCtaText'] as const).map((key) => (
               <div key={key}>
                 <label className="text-xs text-stone-500 uppercase font-bold">{key}</label>

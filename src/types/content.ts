@@ -8,6 +8,7 @@ export type ButtonActionType =
 
 export type OfferingCategory =
   | 'what_we_offer'
+  | 'media_showcase'
   | 'service_package'
   | 'cinematic'
   | 'cinematic_addon'
@@ -134,6 +135,7 @@ export interface SiteContent {
 export type AdminSection =
   | 'settings'
   | 'home'
+  | 'media_showcase'
   | 'what_we_offer'
   | 'packages'
   | 'cinematic'

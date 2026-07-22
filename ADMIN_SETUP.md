@@ -60,6 +60,17 @@ See [EMAIL_SETUP.md](./EMAIL_SETUP.md).
 
 ---
 
+## Media Showcase (Offerings YouTube spots)
+
+1. Open `/admin` → **Media Showcase (YouTube)**
+2. For each of the three cards (Social Media, Brand Building, Cinematic Production):
+   - Paste a **YouTube URL**
+   - Edit title, description, Book Now button text
+   - Optional: upload a thumbnail image
+3. **Save Draft** → **Publish Live**
+
+Image upload uses the same Vercel Blob store as publish. If upload fails, connect Blob storage first.
+
 ## How publishing works
 
 1. Edit content in `/admin`
