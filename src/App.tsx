@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ContentProvider } from './context/ContentContext';
 import { ContactProvider } from './components/ContactProvider';
@@ -12,9 +13,11 @@ import { PackagesPage } from './pages/PackagesPage';
 import { CinematicPage } from './pages/CinematicPage';
 import { StudioPage } from './pages/StudioPage';
 import { WorkshopsPage } from './pages/WorkshopsPage';
-import { UtahBoltPage } from './pages/UtahBoltPage';
 import { ContactPage } from './pages/ContactPage';
 import { AdminApp } from './admin/AdminApp';
+
+// The 3D scenes only download for visitors who actually open /tech.
+const TechPage = lazy(() => import('./pages/TechPage').then((m) => ({ default: m.TechPage })));
 import { ROUTES } from './lib/routes';
 
 function PublicSite() {
@@ -30,7 +33,14 @@ function PublicSite() {
             <Route path="/offerings/cinematic" element={<CinematicPage />} />
             <Route path="/offerings/studio" element={<StudioPage />} />
             <Route path="/offerings/workshops" element={<WorkshopsPage />} />
-            <Route path="/offerings/utah-bolt" element={<UtahBoltPage />} />
+            <Route
+              path="/tech"
+              element={
+                <Suspense fallback={<div className="min-h-[70vh]" />}>
+                  <TechPage />
+                </Suspense>
+              }
+            />
             <Route path="/open-source" element={<OpenSourcePage />} />
             <Route path="/get-involved" element={<GetInvolvedPage />} />
             <Route path="/pilot-roadmap" element={<PilotRoadmapPage />} />
@@ -41,7 +51,8 @@ function PublicSite() {
             <Route path="/cinematic" element={<Navigate to={ROUTES.offeringsCinematic} replace />} />
             <Route path="/studio" element={<Navigate to={ROUTES.offeringsStudio} replace />} />
             <Route path="/workshops" element={<Navigate to={ROUTES.offeringsWorkshops} replace />} />
-            <Route path="/utah-bolt" element={<Navigate to={ROUTES.offeringsUtahBolt} replace />} />
+            <Route path="/offerings/utah-bolt" element={<Navigate to={ROUTES.offeringsCinematic} replace />} />
+            <Route path="/utah-bolt" element={<Navigate to={ROUTES.offeringsCinematic} replace />} />
             <Route path="/program" element={<Navigate to={ROUTES.howItWorks} replace />} />
           </Routes>
         </SiteLayout>

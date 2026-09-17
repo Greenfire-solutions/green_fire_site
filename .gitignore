@@ -4,3 +4,10 @@ dist
 *.local
 .env
 .env.*
+
+# Local shortcut to the sibling Bioregional-OS project (not part of this site)
+Bioregional-OS
+
+# The Greenfire operator (local-only tooling, never deployed)
+_TOOLS
+Start Greenfire.app

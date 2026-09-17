@@ -34,7 +34,7 @@ export function buildDefaultSiteContent(): SiteContent {
     ['Creative Direction', 'Compass'],
     ['Studio Recording', 'Mic'],
     ['Cinematic Content Production', 'Film'],
-    ['Robot Arm Camera Movement', 'Bot'],
+    ['Multi-City Studio Production', 'MapPin'],
     ['Workshops and Private Lessons', 'GraduationCap'],
   ];
 
@@ -123,7 +123,7 @@ export function buildDefaultSiteContent(): SiteContent {
         'Branding', 'Video production', 'Video editing', 'Audio recording', 'Song production',
         'Graphics', 'Flyers', 'Web design', 'UI design', 'Tech setup', 'Creative direction',
         'Social media content', 'Studio production', 'Campaign planning',
-        'Optional cinematic Bolt robot production in Utah',
+        'Optional cinematic production (from $10,000)',
       ],
       bestFor: ['Full creative launches', 'Artists and founders building end-to-end'],
       addOns: [],
@@ -134,12 +134,12 @@ export function buildDefaultSiteContent(): SiteContent {
     {
       id: 'cine-signature',
       title: 'Signature Content',
-      price: '$3,500',
+      price: 'From $10,000',
       premium: true,
-      description: 'Half-day premium production for artists, brands, and campaigns that need polished cinematic visuals.',
+      description: 'Premium production for artists, brands, and campaigns that need polished cinematic visuals. Quoted to your creative needs.',
       category: 'cinematic' as const,
       includes: [
-        'Half-day production, up to 4 hours', 'Cinema camera and professional lighting',
+        'Cinema camera and professional lighting', 'Studio or on-location options',
         '2–3 edited videos, vertical or horizontal', 'Color grading and sound design',
         'Simple motion graphics and text overlays', 'Creative direction to guide the shoot',
       ],
@@ -150,17 +150,17 @@ export function buildDefaultSiteContent(): SiteContent {
       addOns: [],
       order: nextOrder(),
       visible: true,
-      ...mkBtn('Book Signature Content', 'Green Fire — Signature Content ($3,500)'),
+      ...mkBtn('Book Signature Content', 'Green Fire — Signature Content (from $10,000)'),
     },
     {
       id: 'cine-motion',
       title: 'Cinematic Motion',
-      price: '$7,500',
+      price: 'From $15,000',
       premium: true,
-      description: 'Full-day production with Bolt robot operation for high-end brand and performance content.',
+      description: 'Full-day production for high-end brand and performance content across our studio cities.',
       category: 'cinematic' as const,
       includes: [
-        'Full-day production, up to 8 hours', 'Bolt robot operation included',
+        'Full-day production, up to 8 hours', 'Professional camera and lighting package',
         'Advanced camera and lighting setup', '4–6 edited videos', 'Color grading and sound design',
         'Shot planning', 'Product-focused storytelling', 'Slow-motion shots',
         'Motion-controlled shots', 'Deliverables optimized for social media and ads',
@@ -172,17 +172,17 @@ export function buildDefaultSiteContent(): SiteContent {
       addOns: [],
       order: nextOrder(),
       visible: true,
-      ...mkBtn('Book Cinematic Motion', 'Green Fire — Cinematic Motion ($7,500)'),
+      ...mkBtn('Book Cinematic Motion', 'Green Fire — Cinematic Motion (from $15,000)'),
     },
     {
       id: 'cine-campaign',
       title: 'Full Campaign Production',
-      price: '$12,000',
+      price: 'From $25,000',
       premium: true,
       description: 'Expanded creative direction and deliverables for full brand campaigns and major rollouts.',
       category: 'cinematic' as const,
       includes: [
-        'Full-day production with expanded creative direction', 'Priority Bolt robot operation',
+        'Full-day production with expanded creative direction', 'Priority camera package and creative direction',
         'Full camera and lighting package', '6–10 edited videos', 'Concept development', 'Shot planning',
         'Color grading and sound design', 'Motion graphics and VFX as needed',
         'Multi-platform deliverables for TikTok, Meta, web, and ads', 'Edits structured for performance',
@@ -194,11 +194,11 @@ export function buildDefaultSiteContent(): SiteContent {
       addOns: [],
       order: nextOrder(),
       visible: true,
-      ...mkBtn('Book Full Campaign', 'Green Fire — Full Campaign Production ($12,000)'),
+      ...mkBtn('Book Full Campaign', 'Green Fire — Full Campaign Production (from $25,000)'),
     },
     ...[
-      'Additional edited video: $600 each',
-      'Additional shoot day: $3,000',
+      'Additional edited video: custom quoted',
+      'Additional shoot day: custom quoted',
       'Raw footage delivery: available by request',
       '24–48 hour rush turnaround: available by request',
       'Travel, lodging, and location production: custom quoted',
@@ -219,9 +219,9 @@ export function buildDefaultSiteContent(): SiteContent {
       internalPage: 'contact',
     })),
     ...[
-      ['Artist Content Day', 'For artists who need a strong batch of content in one focused session.', 'Studio recording, performance video, short-form clips, promo graphics, cover art direction, flyers, editing, release content planning, and optional cinematic Bolt robot production in Utah.'],
+      ['Artist Content Day', 'For artists who need a strong batch of content in one focused session.', 'Studio recording, performance video, short-form clips, promo graphics, cover art direction, flyers, editing, release content planning, and optional cinematic production (from $10,000).'],
       ['Business Media Day', 'For small businesses, coaches, wellness brands, and entrepreneurs who need better media.', 'Branding, promo video, website support, graphics, flyers, interview content, social media clips, editing, content strategy, and optional travel-based production.'],
-      ['Music Video + Release Build', 'For artists who want the song, visuals, and rollout to feel connected.', 'Song production, recording, video shoot, editing, cover art, promo graphics, reels and shorts, landing page, release strategy, and optional cinematic robot arm shots in Utah.'],
+      ['Music Video + Release Build', 'For artists who want the song, visuals, and rollout to feel connected.', 'Song production, recording, video shoot, editing, cover art, promo graphics, reels and shorts, landing page, release strategy, and optional cinematic production from our Austin, Salt Lake City, or San Diego studios.'],
       ['Workshop + Studio Build', 'For people who want to learn while creating a finished project.', 'Private lessons, studio time, guided project build, video editing lessons, music production lessons, branding lessons, website lessons, and final deliverable review.'],
     ].map(([title, desc, inc], i) => ({
       id: `combined-${i}`,
@@ -288,26 +288,6 @@ export function buildDefaultSiteContent(): SiteContent {
       description: title,
       price: '',
       category: 'workshop_audience' as const,
-      includes: [],
-      bestFor: [],
-      addOns: [],
-      order: i,
-      visible: true,
-      featured: false,
-      buttonLabel: '',
-      buttonActionType: 'contact_form' as const,
-      internalPage: 'contact',
-    })),
-    ...[
-      'Music videos', 'Product videos', 'Brand campaigns', 'Performance visuals',
-      'Social media ads', 'Cinematic promos', 'Launch campaigns', 'High-end artist content',
-      'Experimental creative shoots',
-    ].map((title, i) => ({
-      id: `bolt-${i}`,
-      title,
-      description: title,
-      price: '',
-      category: 'utah_bolt_ideal' as const,
       includes: [],
       bestFor: [],
       addOns: [],
@@ -420,14 +400,14 @@ export function buildDefaultSiteContent(): SiteContent {
         howItWorksTitle: 'From idea to launch-ready media',
         howItWorksSteps: [
           { step: '01', title: 'Book & Plan', description: 'Tell us your vision, timeline, and goals. We match you to the right package or studio session.' },
-          { step: '02', title: 'Create', description: 'Record, shoot, design, and produce in our studio or on location — including Utah Bolt cinematic production.' },
+          { step: '02', title: 'Create', description: 'Record, shoot, design, and produce in our studio or on location — across studios in Austin, Salt Lake City, and San Diego.' },
           { step: '03', title: 'Polish', description: 'Editing, color, sound, graphics, and web assets shaped for your brand and platforms.' },
           { step: '04', title: 'Launch', description: 'Deliverables ready for release, campaigns, social, and growth — with optional workshops to keep building.' },
         ],
         combinedSectionTitle: 'Combined creative packages',
         bottomCtaTitle: 'Ready to build something real?',
         bottomCtaText:
-          'Book a package, studio session, workshop, or Utah Bolt cinematic production. The deeper Green Fire community vision lives under Program.',
+          'Book social media, brand building, or cinematic production (from $10,000). Studios in Austin, TX; Salt Lake City, UT; and San Diego, CA.'
       },
       packages: {
         headline: 'Media packages built for your project',
@@ -437,9 +417,10 @@ export function buildDefaultSiteContent(): SiteContent {
       cinematic: {
         headline: 'Premium cinematic content production',
         cinematicIntro:
-          'For brands, artists, products, businesses, and campaigns that need high-end cinematic visuals, Green Fire Media Hub offers premium production packages through our Utah-based cinematic studio setup.',
-        boltAdvantage:
-          'The Bolt system allows for precise, repeatable, high-speed camera moves that create clean, controlled, and eye-catching shots. This is ideal for product shots, music visuals, cinematic brand content, slow-motion movement, performance footage, and high-end social ads.',
+          'For brands, artists, products, businesses, and campaigns that need high-end cinematic visuals. Cinematic packages start at $10,000 and go up based on creative needs, locations, crew, and deliverables. We produce from studios in Austin, Texas; Salt Lake City, Utah; and San Diego, California — and on location when the project calls for it.',
+        studioLocations:
+          'Studios in Austin, Texas · Salt Lake City, Utah · San Diego, California',
+        pricingNote: 'Cinematic packages start at $10,000 and are quoted based on scope.',
       },
       studio: {
         headline: 'Use the Green Fire Media Studio',
@@ -450,13 +431,6 @@ export function buildDefaultSiteContent(): SiteContent {
         headline: 'Learn the Skills While Building the Project',
         intro:
           'Everything offered through Green Fire Media Hub can also be taught through private lessons, group workshops, or guided project sessions.',
-      },
-      utahBolt: {
-        headline: 'High-End Robot Arm Production in Utah',
-        intro:
-          'The Bolt robot arm and cinematic studio setup are located in Utah. Clients can travel to the Utah studio to create professional cinematic content using advanced camera movement, lighting, slow motion, and motion-controlled shots.',
-        travelNote:
-          'Travel can be built into custom packages when needed. Final pricing may include production time, setup, travel, lodging, gear transport, and any additional shoot requirements.',
       },
       program: {
         headline: 'What Is Green Fire Media Hub?',
@@ -487,21 +461,21 @@ export function buildDefaultSiteContent(): SiteContent {
         headline: 'Ready to Build?',
         intro: 'Tell us what you are creating and what kind of support you need.',
         bookingOptions: [
-          'A media package', 'A cinematic production package', 'A studio session',
+          'A media package', 'A cinematic production package (from $10,000)', 'A studio session',
           'A music production session', 'A content day', 'A workshop', 'A private lesson',
-          'A Utah Bolt robot production session', 'A full creative launch package',
+          'A full creative launch package',
         ],
         projectTypes: [
           'Brand Starter Package', 'Music + Media Package', 'Content Creation Package',
-          'Full Creative Launch Package', 'Signature Content ($3,500)', 'Cinematic Motion ($7,500)',
-          'Full Campaign Production ($12,000)', 'Studio Session', 'Workshop / Private Lesson',
-          'Utah Bolt Production', 'Community / Program Collaboration', 'Other',
+          'Full Creative Launch Package', 'Signature Content (from $10,000)', 'Cinematic Motion (from $15,000)',
+          'Full Campaign Production (from $25,000)', 'Studio Session', 'Workshop / Private Lesson',
+          'Community / Program Collaboration', 'Other',
         ],
         interestAreas: [
           'Media production', 'Music', 'Branding', 'Web design', 'Workshops', 'Cinematic production',
         ],
         pricingNote:
-          'Every project is quoted based on scope, production needs, editing time, travel, location, equipment, and final deliverables. Cinematic Bolt robot productions begin at $3,500 and are based in Utah.',
+          'Every project is quoted based on scope, production needs, editing time, travel, location, equipment, and final deliverables. Cinematic packages start at $10,000. Studios in Austin, TX; Salt Lake City, UT; and San Diego, CA.',
       },
     },
     offerings,

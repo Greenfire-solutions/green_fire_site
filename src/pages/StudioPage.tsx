@@ -1,8 +1,14 @@
-import { Mic, Video } from 'lucide-react';
+import { Mic, Video, MapPin } from 'lucide-react';
 import { SectionLabel, SectionTitle } from '../components/ui';
 import { ContentButton } from '../components/ContentButton';
 import { useSiteContent } from '../context/ContentContext';
 import { getVisibleOfferings } from '../lib/contentHelpers';
+
+const STUDIO_LOCATIONS = [
+  { city: 'Austin', region: 'Texas' },
+  { city: 'Salt Lake City', region: 'Utah' },
+  { city: 'San Diego', region: 'California' },
+];
 
 export function StudioPage() {
   const content = useSiteContent();
@@ -15,7 +21,18 @@ export function StudioPage() {
         <div className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
           <SectionLabel text="Studio" />
           <h1 className="text-4xl md:text-5xl font-semibold text-white mb-6">{content.pages.studio.headline}</h1>
-          <p className="max-w-2xl text-lg text-stone-400 leading-relaxed">{content.pages.studio.intro}</p>
+          <p className="max-w-2xl text-lg text-stone-400 leading-relaxed mb-8">{content.pages.studio.intro}</p>
+          <div className="flex flex-wrap gap-3">
+            {STUDIO_LOCATIONS.map((loc) => (
+              <span
+                key={loc.city}
+                className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-100"
+              >
+                <MapPin className="h-4 w-4 text-emerald-400" />
+                {loc.city}, {loc.region}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 

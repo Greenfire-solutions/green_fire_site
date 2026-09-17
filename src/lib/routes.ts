@@ -2,11 +2,11 @@ export const ROUTES = {
   home: '/',
   howItWorks: '/how-it-works',
   offerings: '/offerings',
+  tech: '/tech',
   offeringsPackages: '/offerings/packages',
   offeringsCinematic: '/offerings/cinematic',
   offeringsStudio: '/offerings/studio',
   offeringsWorkshops: '/offerings/workshops',
-  offeringsUtahBolt: '/offerings/utah-bolt',
   openSource: '/open-source',
   getInvolved: '/get-involved',
   contact: '/contact',
@@ -21,13 +21,14 @@ export const LEGACY_PAGE_TO_PATH: Record<string, string> = {
   cinematic: ROUTES.offeringsCinematic,
   studio: ROUTES.offeringsStudio,
   workshops: ROUTES.offeringsWorkshops,
-  'utah-bolt': ROUTES.offeringsUtahBolt,
+  'utah-bolt': ROUTES.offeringsCinematic,
   program: ROUTES.howItWorks,
   contact: ROUTES.contact,
   offerings: ROUTES.offerings,
   'how-it-works': ROUTES.howItWorks,
   'open-source': ROUTES.openSource,
   'get-involved': ROUTES.getInvolved,
+  tech: ROUTES.tech,
 };
 
 export function resolvePath(pageOrPath?: string): string {
@@ -40,6 +41,7 @@ export const PRIMARY_NAV = [
   { path: ROUTES.home, label: 'Home' },
   { path: ROUTES.howItWorks, label: 'How It Works' },
   { path: ROUTES.offerings, label: 'Offerings' },
+  { path: ROUTES.tech, label: 'Tech' },
   { path: ROUTES.openSource, label: 'Open Source' },
   { path: ROUTES.getInvolved, label: 'Get Involved' },
 ] as const;
@@ -47,6 +49,7 @@ export const PRIMARY_NAV = [
 export const FOOTER_NAV = [
   { path: ROUTES.howItWorks, label: 'About' },
   { path: ROUTES.pilotRoadmap, label: 'Pilot Roadmap' },
+  { path: ROUTES.tech, label: 'Tech and 3D' },
   { path: ROUTES.getInvolved, label: 'Community Intake' },
   { path: ROUTES.getInvolved, label: 'Partner With Greenfire' },
   { path: ROUTES.openSource, label: 'Data and Consent' },

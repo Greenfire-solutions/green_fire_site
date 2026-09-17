@@ -6,7 +6,7 @@ import { useSiteContent } from '../context/ContentContext';
 
 const initialForm = {
   name: '', email: '', phone: '', projectType: '', helpNeeded: '', interestArea: '',
-  studioTime: '', utahBolt: '', timeline: '', budget: '', notes: '',
+  studioTime: '', preferredStudio: '', timeline: '', budget: '', notes: '',
 };
 
 export function ContactPage() {
@@ -32,7 +32,7 @@ export function ContactPage() {
     '', 'What they need help with:', form.helpNeeded,
     '', `Interest areas: ${form.interestArea || 'Not specified'}`,
     `Studio time needed: ${form.studioTime || 'Not specified'}`,
-    `Utah Bolt interest: ${form.utahBolt || 'Not specified'}`,
+    `Preferred studio: ${form.preferredStudio || 'Not specified'}`,
     `Timeline: ${form.timeline || 'Not specified'}`,
     `Estimated budget: ${form.budget || 'Not specified'}`,
     '', 'Additional notes:', form.notes || 'None',
@@ -94,11 +94,13 @@ export function ContactPage() {
                 <option value="No">No</option>
                 <option value="Maybe">Maybe / not sure</option>
               </select>
-              <select value={form.utahBolt} onChange={set('utahBolt')} className={inputClass}>
-                <option value="">Interested in Utah Bolt robot studio?</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-                <option value="Learn more">I'd like to learn more</option>
+              <select value={form.preferredStudio} onChange={set('preferredStudio')} className={inputClass}>
+                <option value="">Preferred studio location?</option>
+                <option value="Austin, Texas">Austin, Texas</option>
+                <option value="Salt Lake City, Utah">Salt Lake City, Utah</option>
+                <option value="San Diego, California">San Diego, California</option>
+                <option value="On location">On location / flexible</option>
+                <option value="Not sure">Not sure yet</option>
               </select>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">

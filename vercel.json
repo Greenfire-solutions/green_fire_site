@@ -8,7 +8,8 @@
     { "source": "/cinematic", "destination": "/offerings/cinematic", "permanent": true },
     { "source": "/studio", "destination": "/offerings/studio", "permanent": true },
     { "source": "/workshops", "destination": "/offerings/workshops", "permanent": true },
-    { "source": "/utah-bolt", "destination": "/offerings/utah-bolt", "permanent": true },
+    { "source": "/utah-bolt", "destination": "/offerings/cinematic", "permanent": true },
+    { "source": "/offerings/utah-bolt", "destination": "/offerings/cinematic", "permanent": true },
     { "source": "/program", "destination": "/how-it-works", "permanent": true }
   ]
 }

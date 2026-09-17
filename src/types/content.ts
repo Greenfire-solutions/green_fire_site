@@ -16,7 +16,6 @@ export type OfferingCategory =
   | 'studio_session'
   | 'workshop_topic'
   | 'workshop_audience'
-  | 'utah_bolt_ideal'
   | 'hero_cta'
   | 'contact_cta';
 
@@ -92,10 +91,10 @@ export interface PageCopy {
   intro?: string;
   sectionLabel?: string;
   sectionTitle?: string;
-  boltAdvantage?: string;
   travelNote?: string;
   pricingNote?: string;
   cinematicIntro?: string;
+  studioLocations?: string;
 }
 
 export interface SiteContent {
@@ -114,7 +113,6 @@ export interface SiteContent {
     cinematic: PageCopy;
     studio: PageCopy;
     workshops: PageCopy;
-    utahBolt: PageCopy;
     program: PageCopy & {
       introParagraphs: string[];
       builtAround: string[];
@@ -141,6 +139,5 @@ export type AdminSection =
   | 'cinematic'
   | 'studio'
   | 'workshops'
-  | 'utah_bolt'
   | 'program'
   | 'contact';

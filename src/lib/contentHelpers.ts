@@ -182,8 +182,8 @@ const DEFAULT_MEDIA_SHOWCASES: OfferingItem[] = [
     title: 'Cinematic Production',
     subtitle: 'Premium motion for films, music, and campaigns',
     description:
-      'High-end cinematic production for music videos, documentaries, commercials, and hero films — including Utah Bolt precision camera movement when needed.',
-    price: 'Custom quote',
+      'High-end cinematic production for music videos, documentaries, commercials, and hero films. Packages start at $10,000. Studios in Austin, Salt Lake City, and San Diego.',
+    price: 'From $10,000',
     category: 'media_showcase',
     includes: ['Cinematic direction', 'Premium camera work', 'Color & sound polish', 'Delivery for film & web'],
     bestFor: ['Music artists', 'Agencies', 'Documentaries', 'Premium brands'],

@@ -17,7 +17,7 @@ Public site for **Greenfire Innovation Center**, powered by the **Greenfire Crea
 | `/` | New vision homepage |
 | `/how-it-works` | Ten-stage system + Program deep dive |
 | `/offerings` | Creative services hub (former homepage content) |
-| `/offerings/packages` … | Studio, cinematic, workshops, Utah Bolt |
+| `/offerings/packages` … | Packages, cinematic, studio, workshops |
 | `/open-source` | Creator Commons open-source framework |
 | `/get-involved` | Participation pathways + intake form |
 | `/pilot-roadmap` | Pilot milestones |

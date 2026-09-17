@@ -5,7 +5,7 @@ import {
   adminLogin, getAdminToken, clearAdminToken, publishSiteContent,
   saveDraftLocally, loadDraftLocally, clearDraftLocally, fetchPublishStatus,
 } from '../lib/adminApi';
-import { validateContent, newOfferingId, duplicateOffering, ensureMediaShowcases } from '../lib/contentHelpers';
+import { validateContent, newOfferingId, duplicateOffering, ensureMediaShowcases, getVisibleOfferings } from '../lib/contentHelpers';
 import { PublicPackageCard, OfferingMedia } from '../components/ContentButton';
 import { MediaField } from './MediaField';
 import bundledContent from '../data/siteContent.json';
@@ -19,7 +19,6 @@ const SECTIONS: { id: AdminSection; label: string; category?: OfferingItem['cate
   { id: 'cinematic', label: 'Cinematic', category: 'cinematic' },
   { id: 'studio', label: 'Studio', category: 'studio_session' },
   { id: 'workshops', label: 'Workshops', category: 'workshop_topic' },
-  { id: 'utah_bolt', label: 'Utah Bolt', category: 'utah_bolt_ideal' },
   { id: 'what_we_offer', label: 'Service Chips (legacy)', category: 'what_we_offer' },
   { id: 'program', label: 'How It Works / Program' },
   { id: 'contact', label: 'Contact / CTAs', category: 'contact_cta' },
@@ -147,7 +146,7 @@ function OfferingEditor({
         <select value={item.buttonActionType} onChange={(e) => set('buttonActionType', e.target.value as OfferingItem['buttonActionType'])} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white">
           {BTN_ACTIONS.map((a) => <option key={a.value} value={a.value}>{a.label}</option>)}
         </select>
-        <input placeholder="Internal page (home, packages, cinematic, studio, workshops, utah-bolt, program, contact)" value={item.internalPage || ''} onChange={(e) => set('internalPage', e.target.value)} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
+        <input placeholder="Internal page (home, packages, cinematic, studio, workshops, program, contact)" value={item.internalPage || ''} onChange={(e) => set('internalPage', e.target.value)} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
         <input placeholder="External / video URL" value={item.buttonUrl || ''} onChange={(e) => set('buttonUrl', e.target.value)} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
         <input placeholder="Email recipient" value={item.buttonEmail || ''} onChange={(e) => set('buttonEmail', e.target.value)} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
         <input placeholder="Email subject" value={item.buttonSubject || ''} onChange={(e) => set('buttonSubject', e.target.value)} className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-white" />
@@ -525,8 +524,9 @@ function AdminDashboard() {
             {section === 'cinematic' && (
               <>
                 <input value={content.pages.cinematic.headline || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, cinematic: { ...content.pages.cinematic, headline: e.target.value } } })} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" />
-                <textarea value={content.pages.cinematic.cinematicIntro || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, cinematic: { ...content.pages.cinematic, cinematicIntro: e.target.value } } })} rows={3} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" />
-                <textarea value={content.pages.cinematic.boltAdvantage || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, cinematic: { ...content.pages.cinematic, boltAdvantage: e.target.value } } })} rows={3} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" />
+                <textarea value={content.pages.cinematic.cinematicIntro || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, cinematic: { ...content.pages.cinematic, cinematicIntro: e.target.value } } })} rows={3} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" placeholder="Intro" />
+                <textarea value={content.pages.cinematic.studioLocations || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, cinematic: { ...content.pages.cinematic, studioLocations: e.target.value } } })} rows={2} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" placeholder="Studio locations note" />
+                <textarea value={content.pages.cinematic.pricingNote || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, cinematic: { ...content.pages.cinematic, pricingNote: e.target.value } } })} rows={2} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" placeholder="Pricing note (from $10,000)" />
               </>
             )}
           </div>
@@ -549,15 +549,6 @@ function AdminDashboard() {
             {content.offerings.filter((o) => o.category === 'workshop_audience').map((item) => (
               <OfferingEditor key={item.id} item={item} onChange={(n) => updateOffering(item.id, n)} onDelete={() => deleteOffering(item.id)} onDuplicate={() => setContent((c) => ({ ...c, offerings: [...c.offerings, duplicateOffering(item)] }))} onMoveUp={() => moveOffering(item.id, -1)} onMoveDown={() => moveOffering(item.id, 1)} />
             ))}
-          </div>
-        )}
-
-        {section === 'utah_bolt' && (
-          <div className="space-y-3 max-w-2xl mb-6">
-            <h2 className="text-2xl font-bold text-white">Utah Bolt Page</h2>
-            <input value={content.pages.utahBolt.headline || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, utahBolt: { ...content.pages.utahBolt, headline: e.target.value } } })} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" />
-            <textarea value={content.pages.utahBolt.intro || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, utahBolt: { ...content.pages.utahBolt, intro: e.target.value } } })} rows={3} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" />
-            <textarea value={content.pages.utahBolt.travelNote || ''} onChange={(e) => setContent({ ...content, pages: { ...content.pages, utahBolt: { ...content.pages.utahBolt, travelNote: e.target.value } } })} rows={2} className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white" />
           </div>
         )}
 

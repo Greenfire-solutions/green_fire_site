@@ -28,12 +28,12 @@ export function SiteLayout({ children }: SiteLayoutProps) {
     <div className="min-h-screen bg-neutral-950 text-stone-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-100">
       <header className="sticky top-0 z-50 border-b border-white/5 bg-neutral-950/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <Link to={ROUTES.home} className="flex items-center gap-3 group shrink-0">
-            <div className="rounded-full bg-emerald-500/10 p-2.5 ring-1 ring-emerald-400/30 transition-all group-hover:bg-emerald-500/20">
+          <Link to={ROUTES.home} className="flex min-w-0 items-center gap-3 group">
+            <div className="shrink-0 rounded-full bg-emerald-500/10 p-2.5 ring-1 ring-emerald-400/30 transition-all group-hover:bg-emerald-500/20">
               <Flame className="h-6 w-6 text-emerald-400" />
             </div>
-            <div className="text-left">
-              <span className="block text-sm md:text-lg font-bold tracking-wide text-white leading-tight">
+            <div className="min-w-0 text-left">
+              <span className="block truncate text-sm md:text-lg font-bold tracking-wide text-white leading-tight">
                 {siteConfig.organizationName}
               </span>
               <span className="block text-[10px] font-bold uppercase tracking-widest text-emerald-400/80 hidden sm:block">
@@ -70,7 +70,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
             aria-label="Menu"
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden rounded-lg p-2 text-stone-300 hover:bg-white/5"
+            className="lg:hidden shrink-0 rounded-lg p-2 text-stone-300 hover:bg-white/5"
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>

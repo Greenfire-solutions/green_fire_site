@@ -27,7 +27,7 @@
         {
           "step": "02",
           "title": "Create",
-          "description": "Record, shoot, design, and produce in our studio or on location — including Utah Bolt cinematic production."
+          "description": "Record, shoot, design, and produce in our studio or on location."
         },
         {
           "step": "03",
@@ -42,7 +42,7 @@
       ],
       "combinedSectionTitle": "Combined creative packages",
       "bottomCtaTitle": "Ready to build something real?",
-      "bottomCtaText": "Book social media, brand building, or cinematic production. Tell us your vision and we will scope the right package."
+      "bottomCtaText": "Book social media, brand building, or cinematic production (from $10,000). Studios in Austin, TX; Salt Lake City, UT; and San Diego, CA."
     },
     "packages": {
       "headline": "Media packages built for your project",
@@ -50,8 +50,9 @@
     },
     "cinematic": {
       "headline": "Premium cinematic content production",
-      "cinematicIntro": "For brands, artists, products, businesses, and campaigns that need high-end cinematic visuals, Green Fire Media Hub offers premium production packages through our Utah-based cinematic studio setup.",
-      "boltAdvantage": "The Bolt system allows for precise, repeatable, high-speed camera moves that create clean, controlled, and eye-catching shots. This is ideal for product shots, music visuals, cinematic brand content, slow-motion movement, performance footage, and high-end social ads."
+      "cinematicIntro": "For brands, artists, products, businesses, and campaigns that need high-end cinematic visuals. Cinematic packages start at $10,000 and go up based on creative needs, locations, crew, and deliverables. We produce from studios in Austin, Texas; Salt Lake City, Utah; and San Diego, California — and on location when the project calls for it.",
+      "studioLocations": "Studios in Austin, Texas · Salt Lake City, Utah · San Diego, California",
+      "pricingNote": "Cinematic packages start at $10,000 and are quoted based on scope."
     },
     "studio": {
       "headline": "Use the Green Fire Media Studio",
@@ -60,11 +61,6 @@
     "workshops": {
       "headline": "Learn the Skills While Building the Project",
       "intro": "Everything offered through Green Fire Media Hub can also be taught through private lessons, group workshops, or guided project sessions."
-    },
-    "utahBolt": {
-      "headline": "High-End Robot Arm Production in Utah",
-      "intro": "The Bolt robot arm and cinematic studio setup are located in Utah. Clients can travel to the Utah studio to create professional cinematic content using advanced camera movement, lighting, slow motion, and motion-controlled shots.",
-      "travelNote": "Travel can be built into custom packages when needed. Final pricing may include production time, setup, travel, lodging, gear transport, and any additional shoot requirements."
     },
     "program": {
       "headline": "What Is Green Fire Media Hub?",
@@ -118,13 +114,12 @@
       "intro": "Tell us what you are creating and what kind of support you need.",
       "bookingOptions": [
         "A media package",
-        "A cinematic production package",
+        "A cinematic production package (from $10,000)",
         "A studio session",
         "A music production session",
         "A content day",
         "A workshop",
         "A private lesson",
-        "A Utah Bolt robot production session",
         "A full creative launch package"
       ],
       "projectTypes": [
@@ -132,12 +127,11 @@
         "Music + Media Package",
         "Content Creation Package",
         "Full Creative Launch Package",
-        "Signature Content ($3,500)",
-        "Cinematic Motion ($7,500)",
-        "Full Campaign Production ($12,000)",
+        "Signature Content (from $10,000)",
+        "Cinematic Motion (from $15,000)",
+        "Full Campaign Production (from $25,000)",
         "Studio Session",
         "Workshop / Private Lesson",
-        "Utah Bolt Production",
         "Community / Program Collaboration",
         "Other"
       ],
@@ -149,7 +143,7 @@
         "Workshops",
         "Cinematic production"
       ],
-      "pricingNote": "Every project is quoted based on scope, production needs, editing time, travel, location, equipment, and final deliverables. Cinematic Bolt robot productions begin at $3,500 and are based in Utah."
+      "pricingNote": "Every project is quoted based on scope, production needs, editing time, travel, location, equipment, and final deliverables. Cinematic packages start at $10,000. Studios in Austin, TX; Salt Lake City, UT; and San Diego, CA."
     }
   },
   "offerings": [
@@ -168,8 +162,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -187,8 +180,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -206,8 +198,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -225,8 +216,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -244,8 +234,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -263,8 +252,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -282,8 +270,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -301,8 +288,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -320,8 +306,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -339,8 +324,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -358,8 +342,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -377,8 +360,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -396,8 +378,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -415,27 +396,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
-      "internalPage": "contact"
-    },
-    {
-      "id": "offer-robot-arm-camera-movement",
-      "title": "Robot Arm Camera Movement",
-      "description": "Robot Arm Camera Movement",
-      "price": "",
-      "category": "what_we_offer",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "icon": "Bot",
-      "featured": false,
-      "order": 15,
-      "visible": true,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -453,8 +414,7 @@
       "visible": true,
       "buttonLabel": "",
       "buttonActionType": "contact_form",
-      "buttonSubject": "",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in .\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in.",
       "internalPage": "contact"
     },
     {
@@ -487,7 +447,7 @@
       "buttonLabel": "Book a Brand Starter Call",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Brand Starter Package",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Brand Starter Package.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Brand Starter Package.",
       "internalPage": "contact"
     },
     {
@@ -522,7 +482,7 @@
       "buttonLabel": "Book a Music + Media Session",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Music + Media Package",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Music + Media Package.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Music + Media Package.",
       "internalPage": "contact"
     },
     {
@@ -558,7 +518,7 @@
       "buttonLabel": "Book a Content Package",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Content Creation Package",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Content Creation Package.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Content Creation Package.",
       "internalPage": "contact"
     },
     {
@@ -581,8 +541,7 @@
         "Creative direction",
         "Social media content",
         "Studio production",
-        "Campaign planning",
-        "Optional cinematic Bolt robot production in Utah"
+        "Campaign planning"
       ],
       "bestFor": [
         "Full creative launches",
@@ -594,15 +553,15 @@
       "buttonLabel": "Build My Creative Launch",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Full Creative Launch Package",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Full Creative Launch Package.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Full Creative Launch Package.",
       "internalPage": "contact"
     },
     {
       "id": "cine-signature",
       "title": "Signature Content",
-      "price": "$3,500",
+      "price": "From $10,000",
       "premium": true,
-      "description": "Half-day premium production for artists, brands, and campaigns that need polished cinematic visuals.",
+      "description": "Half-day to full-day premium cinematic production for artists, brands, and campaigns. Pricing starts at $10,000 and scales with scope, locations, crew, and deliverables.",
       "category": "cinematic",
       "includes": [
         "Half-day production, up to 4 hours",
@@ -626,20 +585,20 @@
       "visible": true,
       "buttonLabel": "Book Signature Content",
       "buttonActionType": "contact_form",
-      "buttonSubject": "Green Fire — Signature Content ($3,500)",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Signature Content ($3,500).\n\n",
+      "buttonSubject": "Green Fire — Signature Content (from $10,000)",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Signature Content (from $10,000).",
       "internalPage": "contact"
     },
     {
       "id": "cine-motion",
       "title": "Cinematic Motion",
-      "price": "$7,500",
+      "price": "From $15,000",
       "premium": true,
-      "description": "Full-day production with Bolt robot operation for high-end brand and performance content.",
+      "description": "Expanded cinematic production for high-end brand, music, and performance content. Starts above the base package and is quoted to your needs.",
       "category": "cinematic",
       "includes": [
         "Full-day production, up to 8 hours",
-        "Bolt robot operation included",
+        "Premium cinematic production",
         "Advanced camera and lighting setup",
         "4–6 edited videos",
         "Color grading and sound design",
@@ -662,20 +621,20 @@
       "visible": true,
       "buttonLabel": "Book Cinematic Motion",
       "buttonActionType": "contact_form",
-      "buttonSubject": "Green Fire — Cinematic Motion ($7,500)",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Cinematic Motion ($7,500).\n\n",
+      "buttonSubject": "Green Fire — Cinematic Motion (from $15,000)",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Cinematic Motion (from $15,000).",
       "internalPage": "contact"
     },
     {
       "id": "cine-campaign",
       "title": "Full Campaign Production",
-      "price": "$12,000",
+      "price": "From $25,000",
       "premium": true,
-      "description": "Expanded creative direction and deliverables for full brand campaigns and major rollouts.",
+      "description": "Full campaign-scale cinematic production across multiple deliverables and platforms. Quoted from $25,000 based on creative scope and needs.",
       "category": "cinematic",
       "includes": [
         "Full-day production with expanded creative direction",
-        "Priority Bolt robot operation",
+        "Priority production scheduling",
         "Full camera and lighting package",
         "6–10 edited videos",
         "Concept development",
@@ -698,8 +657,8 @@
       "visible": true,
       "buttonLabel": "Book Full Campaign",
       "buttonActionType": "contact_form",
-      "buttonSubject": "Green Fire — Full Campaign Production ($12,000)",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Full Campaign Production ($12,000).\n\n",
+      "buttonSubject": "Green Fire — Full Campaign Production (from $25,000)",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Full Campaign Production (from $25,000).",
       "internalPage": "contact"
     },
     {
@@ -789,7 +748,7 @@
       "price": "Custom quote",
       "category": "combined",
       "includes": [
-        "Studio recording, performance video, short-form clips, promo graphics, cover art direction, flyers, editing, release content planning, and optional cinematic Bolt robot production in Utah."
+        "Studio recording, performance video, short-form clips, promo graphics, cover art direction, flyers, editing, release content planning, and."
       ],
       "bestFor": [],
       "addOns": [],
@@ -799,7 +758,7 @@
       "buttonLabel": "Book Artist Content Day",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Artist Content Day",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Artist Content Day.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Artist Content Day.",
       "internalPage": "contact"
     },
     {
@@ -819,7 +778,7 @@
       "buttonLabel": "Book Business Media Day",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Business Media Day",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Business Media Day.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Business Media Day.",
       "internalPage": "contact"
     },
     {
@@ -829,7 +788,7 @@
       "price": "Custom quote",
       "category": "combined",
       "includes": [
-        "Song production, recording, video shoot, editing, cover art, promo graphics, reels and shorts, landing page, release strategy, and optional cinematic robot arm shots in Utah."
+        "Song production, recording, video shoot, editing, cover art, promo graphics, reels and shorts, landing page, release strategy, and."
       ],
       "bestFor": [],
       "addOns": [],
@@ -839,7 +798,7 @@
       "buttonLabel": "Book Music Video + Release Build",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Music Video + Release Build",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Music Video + Release Build.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Music Video + Release Build.",
       "internalPage": "contact"
     },
     {
@@ -859,7 +818,7 @@
       "buttonLabel": "Book Workshop + Studio Build",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Workshop + Studio Build",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Workshop + Studio Build.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Workshop + Studio Build.",
       "internalPage": "contact"
     },
     {
@@ -1439,150 +1398,6 @@
       "internalPage": "contact"
     },
     {
-      "id": "bolt-0",
-      "title": "Music videos",
-      "description": "Music videos",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 0,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
-      "id": "bolt-1",
-      "title": "Product videos",
-      "description": "Product videos",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 1,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
-      "id": "bolt-2",
-      "title": "Brand campaigns",
-      "description": "Brand campaigns",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 2,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
-      "id": "bolt-3",
-      "title": "Performance visuals",
-      "description": "Performance visuals",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 3,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
-      "id": "bolt-4",
-      "title": "Social media ads",
-      "description": "Social media ads",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 4,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
-      "id": "bolt-5",
-      "title": "Cinematic promos",
-      "description": "Cinematic promos",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 5,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
-      "id": "bolt-6",
-      "title": "Launch campaigns",
-      "description": "Launch campaigns",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 6,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
-      "id": "bolt-7",
-      "title": "High-end artist content",
-      "description": "High-end artist content",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 7,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
-      "id": "bolt-8",
-      "title": "Experimental creative shoots",
-      "description": "Experimental creative shoots",
-      "price": "",
-      "category": "utah_bolt_ideal",
-      "includes": [],
-      "bestFor": [],
-      "addOns": [],
-      "order": 8,
-      "visible": true,
-      "featured": false,
-      "buttonLabel": "",
-      "buttonActionType": "contact_form",
-      "internalPage": "contact"
-    },
-    {
       "id": "hero-cta-book",
       "title": "Book a Package",
       "description": "",
@@ -1597,7 +1412,7 @@
       "buttonLabel": "Book a Package",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Book a Package",
-      "buttonMessage": "Hi Green Fire team,\n\nI'd like to book a package.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'd like to book a package.",
       "internalPage": "contact"
     },
     {
@@ -1663,7 +1478,7 @@
       "buttonLabel": "Start a Project",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Booking Inquiry",
-      "buttonMessage": "Hi Green Fire team,\n\nI'm interested in Booking Inquiry.\n\n",
+      "buttonMessage": "Hi Green Fire team, I'm interested in Booking Inquiry.",
       "internalPage": "contact"
     },
     {
@@ -1695,7 +1510,7 @@
       "buttonLabel": "Book Now",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Social Media Production",
-      "buttonMessage": "Hi Green Fire team,\n\nI am interested in Social Media production.\n\n",
+      "buttonMessage": "Hi Green Fire team, I am interested in Social Media production.",
       "internalPage": "contact"
     },
     {
@@ -1727,15 +1542,15 @@
       "buttonLabel": "Book Now",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Brand Building Media",
-      "buttonMessage": "Hi Green Fire team,\n\nI am interested in Brand Building media.\n\n",
+      "buttonMessage": "Hi Green Fire team, I am interested in Brand Building media.",
       "internalPage": "contact"
     },
     {
       "id": "media-showcase-cinematic",
       "title": "Cinematic Production",
       "subtitle": "Premium motion for films, music, and campaigns",
-      "description": "High-end cinematic production for music videos, documentaries, commercials, and hero films — including Utah Bolt precision camera movement when needed.",
-      "price": "Custom quote",
+      "description": "High-end cinematic production for music videos, documentaries, commercials, and hero films. Packages start at $10,000 and scale based on needs. Studios in Austin, Texas; Salt Lake City, Utah; and San Diego, California.",
+      "price": "From $10,000",
       "category": "media_showcase",
       "includes": [
         "Cinematic direction",
@@ -1760,7 +1575,7 @@
       "buttonLabel": "Book Now",
       "buttonActionType": "contact_form",
       "buttonSubject": "Green Fire — Cinematic Production",
-      "buttonMessage": "Hi Green Fire team,\n\nI am interested in Cinematic Production.\n\n",
+      "buttonMessage": "Hi Green Fire team, I am interested in Cinematic Production.",
       "internalPage": "contact"
     }
   ]

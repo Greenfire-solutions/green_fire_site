@@ -54,7 +54,7 @@ export function ProgramDeepDive() {
             >
               Join Founding Circle
             </ContactButton>
-            <button onClick={() => document.getElementById('system-map').scrollIntoView({behavior: 'smooth'})} className="rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white hover:bg-white/10 transition-colors">Explore Map</button>
+            <button onClick={() => document.getElementById('system-map')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white hover:bg-white/10 transition-colors">Explore Map</button>
           </div>
         </div>
       </section>
