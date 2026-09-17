@@ -11,3 +11,5 @@ Bioregional-OS
 # The Greenfire operator (local-only tooling, never deployed)
 _TOOLS
 Start Greenfire.app
+.vercel
+.env*
