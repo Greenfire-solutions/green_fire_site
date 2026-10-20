@@ -6,17 +6,12 @@ import { useSiteContent } from '../context/ContentContext';
 import { getVisibleOfferings } from '../lib/contentHelpers';
 import { offeringsStatement } from '../data/offeringsData';
 import { siteConfig } from '../config/siteConfig';
-import { usePageMeta } from '../lib/usePageMeta';
 import { ROUTES } from '../lib/routes';
 import { useContact } from '../components/ContactProvider';
 
 const STEP_ICONS = [Search, Hammer, Video, Network];
 
 export function OfferingsPage() {
-  usePageMeta(
-    siteConfig.seo.offeringsTitle,
-    'Social media, brand building, and cinematic production from Green Fire Media.',
-  );
 
   const content = useSiteContent();
   const { goToContact } = useContact();

@@ -2,10 +2,8 @@ import { pilotRoadmap } from '../data/pilotRoadmapData';
 import { siteConfig } from '../config/siteConfig';
 import { PageHero, SectionLabel } from '../components/ui';
 import { StatusBadge } from '../components/StatusBadge';
-import { usePageMeta } from '../lib/usePageMeta';
 
 export function PilotRoadmapPage() {
-  usePageMeta('Pilot Roadmap | Greenfire Innovation Center', pilotRoadmap.intro);
 
   return (
     <>

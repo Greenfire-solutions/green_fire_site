@@ -30,14 +30,9 @@ import { CoreCapacitiesSection } from '../components/home/CoreCapacitiesSection'
 import { ElderGuidanceSection } from '../components/home/ElderGuidanceSection';
 import { LearnMorePanel } from '../components/home/LearnMorePanel';
 import { StatusBadge, StatusNote } from '../components/StatusBadge';
-import { usePageMeta } from '../lib/usePageMeta';
 import { getServiceIcon } from '../lib/icons';
 
 export function HomePage() {
-  usePageMeta(
-    'Green Fire Research and Innovation Center | Council, Creativity & Community Solutions',
-    'Green Fire is a living center for council, creativity, regeneration, and community solutions — gathering people to solve real problems together.',
-  );
 
   return (
     <>

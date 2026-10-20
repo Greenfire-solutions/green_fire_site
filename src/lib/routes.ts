@@ -12,6 +12,8 @@ export const ROUTES = {
   contact: '/contact',
   start: '/start',
   pilotRoadmap: '/pilot-roadmap',
+  /** Static HTML written at build time by scripts/seo/build.mjs, not a React route. */
+  blog: '/blog/',
   admin: '/admin',
 } as const;
 
@@ -44,12 +46,14 @@ export const PRIMARY_NAV = [
   { path: ROUTES.start, label: 'AI Help' },
   { path: ROUTES.offerings, label: 'Offerings' },
   { path: ROUTES.tech, label: 'Tech' },
+  { path: ROUTES.blog, label: 'Blog' },
   { path: ROUTES.openSource, label: 'Open Source' },
   { path: ROUTES.getInvolved, label: 'Get Involved' },
 ] as const;
 
 export const FOOTER_NAV = [
   { path: ROUTES.howItWorks, label: 'About' },
+  { path: ROUTES.blog, label: 'Blog' },
   { path: ROUTES.pilotRoadmap, label: 'Pilot Roadmap' },
   { path: ROUTES.tech, label: 'Tech and 3D' },
   { path: ROUTES.getInvolved, label: 'Community Intake' },
@@ -57,3 +61,6 @@ export const FOOTER_NAV = [
   { path: ROUTES.openSource, label: 'Data and Consent' },
   { path: ROUTES.contact, label: 'Contact' },
 ] as const;
+
+/** The blog is plain HTML outside the app, so it needs a full page load, not a router push. */
+export const isStaticPath = (path: string) => path === ROUTES.blog || path.startsWith('/blog');

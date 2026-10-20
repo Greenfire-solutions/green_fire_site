@@ -21,6 +21,21 @@ import { AdminApp } from './admin/AdminApp';
 const TechPage = lazy(() => import('./pages/TechPage').then((m) => ({ default: m.TechPage })));
 import { ROUTES } from './lib/routes';
 
+/* Only reached when the router, not the server, lands on /blog: a CMS link or
+   a typed path inside the app. In production the real file is one load away;
+   in `npm run dev` there is no file, because the blog is written by the build. */
+function BlogFallback() {
+  if (!import.meta.env.DEV) {
+    window.location.replace(window.location.pathname + window.location.search + window.location.hash);
+    return null;
+  }
+  return (
+    <div className="mx-auto max-w-2xl px-4 py-24 text-stone-300">
+      The blog is static HTML made by the build. Run <code>npm run build</code> then <code>npm run preview</code> to see it.
+    </div>
+  );
+}
+
 function PublicSite() {
   return (
     <ContentProvider>
@@ -49,6 +64,7 @@ function PublicSite() {
             <Route path="/start" element={<StartPage />} />
             <Route path="/start/thanks" element={<StartThanksPage />} />
             <Route path="/ai" element={<Navigate to="/start" replace />} />
+            <Route path="/blog/*" element={<BlogFallback />} />
 
             {/* Legacy redirects */}
             <Route path="/packages" element={<Navigate to={ROUTES.offeringsPackages} replace />} />

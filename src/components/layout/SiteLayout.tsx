@@ -4,7 +4,16 @@ import { Flame, Mail, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSiteContent } from '../../context/ContentContext';
 import { siteConfig } from '../../config/siteConfig';
-import { PRIMARY_NAV, FOOTER_NAV, ROUTES } from '../../lib/routes';
+import { PRIMARY_NAV, FOOTER_NAV, ROUTES, isStaticPath } from '../../lib/routes';
+import { usePageMeta } from '../../lib/usePageMeta';
+
+/* A router Link to the static blog would render an empty app page, so those
+   links are plain anchors that load the file Vercel serves. */
+function NavLink({ to, className, onClick, children }: { to: string; className: string; onClick?: () => void; children: React.ReactNode }) {
+  return isStaticPath(to)
+    ? <a href={to} className={className} onClick={onClick}>{children}</a>
+    : <Link to={to} className={className} onClick={onClick}>{children}</Link>;
+}
 
 type SiteLayoutProps = {
   children: React.ReactNode;
@@ -14,6 +23,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { settings } = useSiteContent();
   const location = useLocation();
+  usePageMeta();
   const contactEmail = settings.contactEmail || siteConfig.contactEmail;
 
   const isActive = (path: string) => {
@@ -44,7 +54,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
             {PRIMARY_NAV.map((item) => (
-              <Link
+              <NavLink
                 key={item.path}
                 to={item.path}
                 className={`rounded-full px-3 py-2 text-xs font-semibold transition-colors ${
@@ -54,7 +64,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
                 }`}
               >
                 {item.label}
-              </Link>
+              </NavLink>
             ))}
           </nav>
 
@@ -86,7 +96,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
             >
               <div className="grid grid-cols-2 gap-2">
                 {PRIMARY_NAV.map((item) => (
-                  <Link
+                  <NavLink
                     key={item.path}
                     to={item.path}
                     onClick={() => setMobileOpen(false)}
@@ -97,7 +107,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
                     }`}
                   >
                     {item.label}
-                  </Link>
+                  </NavLink>
                 ))}
               </div>
               <Link
@@ -127,9 +137,9 @@ export function SiteLayout({ children }: SiteLayoutProps) {
             </div>
             <nav className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-2" aria-label="Footer">
               {FOOTER_NAV.map((item) => (
-                <Link key={`${item.path}-${item.label}`} to={item.path} className="text-stone-400 hover:text-emerald-300 text-xs">
+                <NavLink key={`${item.path}-${item.label}`} to={item.path} className="text-stone-400 hover:text-emerald-300 text-xs">
                   {item.label}
-                </Link>
+                </NavLink>
               ))}
             </nav>
           </div>

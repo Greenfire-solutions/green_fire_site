@@ -4,10 +4,8 @@ import { linksConfig } from '../config/linksConfig';
 import { siteConfig } from '../config/siteConfig';
 import { PageHero, SectionLabel, BookButton } from '../components/ui';
 import { StatusBadge, StatusNote } from '../components/StatusBadge';
-import { usePageMeta } from '../lib/usePageMeta';
 
 export function OpenSourcePage() {
-  usePageMeta(siteConfig.seo.openSourceTitle, openSourceContent.intro);
 
   return (
     <>

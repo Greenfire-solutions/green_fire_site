@@ -1,15 +1,68 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/((?!api/)(?!assets/).*)", "destination": "/index.html" }
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog/index.html"
+    },
+    {
+      "source": "/blog/:path*",
+      "destination": "/blog/:path*/index.html"
+    },
+    {
+      "source": "/((?!api/)(?!assets/).*)",
+      "destination": "/index.html"
+    }
   ],
   "redirects": [
-    { "source": "/packages", "destination": "/offerings/packages", "permanent": true },
-    { "source": "/cinematic", "destination": "/offerings/cinematic", "permanent": true },
-    { "source": "/studio", "destination": "/offerings/studio", "permanent": true },
-    { "source": "/workshops", "destination": "/offerings/workshops", "permanent": true },
-    { "source": "/utah-bolt", "destination": "/offerings/cinematic", "permanent": true },
-    { "source": "/offerings/utah-bolt", "destination": "/offerings/cinematic", "permanent": true },
-    { "source": "/program", "destination": "/how-it-works", "permanent": true }
+    {
+      "source": "/packages",
+      "destination": "/offerings/packages",
+      "permanent": true
+    },
+    {
+      "source": "/cinematic",
+      "destination": "/offerings/cinematic",
+      "permanent": true
+    },
+    {
+      "source": "/studio",
+      "destination": "/offerings/studio",
+      "permanent": true
+    },
+    {
+      "source": "/workshops",
+      "destination": "/offerings/workshops",
+      "permanent": true
+    },
+    {
+      "source": "/utah-bolt",
+      "destination": "/offerings/cinematic",
+      "permanent": true
+    },
+    {
+      "source": "/offerings/utah-bolt",
+      "destination": "/offerings/cinematic",
+      "permanent": true
+    },
+    {
+      "source": "/program",
+      "destination": "/how-it-works",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/blog/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
   ]
 }

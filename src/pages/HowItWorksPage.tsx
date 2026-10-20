@@ -11,12 +11,10 @@ import { conflictSection } from '../data/offeringsData';
 import { elderGuidance } from '../data/elderGuidanceData';
 import { impactCategories } from '../data/impactMetricsData';
 import { siteConfig } from '../config/siteConfig';
-import { usePageMeta } from '../lib/usePageMeta';
 import { StatusBadge, StatusNote } from '../components/StatusBadge';
 import { eventRevenueExample } from '../data/pilotRoadmapData';
 
 export function HowItWorksPage() {
-  usePageMeta(siteConfig.seo.howItWorksTitle, siteConfig.seo.homeDescription);
   const content = useSiteContent();
   const { program } = content.pages;
   const [openSection, setOpenSection] = useState<string | null>('vision');

@@ -1,0 +1,81 @@
+{
+  "_comment": "THE ONE HOME for search. The site address, and the title, description and heading every public page shows to Google and to AI crawlers. The SPA reads it on every route change (src/lib/usePageMeta.ts) and the build writes a real HTML file per route from it (scripts/seo/build.mjs), so a crawler that runs no JavaScript still sees the right page. Change the domain here and canonicals, the sitemap, the feed and every blog page follow. Titles under 60 characters, descriptions 70 to 160. No em dashes: Jordan reads them as machine written.",
+  "siteUrl": "https://green-fire-site.vercel.app",
+  "siteName": "Green Fire",
+  "organization": "Green Fire Research and Innovation Center",
+  "author": {
+    "name": "Jordan Larsen",
+    "role": "Founder, Green Fire Research and Innovation Center",
+    "bio": "Jordan builds the AI dashboards that run his own music business, The Great Medicine Show, and now builds them for artists, small businesses and community projects. He teaches AI workshops and makes interactive 3D for land projects, festivals and eco villages.",
+    "sameAs": ["https://thegreatmedicineshow.com"]
+  },
+  "defaultImage": "/og-default.jpg",
+  "routes": {
+    "/": {
+      "title": "Green Fire Research and Innovation Center",
+      "description": "Green Fire is a living center for council, creativity, regeneration and community solutions, with AI help for artists, small businesses and teams.",
+      "h1": "Green Fire Research and Innovation Center"
+    },
+    "/start": {
+      "title": "AI Help for Artists and Small Businesses | Green Fire",
+      "description": "AI workshops, one to one AI dashboard onboarding, and done for you AI dashboards built around how your business already works.",
+      "h1": "Get AI working for you"
+    },
+    "/tech": {
+      "title": "Interactive 3D for Land, Festivals and Fundraising | Green Fire",
+      "description": "Interactive 3D maps and walkthroughs for land projects, construction, festivals and fundraising, plus custom AI and UX work.",
+      "h1": "Interactive 3D and custom tech"
+    },
+    "/how-it-works": {
+      "title": "How It Works | Greenfire Creator Commons",
+      "description": "The ten stage Greenfire Creator Commons model for turning community needs into creative projects, local jobs and measurable impact.",
+      "h1": "How Greenfire works"
+    },
+    "/offerings": {
+      "title": "Offerings | Green Fire Research and Innovation Center",
+      "description": "Social media, brand building, studio and cinematic production from Green Fire Media.",
+      "h1": "Offerings"
+    },
+    "/offerings/packages": {
+      "title": "Media Packages | Green Fire",
+      "description": "Social media and brand building packages from Green Fire Media for artists, venues and community projects.",
+      "h1": "Media packages"
+    },
+    "/offerings/cinematic": {
+      "title": "Cinematic Production | Green Fire",
+      "description": "Cinematic video production for festivals, land projects, artists and community organisations.",
+      "h1": "Cinematic production"
+    },
+    "/offerings/studio": {
+      "title": "Studio | Green Fire",
+      "description": "Recording and production studio sessions with Green Fire for artists and community projects.",
+      "h1": "Studio"
+    },
+    "/offerings/workshops": {
+      "title": "Workshops | Green Fire",
+      "description": "Hands on workshops from Green Fire, from AI workflows for creative work to music and media production.",
+      "h1": "Workshops"
+    },
+    "/open-source": {
+      "title": "Open Source | Greenfire Creator Commons",
+      "description": "The Greenfire Creator Commons open source framework, including BioRegional OS, a commons platform any community can adapt.",
+      "h1": "Open source"
+    },
+    "/get-involved": {
+      "title": "Get Involved | Green Fire",
+      "description": "Bring a need, offer a skill, partner, support a project, or explore adapting Greenfire in your community.",
+      "h1": "Get involved"
+    },
+    "/pilot-roadmap": {
+      "title": "Pilot Roadmap | Green Fire",
+      "description": "The milestones of the Green Fire pilot, what is active now, what is in development and what is planned.",
+      "h1": "Pilot roadmap"
+    },
+    "/contact": {
+      "title": "Contact | Green Fire",
+      "description": "Book Green Fire for media, studio, workshops, AI help or interactive 3D, or ask a question.",
+      "h1": "Contact"
+    }
+  },
+  "noindex": ["/admin", "/start/thanks"]
+}

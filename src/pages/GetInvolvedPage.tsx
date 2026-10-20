@@ -2,13 +2,11 @@ import { participationPathways, youthSection } from '../data/participationData';
 import { siteConfig } from '../config/siteConfig';
 import { PageHero, SectionLabel, SectionTitle, BookButton, inputClass, textareaClass } from '../components/ui';
 import { StatusNote } from '../components/StatusBadge';
-import { usePageMeta } from '../lib/usePageMeta';
 import { useContact } from '../components/ContactProvider';
 import { useState } from 'react';
 import { linksConfig } from '../config/linksConfig';
 
 export function GetInvolvedPage() {
-  usePageMeta(siteConfig.seo.getInvolvedTitle, 'Bring a need, offer a skill, partner, support a project, or explore adapting Greenfire in your community.');
   const { submitMessage, isSubmitting } = useContact();
   const [form, setForm] = useState({ name: '', email: '', type: 'need', message: '' });
   const [sent, setSent] = useState(false);
