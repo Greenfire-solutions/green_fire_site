@@ -7,7 +7,7 @@ import data from '../data/startOffers.json';
    Everything on it comes from startOffers.json, the same file the Greenfire
    operator and Pip read, so the page cannot quote a price the till disagrees with. */
 
-type Offer = (typeof data.offers)[number] & { when?: string; terms?: string };
+type Offer = (typeof data.offers)[number] & { when?: string; terms?: string; book_url?: string };
 const offers = data.offers as Offer[];
 
 function OfferCard({ o, onAsk }: { o: Offer; onAsk: (id: string) => void }) {
@@ -155,10 +155,19 @@ export function StartThanksPage() {
       <p className="mt-4 text-stone-300">
         {o ? `${o.title} is booked.` : 'Your booking is in.'} One step left: tell me about your work in the short intake form, so the time we spend is about your business and not setup.
       </p>
-      <a href={data.intake_form_url} className="mt-8 inline-block rounded-xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-black hover:bg-emerald-400">
-        Fill in the intake form
-      </a>
-      <p className="mt-6 text-sm text-stone-500">I will email you within a day to set the time. Your receipt is on its way from Stripe.</p>
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
+        {o?.book_url && (
+          <a href={o.book_url} className="inline-block rounded-xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-black hover:bg-emerald-400">
+            Pick your time
+          </a>
+        )}
+        <a href={data.intake_form_url} className={`inline-block rounded-xl px-6 py-3 text-sm font-semibold ${o?.book_url ? 'border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10' : 'bg-emerald-500 text-black hover:bg-emerald-400'}`}>
+          Fill in the intake form
+        </a>
+      </div>
+      <p className="mt-6 text-sm text-stone-500">
+        {o?.book_url ? 'The calendar link above shows my open times; your Google Meet link arrives with the booking.' : 'I will email you within a day to set the time.'} Your receipt is on its way from Stripe.
+      </p>
     </section>
   );
 }

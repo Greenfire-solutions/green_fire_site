@@ -40,7 +40,9 @@
       ],
       "button": "Book my session",
       "checkout_url": "https://buy.stripe.com/7sY5kF0iWf9Z4xG53F1kA0i",
-      "checkout_link_id": "plink_1USVWrPj7NJJ79xWxp36xVnR"
+      "checkout_link_id": "plink_1USVWrPj7NJJ79xWxp36xVnR",
+      "book_url": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ39VZN3DBqcMIJC1ItWGww5gaiMBQ5dv3RGJTSiUmkiCTRdd9NlM5Xi3rdznTUSwoRS4lm9nij_",
+      "_book_note": "His Google Calendar booking page (made 2026-10-20): weekdays 1 to 5pm Central, 2 hour slots, 24 hours notice, one a day, his busy times blocked, Google Meet. Shown on /start/thanks after payment and sent in the welcome. Change the hours in Google Calendar, not here."
     },
     {
       "id": "build",
