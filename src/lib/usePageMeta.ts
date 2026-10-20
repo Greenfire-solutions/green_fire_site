@@ -32,7 +32,8 @@ export function usePageMeta() {
       setMeta('meta[property="og:description"]', 'property', 'og:description', meta.description);
     }
     setMeta('link[rel="canonical"]', 'rel', 'canonical', seo.siteUrl + path, 'href');
-    const hidden = seo.noindex.some((p) => path === p || path.startsWith(`${p}/`));
+    /* A /blog address inside the app is never a real post (those are static files), only a miss. */
+    const hidden = path.startsWith('/blog') || seo.noindex.some((p) => path === p || path.startsWith(`${p}/`));
     setMeta('meta[name="robots"]', 'name', 'robots', hidden ? 'noindex' : 'index,follow');
   }, [pathname]);
 }

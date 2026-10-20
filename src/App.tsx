@@ -21,17 +21,27 @@ import { AdminApp } from './admin/AdminApp';
 const TechPage = lazy(() => import('./pages/TechPage').then((m) => ({ default: m.TechPage })));
 import { ROUTES } from './lib/routes';
 
-/* Only reached when the router, not the server, lands on /blog: a CMS link or
-   a typed path inside the app. In production the real file is one load away;
-   in `npm run dev` there is no file, because the blog is written by the build. */
+/* Only reached when the app, not a blog file, is showing a /blog address.
+   Two ways that happens: a router link inside the app (then the real file is
+   one full load away), or a post that does not exist, which the server answers
+   with the app. The second must NOT reload, or it reloads forever: a page that
+   was loaded fresh at this very address is a missing post, so it says so. */
 function BlogFallback() {
-  if (!import.meta.env.DEV) {
+  const loadedHere = (() => {
+    try {
+      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+      return !nav || new URL(nav.name).pathname === window.location.pathname;
+    } catch { return true; }
+  })();
+  if (!import.meta.env.DEV && !loadedHere) {
     window.location.replace(window.location.pathname + window.location.search + window.location.hash);
     return null;
   }
   return (
     <div className="mx-auto max-w-2xl px-4 py-24 text-stone-300">
-      The blog is static HTML made by the build. Run <code>npm run build</code> then <code>npm run preview</code> to see it.
+      <h1 className="text-3xl font-semibold text-white">That post is not here</h1>
+      <p className="mt-4">It may have moved. <a href="/blog/" className="text-emerald-400 underline">See every post on the blog</a>.</p>
+      {import.meta.env.DEV && <p className="mt-4 text-sm text-stone-500">In npm run dev the blog does not exist: it is written by the build. Run npm run build then npm run preview.</p>}
     </div>
   );
 }
