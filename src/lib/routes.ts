@@ -10,6 +10,7 @@ export const ROUTES = {
   openSource: '/open-source',
   getInvolved: '/get-involved',
   contact: '/contact',
+  start: '/start',
   pilotRoadmap: '/pilot-roadmap',
   admin: '/admin',
 } as const;
@@ -40,6 +41,7 @@ export function resolvePath(pageOrPath?: string): string {
 export const PRIMARY_NAV = [
   { path: ROUTES.home, label: 'Home' },
   { path: ROUTES.howItWorks, label: 'How It Works' },
+  { path: ROUTES.start, label: 'AI Help' },
   { path: ROUTES.offerings, label: 'Offerings' },
   { path: ROUTES.tech, label: 'Tech' },
   { path: ROUTES.openSource, label: 'Open Source' },
