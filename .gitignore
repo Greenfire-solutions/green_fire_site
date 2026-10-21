@@ -13,3 +13,9 @@ _TOOLS
 Start Greenfire.app
 .vercel
 .env*
+
+# Private plans, manuals and business records (this repo is PUBLIC; never commit these)
+_PLANS
+_MEDIA
+*.docx
+*.xlsx
