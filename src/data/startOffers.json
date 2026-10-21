@@ -5,7 +5,8 @@
     "intro": "I teach artists, small businesses and teams to use AI, set you up with your own AI dashboard, or build one around how you already work. One to one or in a group, online or in person. Pick the one that fits, or tell me what you need and I will point you to the right one.",
     "short_link": "https://green-fire-site.vercel.app/start"
   },
-  "intake_form_url": "https://docs.google.com/forms/d/e/1FAIpQLSdYeG_TRQKYRb6keEcmDKQO54gwF_ffhQA5djcivR6JLghkrQ/viewform",
+  "intake_form_url": "https://green-fire-site.vercel.app/onboard",
+  "_intake_note": "Our own onboarding form (api/onboard.ts, questions in api/lib/onboardQuestions.ts), replacing the Google Form 2026-10-20. Add ?for=<offer id> to preselect the session. Answers land on the operator Clients tab.",
   "offers": [
     {
       "id": "workshop",

@@ -5,6 +5,10 @@
       "destination": "/api/$1"
     },
     {
+      "source": "/onboard",
+      "destination": "/api/onboard"
+    },
+    {
       "source": "/blog",
       "destination": "/blog/index.html"
     },
@@ -64,5 +68,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/onboard.ts": {
+      "includeFiles": "src/data/startOffers.json"
+    }
+  }
 }
