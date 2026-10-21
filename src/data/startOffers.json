@@ -13,8 +13,8 @@
       "video": "/videos/start-workshop.mp4",
       "poster": "/videos/start-workshop.jpg",
       "title": "AI Workflow Workshop",
-      "price_usd": 300,
-      "price_label": "$300",
+      "price_usd": 500,
+      "price_label": "$500",
       "unit": "4 hours, small group, online",
       "when": "Saturday, November 7, 4pm Central",
       "for": "You want to learn how to use AI in your own work, alongside a few other people.",
@@ -24,7 +24,7 @@
         "The starter dashboard template to keep"
       ],
       "button": "Take a seat",
-      "checkout_url": "https://buy.stripe.com/eVq28t3v80f50hqeEf1kA0h",
+      "checkout_url": "https://buy.stripe.com/3cIcN71n0e5VaW49jV1kA0l",
       "checkout_link_id": null,
       "_checkout_note": "This seat is sold by the GMS operator's store (product ai-workflow-workshop) and its sales are tracked there."
     },
@@ -33,8 +33,8 @@
       "video": "/videos/start-onboarding.mp4",
       "poster": "/videos/start-onboarding.jpg",
       "title": "One to One Dashboard Onboarding",
-      "price_usd": 250,
-      "price_label": "$250",
+      "price_usd": 500,
+      "price_label": "$500",
       "unit": "2 hours, just you, online",
       "for": "You want your own AI dashboard set up with you, on your business, at your pace.",
       "includes": [
@@ -44,8 +44,8 @@
         "A short written plan for what to automate next"
       ],
       "button": "Book my session",
-      "checkout_url": "https://buy.stripe.com/7sY5kF0iWf9Z4xG53F1kA0i",
-      "checkout_link_id": "plink_1USVWrPj7NJJ79xWxp36xVnR",
+      "checkout_url": "https://buy.stripe.com/eVq3cx0iWe5Vc08fIj1kA0m",
+      "checkout_link_id": "plink_1UT5iJPj7NJJ79xWjODmRQGw",
       "book_url": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ39VZN3DBqcMIJC1ItWGww5gaiMBQ5dv3RGJTSiUmkiCTRdd9NlM5Xi3rdznTUSwoRS4lm9nij_",
       "_book_note": "His Google Calendar booking page (made 2026-10-20): weekdays 1 to 5pm Central, 2 hour slots, 24 hours notice, one a day, his busy times blocked, Google Meet. Shown on /start/thanks after payment and sent in the welcome. Change the hours in Google Calendar, not here."
     },
