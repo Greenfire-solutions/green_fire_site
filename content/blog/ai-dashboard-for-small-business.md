@@ -1,8 +1,8 @@
 ---
 title: What an AI Dashboard for a Small Business Actually Does
 description: A plain look at what an AI dashboard does for a small business day to day, what to put on it first, and the guardrails that keep it from embarrassing you.
-date: 2026-10-20
-status: draft
+date: 2026-10-21
+status: published
 cluster: ai-small-business
 keyword: ai dashboard for small business
 tags: [ai dashboard, automation, small business]
