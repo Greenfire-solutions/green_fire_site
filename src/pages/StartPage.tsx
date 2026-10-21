@@ -7,12 +7,30 @@ import data from '../data/startOffers.json';
    Everything on it comes from startOffers.json, the same file the Greenfire
    operator and Pip read, so the page cannot quote a price the till disagrees with. */
 
-type Offer = (typeof data.offers)[number] & { when?: string; terms?: string; book_url?: string };
+type Offer = (typeof data.offers)[number] & { when?: string; terms?: string; book_url?: string; video?: string; poster?: string };
 const offers = data.offers as Offer[];
+
+/* The 25 second intro, rendered by _TOOLS/intro-videos/render.py. The poster
+   stands in until pressed so four videos do not load with the page. */
+function Intro({ o }: { o: Offer }) {
+  const [on, setOn] = useState(false);
+  const box = 'mb-5 aspect-video w-full overflow-hidden rounded-xl border border-emerald-500/20 bg-black';
+  if (on) return <video src={o.video} poster={o.poster} controls autoPlay playsInline className={box} />;
+  return (
+    <button onClick={() => setOn(true)} aria-label={`Play: ${o.title} in 25 seconds`} className={`group relative block ${box}`}>
+      <img src={o.poster} alt="" loading="lazy" className="h-full w-full object-cover opacity-90 transition group-hover:opacity-100" />
+      <span className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full bg-emerald-500 py-1 pl-2 pr-3 text-xs font-semibold text-black shadow-[0_0_24px_rgba(46,230,160,0.4)] transition group-hover:bg-emerald-400">
+        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-black"><path d="M8 5v14l11-7z" /></svg>
+        Watch 0:25
+      </span>
+    </button>
+  );
+}
 
 function OfferCard({ o, onAsk }: { o: Offer; onAsk: (id: string) => void }) {
   return (
     <div className="flex flex-col rounded-2xl border border-white/10 bg-neutral-950 p-6">
+      {o.video && <Intro o={o} />}
       <h3 className="text-xl font-semibold text-white">{o.title}</h3>
       <p className="mt-1 text-2xl font-semibold text-emerald-300">{o.price_label}</p>
       <p className="text-xs uppercase tracking-wider text-stone-500">{o.unit}</p>

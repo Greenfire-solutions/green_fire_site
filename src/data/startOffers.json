@@ -9,6 +9,8 @@
   "offers": [
     {
       "id": "workshop",
+      "video": "/videos/start-workshop.mp4",
+      "poster": "/videos/start-workshop.jpg",
       "title": "AI Workflow Workshop",
       "price_usd": 300,
       "price_label": "$300",
@@ -27,6 +29,8 @@
     },
     {
       "id": "onboarding",
+      "video": "/videos/start-onboarding.mp4",
+      "poster": "/videos/start-onboarding.jpg",
       "title": "One to One Dashboard Onboarding",
       "price_usd": 250,
       "price_label": "$250",
@@ -46,6 +50,8 @@
     },
     {
       "id": "build",
+      "video": "/videos/start-build.mp4",
+      "poster": "/videos/start-build.jpg",
       "title": "Done For You AI Dashboard",
       "price_usd": 1700,
       "price_label": "from $1,700",
@@ -66,6 +72,8 @@
     },
     {
       "id": "team",
+      "video": "/videos/start-team.mp4",
+      "poster": "/videos/start-team.jpg",
       "title": "AI Training for Your Team",
       "price_usd": null,
       "price_label": "Quoted for your team",
