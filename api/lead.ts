@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { writeLead } from './lib/storage.js';
+import { writeLead } from './_lib/storage.js';
 
 /* A person asking for something on /start. Kept on the site (encrypted) and
    pulled into the Greenfire operator, where Pip follows it through. */

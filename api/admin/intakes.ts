@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { handleOptions, requireAdmin } from '../lib/auth.js';
-import { readIntakes } from '../lib/storage.js';
+import { handleOptions, requireAdmin } from '../_lib/auth.js';
+import { readIntakes } from '../_lib/storage.js';
 
 /* Every onboarding form filled in at /onboard, for the Greenfire operator. Behind the admin password. */
 export default async function handler(req: VercelRequest, res: VercelResponse) {

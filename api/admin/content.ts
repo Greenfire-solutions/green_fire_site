@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { handleOptions, requireAdmin } from '../lib/auth.js';
-import { readLiveContentJson } from '../lib/contentSource.js';
+import { handleOptions, requireAdmin } from '../_lib/auth.js';
+import { readLiveContentJson } from '../_lib/contentSource.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (handleOptions(req, res)) return;

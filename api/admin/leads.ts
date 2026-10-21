@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { handleOptions, requireAdmin } from '../lib/auth.js';
-import { readLeads } from '../lib/storage.js';
+import { handleOptions, requireAdmin } from '../_lib/auth.js';
+import { readLeads } from '../_lib/storage.js';
 
 /* Everyone who asked on /start, for the Greenfire operator. Behind the admin password. */
 export default async function handler(req: VercelRequest, res: VercelResponse) {

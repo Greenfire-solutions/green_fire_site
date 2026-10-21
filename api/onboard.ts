@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { writeIntake } from './lib/storage.js';
-import { SECTIONS, type Question } from './lib/onboardQuestions.js';
+import { writeIntake } from './_lib/storage.js';
+import { SECTIONS, type Question } from './_lib/onboardQuestions.js';
 
 /* /onboard : the onboarding form. Jordan copies the link from the Clients tab
    of the Greenfire operator (or Pip sends it in a welcome) and the person

@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { handleOptions, requireAdmin } from '../lib/auth.js';
-import { isBlobConfigured } from '../lib/storage.js';
-import { getGitHubConfigStatus, isDeployHookConfigured } from '../lib/github.js';
+import { handleOptions, requireAdmin } from '../_lib/auth.js';
+import { isBlobConfigured } from '../_lib/storage.js';
+import { getGitHubConfigStatus, isDeployHookConfigured } from '../_lib/github.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (handleOptions(req, res)) return;

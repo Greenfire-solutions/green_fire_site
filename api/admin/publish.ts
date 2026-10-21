@@ -1,13 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { handleOptions, requireAdmin } from '../lib/auth.js';
+import { handleOptions, requireAdmin } from '../_lib/auth.js';
 import {
   writeContentToGitHub,
   triggerVercelDeploy,
   isGitHubConfigured,
   isDeployHookConfigured,
   getGitHubConfigStatus,
-} from '../lib/github.js';
-import { writeContentToBlob, isBlobConfigured } from '../lib/storage.js';
+} from '../_lib/github.js';
+import { writeContentToBlob, isBlobConfigured } from '../_lib/storage.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (handleOptions(req, res)) return;

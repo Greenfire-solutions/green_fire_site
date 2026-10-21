@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { put } from '@vercel/blob';
-import { handleOptions, requireAdmin } from '../lib/auth.js';
-import { isBlobConfigured } from '../lib/storage.js';
+import { handleOptions, requireAdmin } from '../_lib/auth.js';
+import { isBlobConfigured } from '../_lib/storage.js';
 
 const MAX_BYTES = 8 * 1024 * 1024; // 8MB
 const ALLOWED = new Set([

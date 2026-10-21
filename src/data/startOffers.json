@@ -6,7 +6,7 @@
     "short_link": "https://green-fire-site.vercel.app/start"
   },
   "intake_form_url": "https://green-fire-site.vercel.app/onboard",
-  "_intake_note": "Our own onboarding form (api/onboard.ts, questions in api/lib/onboardQuestions.ts), replacing the Google Form 2026-10-20. Add ?for=<offer id> to preselect the session. Answers land on the operator Clients tab.",
+  "_intake_note": "Our own onboarding form (api/onboard.ts, questions in api/_lib/onboardQuestions.ts), replacing the Google Form 2026-10-20. Add ?for=<offer id> to preselect the session. Answers land on the operator Clients tab.",
   "offers": [
     {
       "id": "workshop",
