@@ -1,8 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { writeIntake } from './_lib/storage.js';
-import { SECTIONS, type Question } from './_lib/onboardQuestions.js';
+import { writeIntake, readSettings } from './_lib/storage.js';
+import { SECTIONS, ACTIVATION, type Question } from './_lib/onboardQuestions.js';
+import { activatePage } from './_lib/activatePage.js';
 
 /* /onboard : the onboarding form. Jordan copies the link from the Clients tab
    of the Greenfire operator (or Pip sends it in a welcome) and the person
@@ -13,7 +14,11 @@ import { SECTIONS, type Question } from './_lib/onboardQuestions.js';
    here, so /start/thanks, Pip and the Clients tab all send this page.
 
    Answers are sealed exactly like a /start sign-up (storage.ts) and read back
-   only by /api/admin/intakes, behind the admin password. */
+   only by /api/admin/intakes, behind the admin password.
+
+   /activate is served here too (vercel.json adds ?form=activation): the AI
+   Activation prep page in _lib/activatePage.ts. Its answers are stored the
+   same way with offer `activation`. */
 
 type Offer = { id: string; title: string; when?: string; unit?: string };
 
@@ -43,6 +48,11 @@ function answerOf(q: Question, v: unknown): string {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET' || req.method === 'HEAD') {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    if (req.query.form === 'activation') {
+      /* Short cache: the kit link changes from the operator without a deploy. */
+      res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60');
+      return res.status(200).send(req.method === 'HEAD' ? '' : activatePage(await readSettings()));
+    }
     res.setHeader('Cache-Control', 'public, max-age=300');
     return res.status(200).send(req.method === 'HEAD' ? '' : page(offers()));
   }
@@ -55,12 +65,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const email = line(b.email, 160).toLowerCase();
   if (!name) return res.status(400).json({ error: 'Please add your name.' });
   if (!EMAIL.test(email)) return res.status(400).json({ error: 'Please check your email address.' });
+  const activation = b.form === 'activation';
   const known = offers().map((o) => o.id);
-  const offer = known.includes(String(b.offer)) ? String(b.offer) : 'unsure';
+  const offer = activation ? 'activation' : known.includes(String(b.offer)) ? String(b.offer) : 'unsure';
+  if (activation && !line(b.business, 160)) return res.status(400).json({ error: 'Please add the name of your business or project.' });
 
   const given = (b.answers || {}) as Record<string, unknown>;
-  const answers = SECTIONS.flatMap((s) => s.questions).map((q) => ({ id: q.id, label: q.label, value: answerOf(q, given[q.id]) }));
-  const missing = SECTIONS.flatMap((s) => s.questions).filter((q) => q.required && !answers.find((a) => a.id === q.id)?.value);
+  const questions = activation ? ACTIVATION : SECTIONS.flatMap((s) => s.questions);
+  const answers = questions.map((q) => ({ id: q.id, label: q.label, value: answerOf(q, given[q.id]) }));
+  const missing = questions.filter((q) => q.required && !answers.find((a) => a.id === q.id)?.value);
   if (missing.length) return res.status(400).json({ error: `Please answer: ${missing[0].label}` });
 
   try {
@@ -73,7 +86,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       business: line(b.business, 160),
       site: line(b.site, 200),
       answers,
-      source: 'onboard',
+      source: activation ? 'activate' : 'onboard',
     });
     return res.status(200).json({ ok: true });
   } catch {

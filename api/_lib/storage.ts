@@ -106,3 +106,40 @@ export const readLeads = (limit = 500) => readSealed(LEAD_PREFIX, limit);
 const INTAKE_PREFIX = 'intakes/';
 export const writeIntake = (intake: Record<string, unknown>) => writeSealed(INTAKE_PREFIX, intake);
 export const readIntakes = (limit = 500) => readSealed(INTAKE_PREFIX, limit);
+
+/* ------------------------------------------------------------ settings
+   Small values Jordan changes from the operator without a deploy, such as
+   the Beginners Kit download link shown on /activate. Public JSON on
+   purpose: everything in here is shown on a public page anyway. */
+const SETTINGS_PATHNAME = 'settings/onboarding.json';
+
+export type OnboardSettings = { kit_url?: string; kit_updated_at?: string };
+
+export async function readSettings(): Promise<OnboardSettings> {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!token) return {};
+  try {
+    const { blobs } = await list({ prefix: SETTINGS_PATHNAME, limit: 5, token });
+    const match = blobs.find((b) => b.pathname === SETTINGS_PATHNAME);
+    if (!match) return {};
+    const res = await fetch(`${match.url}?v=${Date.parse(String(match.uploadedAt)) || Date.now()}`, { cache: 'no-store' });
+    return res.ok ? ((await res.json()) as OnboardSettings) : {};
+  } catch {
+    return {};
+  }
+}
+
+export async function writeSettings(next: OnboardSettings): Promise<OnboardSettings> {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!token) throw new Error('Blob storage is not configured.');
+  const merged = { ...(await readSettings()), ...next };
+  await put(SETTINGS_PATHNAME, JSON.stringify(merged), {
+    access: 'public',
+    contentType: 'application/json',
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    cacheControlMaxAge: 60,
+    token,
+  });
+  return merged;
+}

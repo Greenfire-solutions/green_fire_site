@@ -15,6 +15,8 @@ export type Question = {
   choices?: string[];
   required?: boolean;
   placeholder?: string;
+  /* Filled in by the page itself, never shown as a box (their time zone). */
+  hidden?: boolean;
 };
 
 export type Section = { title: string; help?: string; questions: Question[] };
@@ -67,4 +69,23 @@ export const SECTIONS: Section[] = [
         'I will never send passwords or keys to anyone, including Jordan'] },
     ],
   },
+];
+
+/* THE ACTIVATION PREP FORM at /activate: the AI Activation (dashboard and
+   agents set up with Jordan). Deliberately short, because the real work is
+   the steps under it: Claude Pro, Warp, Claude Code, GitHub, the project
+   folder, the master prompt and the Beginners Kit. Name and email are asked
+   by the page itself, and the project name becomes the folder name. */
+export const ACTIVATION: Question[] = [
+  { id: 'about', kind: 'long', required: true, label: 'What is it, and who is it for?', help: 'Two or three sentences is plenty.' },
+  { id: 'first_job', kind: 'long', required: true, label: 'What do you most want your AI dashboard and agents to take off your plate?', help: 'The work you repeat every week. Name two or three things.', placeholder: '' },
+  { id: 'goal', kind: 'long', label: 'Where do you want this project to be a year from now?' },
+  { id: 'computer', kind: 'one', required: true, label: 'Which computer will you use for the session?', choices: ['Mac', 'Windows', 'Not sure'] },
+  { id: 'ai_now', kind: 'many', label: 'Which AI do you already use?', help: 'The one that knows you best writes your project brief in step 6.', choices: ['ChatGPT', 'Claude', 'Gemini', 'Copilot', 'Something else', 'None yet'] },
+  { id: 'time_ok', kind: 'one', label: 'Does our session time work for you?', choices: ['Yes, that works', 'I need a different time'] },
+  { id: 'else', kind: 'long', label: 'Anything else I should know?' },
+  { id: 'tz', kind: 'text', hidden: true, label: 'Their time zone' },
+  { id: 'session_seen', kind: 'text', hidden: true, label: 'Session time as they saw it' },
+  { id: 'steps_done', kind: 'many', hidden: true, label: 'Steps they have done', choices: [
+    'Claude Pro', 'Warp', 'Claude Code', 'GitHub', 'Project folder', 'Project brief in the folder', 'Beginners Kit downloaded'] },
 ];

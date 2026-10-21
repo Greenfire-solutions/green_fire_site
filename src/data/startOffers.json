@@ -93,6 +93,18 @@
       "_checkout_note": "No checkout on purpose: a team is quoted after the call, then paid by invoice or a link made for that job."
     }
   ],
+  "private_offers": [
+    {
+      "id": "activation",
+      "title": "AI Activation: Dashboard and Agents Setup",
+      "price_usd": 500,
+      "price_label": "$500",
+      "regular_label": "$1,000",
+      "unit": "initial setup, one to one, online",
+      "form_url": "https://green-fire-site.vercel.app/activate",
+      "_note": "Not shown on /start on purpose (the page and Pip read `offers` only). Sold by hand at half the usual $1,000, paid by invoice or a link made for the job, so mark it paid on the Clients tab. Its prep page is /activate (api/_lib/activatePage.ts): a few questions, then Claude Pro, Warp, Claude Code, GitHub, the project folder, the master prompt and the Beginners Kit link, which is set from the Clients tab."
+    }
+  ],
   "care_plan": {
     "title": "Monthly care",
     "price_label": "$200 a month",

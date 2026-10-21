@@ -9,6 +9,10 @@
       "destination": "/api/onboard"
     },
     {
+      "source": "/activate",
+      "destination": "/api/onboard?form=activation"
+    },
+    {
       "source": "/blog",
       "destination": "/blog/index.html"
     },
