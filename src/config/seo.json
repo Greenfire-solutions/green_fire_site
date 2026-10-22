@@ -1,20 +1,77 @@
 {
-  "_comment": "THE ONE HOME for search. The site address, and the title, description and heading every public page shows to Google and to AI crawlers. The SPA reads it on every route change (src/lib/usePageMeta.ts) and the build writes a real HTML file per route from it (scripts/seo/build.mjs), so a crawler that runs no JavaScript still sees the right page. Change the domain here and canonicals, the sitemap, the feed and every blog page follow. Titles under 60 characters, descriptions 70 to 160. No em dashes: Jordan reads them as machine written.",
+  "_comment": "THE ONE HOME for search. The site address, and the title, description and heading every public page shows to Google and to AI crawlers. The SPA reads it on every route change (src/lib/usePageMeta.ts) and the build writes a real HTML file per route from it (scripts/seo/build.mjs), so a crawler that runs no JavaScript still sees the right page. Change the domain here and canonicals, the sitemap, the feed and every blog page follow. The evergreen topic pages (/solarpunk, /bioregional-ai...) have their text in content/pages/*.md; `topics` here only lists them in footer order with their short label, so the app's footer and the static pages link the same set (the gate fails if the two disagree). `about` paragraphs are extra crawlable text in a route's static HTML. Titles under 60 characters, descriptions 70 to 160. No em dashes: Jordan reads them as machine written.",
   "siteUrl": "https://green-fire-site.vercel.app",
   "siteName": "Green Fire",
   "organization": "Green Fire Research and Innovation Center",
+  "alternateNames": [
+    "Green Fire",
+    "Greenfire",
+    "Greenfire Innovation Center",
+    "Green Fire Innovation Center"
+  ],
   "author": {
     "name": "Jordan Larsen",
     "role": "Founder, Green Fire Research and Innovation Center",
     "bio": "Jordan builds the AI dashboards that run his own music business, The Great Medicine Show, and now builds them for artists, small businesses and community projects. He teaches AI workshops and makes interactive 3D for land projects, festivals and eco villages.",
-    "sameAs": ["https://thegreatmedicineshow.com"]
+    "sameAs": [
+      "https://thegreatmedicineshow.com"
+    ]
   },
+  "organizationSameAs": [
+    "https://github.com/Greenfire-solutions",
+    "https://github.com/Greenfire-solutions/Bioregional-OS"
+  ],
+  "knowsAbout": [
+    "Solarpunk",
+    "Solarpunk technology",
+    "Bioregional AI",
+    "Bioregional technology",
+    "Bioregionalism",
+    "Permaculture AI",
+    "Permaculture design",
+    "Eco village technology",
+    "Eco village AI",
+    "Intentional communities",
+    "AI for land projects",
+    "Regenerative development",
+    "Watershed mapping",
+    "Open source software",
+    "Interactive 3D maps",
+    "AI dashboards for small business",
+    "AI for musicians"
+  ],
   "defaultImage": "/og-default.jpg",
+  "topics": [
+    {
+      "path": "/solarpunk",
+      "label": "Solarpunk"
+    },
+    {
+      "path": "/bioregional-ai",
+      "label": "Bioregional AI"
+    },
+    {
+      "path": "/permaculture-ai",
+      "label": "Permaculture AI"
+    },
+    {
+      "path": "/eco-village-technology",
+      "label": "Eco Village Tech"
+    },
+    {
+      "path": "/ai-for-land-projects",
+      "label": "AI for Land Projects"
+    }
+  ],
   "routes": {
     "/": {
-      "title": "Green Fire Research and Innovation Center",
-      "description": "Green Fire is a living center for council, creativity, regeneration and community solutions, with AI help for artists, small businesses and teams.",
-      "h1": "Green Fire Research and Innovation Center"
+      "title": "Green Fire: Solarpunk Tech, Bioregional AI and Land Projects",
+      "description": "Green Fire is a solarpunk research and innovation center building bioregional AI, eco village technology and open source tools for land projects.",
+      "h1": "Green Fire Research and Innovation Center",
+      "about": [
+        "Green Fire Research and Innovation Center is a living center for council, creativity, regeneration and community solutions, with Indigenous Elders invited to guide values and stories.",
+        "We build solarpunk technology that runs today: BioRegional OS, an open source operating system for a bioregional commons; Civil X, task and proof of work software for eco villages and land projects; interactive 3D maps for land and fundraising; and AI dashboards for artists, small businesses and communities."
+      ]
     },
     "/start": {
       "title": "AI Help for Artists and Small Businesses | Green Fire",
@@ -22,13 +79,13 @@
       "h1": "Get AI working for you"
     },
     "/tech": {
-      "title": "Interactive 3D for Land, Festivals and Fundraising | Green Fire",
-      "description": "Interactive 3D maps and walkthroughs for land projects, construction, festivals and fundraising, plus custom AI and UX work.",
+      "title": "Interactive 3D Maps for Land Projects | Green Fire",
+      "description": "Interactive 3D maps and walkthroughs for land projects, eco villages, construction, festivals and fundraising, plus custom AI and UX work.",
       "h1": "Interactive 3D and custom tech"
     },
     "/how-it-works": {
-      "title": "How It Works | Greenfire Creator Commons",
-      "description": "The ten stage Greenfire Creator Commons model for turning community needs into creative projects, local jobs and measurable impact.",
+      "title": "How Greenfire Works: A Regenerative Community Model",
+      "description": "The ten stage Greenfire Creator Commons model for turning community needs into creative projects, regenerative action, local jobs and measurable impact.",
       "h1": "How Greenfire works"
     },
     "/offerings": {
@@ -57,25 +114,31 @@
       "h1": "Workshops"
     },
     "/open-source": {
-      "title": "Open Source | Greenfire Creator Commons",
-      "description": "The Greenfire Creator Commons open source framework, including BioRegional OS, a commons platform any community can adapt.",
-      "h1": "Open source"
+      "title": "Open Source Bioregional Tech: BioRegional OS | Green Fire",
+      "description": "BioRegional OS and the Greenfire Creator Commons: open source bioregional technology and AI any community can run, adapt and share.",
+      "h1": "Open source",
+      "about": [
+        "BioRegional OS is a local first operating system for a bioregional commons, published under the AGPL at github.com/Greenfire-solutions/Bioregional-OS. It maps ecoregions and watersheds, compiles soil, water and species data, and enforces consent and council review in code."
+      ]
     },
     "/get-involved": {
       "title": "Get Involved | Green Fire",
-      "description": "Bring a need, offer a skill, partner, support a project, or explore adapting Greenfire in your community.",
+      "description": "Bring a need, offer a skill, partner, support a project, or adapt Greenfire and its solarpunk, bioregional tools in your own community.",
       "h1": "Get involved"
     },
     "/pilot-roadmap": {
       "title": "Pilot Roadmap | Green Fire",
-      "description": "The milestones of the Green Fire pilot, what is active now, what is in development and what is planned.",
+      "description": "The milestones of the Green Fire pilot: what is active now, what is in development and what is planned for the solarpunk innovation center.",
       "h1": "Pilot roadmap"
     },
     "/contact": {
       "title": "Contact | Green Fire",
-      "description": "Book Green Fire for media, studio, workshops, AI help or interactive 3D, or ask a question.",
+      "description": "Book Green Fire for AI help, interactive 3D, eco village and land project software, media, studio or workshops, or ask a question.",
       "h1": "Contact"
     }
   },
-  "noindex": ["/admin", "/start/thanks"]
+  "noindex": [
+    "/admin",
+    "/start/thanks"
+  ]
 }

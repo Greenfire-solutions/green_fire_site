@@ -26,6 +26,11 @@ export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 export const POSTS_DIR = join(ROOT, 'content', 'blog')
 export const PLAN_PATH = join(POSTS_DIR, 'plan.json')
 export const SEO_PATH = join(ROOT, 'src', 'config', 'seo.json')
+/* Topic pages: one evergreen page per subject Green Fire wants to be found
+   for (solarpunk, bioregional AI, eco village technology...), served at a
+   short top level address like /solarpunk. Unlike a post they have no date
+   in the URL and no cluster; they are the hubs the blog clusters point at. */
+export const PAGES_DIR = join(ROOT, 'content', 'pages')
 
 export const readSeo = () => JSON.parse(readFileSync(SEO_PATH, 'utf8'))
 export const readPlan = () => JSON.parse(readFileSync(PLAN_PATH, 'utf8'))
@@ -90,6 +95,40 @@ export function readPosts() {
     .sort((a, b) => (b.date || '').localeCompare(a.date || '') || a.slug.localeCompare(b.slug))
 }
 
+export function readPages() {
+  if (!existsSync(PAGES_DIR)) return []
+  return readdirSync(PAGES_DIR)
+    .filter(f => f.endsWith('.md') && !f.startsWith('_'))
+    .map(f => {
+      const file = join(PAGES_DIR, f)
+      const { data, body, error } = parseFrontmatter(readFileSync(file, 'utf8'))
+      const slug = data.slug || basename(f, '.md')
+      return {
+        file, slug, body, parseError: error,
+        title: data.title || '',
+        description: data.description || '',
+        h1: data.h1 || data.title || '',
+        kicker: data.kicker || '',
+        date: data.date || '',
+        updated: data.updated || '',
+        status: data.status || 'draft',
+        keyword: data.keyword || '',
+        tags: Array.isArray(data.tags) ? data.tags : data.tags ? [data.tags] : [],
+        cta: data.cta || 'contact',
+        url: `/${slug}`
+      }
+    })
+}
+
+/* Order and short label come from seo.json `topics`, the list the app's
+   footer also reads, so there is one place to add a topic to the site. */
+export function orderPages(pages, seo) {
+  const at = path => { const i = (seo.topics || []).findIndex(t => t.path === path); return i < 0 ? 999 : i }
+  return pages
+    .map(p => ({ ...p, nav: (seo.topics || []).find(t => t.path === p.url)?.label || p.h1 }))
+    .sort((a, b) => at(a.url) - at(b.url) || a.slug.localeCompare(b.slug))
+}
+
 export const words = md => md.replace(/```[\s\S]*?```/g, ' ').replace(/[#>*_`\[\]()!-]/g, ' ').split(/\s+/).filter(Boolean).length
 export const readingMinutes = md => Math.max(1, Math.round(words(md) / 230))
 
@@ -146,8 +185,9 @@ export function linksIn(md) {
 
 /* Paths a post may link to on this site. A link to anything else is a dead
    link the moment it ships, so it is an error, not a warning. */
-export function knownPaths(seo, posts, plan) {
+export function knownPaths(seo, posts, plan, pages = readPages()) {
   const set = new Set(Object.keys(seo.routes))
+  for (const p of pages) { set.add(p.url); set.add(p.url + '/') }
   set.add('/blog/')
   set.add('/blog')
   for (const p of posts) { set.add(p.url); set.add(p.url.slice(0, -1)) }
@@ -213,12 +253,51 @@ export function checkPost(post, { seo, plan, posts }) {
   return { errors, warnings, words: n }
 }
 
+/* A topic page is held to a higher bar than a post: it is the page meant to
+   rank for a whole subject, so it must be long enough to answer it, must link
+   on to the other topics (a hub that links nowhere is a doorway page), and
+   must not reuse an address the app or the blog already owns. */
+export function checkPage(page, { seo, plan, posts, pages }) {
+  const errors = [], warnings = []
+  const e = m => errors.push(m), w = m => warnings.push(m)
+  if (page.parseError) e(page.parseError)
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(page.slug)) e(`slug "${page.slug}" must be lowercase words joined by hyphens`)
+  if (seo.routes[page.url] || page.slug === 'blog' || page.slug === 'api' || page.slug === 'admin') e(`${page.url} is already an app route; pick another slug`)
+  if (pages.filter(p => p.slug === page.slug).length > 1) e(`slug "${page.slug}" is used by more than one page`)
+  if (!['draft', 'published'].includes(page.status)) e(`status must be draft or published, not "${page.status}"`)
+  if (!page.title) e('no title')
+  else if (page.title.length > 65) w(`title is ${page.title.length} characters; Google cuts it near 60`)
+  if (!page.description) e('no description')
+  else if (page.description.length < 70 || page.description.length > 160) e(`description is ${page.description.length} characters; keep it 70 to 160`)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(page.date)) e('date must be YYYY-MM-DD')
+  if (!page.keyword) w('no keyword')
+  for (const [where, text] of [['title', page.title], ['description', page.description], ['h1', page.h1], ['body', page.body]]) {
+    if (DASHES.test(text)) e(`em or en dash in the ${where}: Jordan reads it as "a machine wrote this". Use a comma or a full stop`)
+  }
+  if (/\b(TODO|TK|XXX|lorem ipsum)\b|\{\{|\[\[/i.test(page.body)) e('placeholder text left in the body (TODO, TK, {{ or [[)')
+  const n = words(page.body)
+  if (n < 900) e(`${n} words; a topic page has to answer the whole subject, 900 at least`)
+  const known = knownPaths(seo, posts, plan, pages)
+  const internal = linksIn(page.body).filter(l => typeof l === 'string' && l.startsWith('/'))
+  for (const l of internal) if (!known.has(l.split('#')[0].split('?')[0])) e(`dead internal link ${l}`)
+  const others = new Set(internal.map(l => l.split('#')[0].replace(/\/$/, '')).filter(l => pages.some(p => p.url === l && p.slug !== page.slug)))
+  if (pages.length > 1 && others.size < 2) e(`links to ${others.size} other topic page${others.size === 1 ? '' : 's'}; link to at least two so the topics hold each other up`)
+  return { errors, warnings, words: n }
+}
+
 export function checkAll() {
-  const seo = readSeo(), plan = readPlan(), posts = readPosts()
+  const seo = readSeo(), plan = readPlan(), posts = readPosts(), pages = orderPages(readPages(), seo)
   const results = posts.map(p => ({ post: p, ...checkPost(p, { seo, plan, posts }) }))
+  const pageResults = pages.map(p => ({ page: p, ...checkPage(p, { seo, plan, posts, pages }) }))
   const planErrors = []
   for (const c of plan.clusters) {
-    if (!seo.routes[c.moneyPage] && c.moneyPage !== '/') planErrors.push(`cluster ${c.id}: money page ${c.moneyPage} is not a route in seo.json`)
+    if (!seo.routes[c.moneyPage] && c.moneyPage !== '/' && !pages.some(p => p.url === c.moneyPage && p.status === 'published')) planErrors.push(`cluster ${c.id}: money page ${c.moneyPage} is not a route in seo.json or a published topic page`)
   }
-  return { seo, plan, posts, results, planErrors }
+  for (const t of seo.topics || []) {
+    if (!pages.some(p => p.url === t.path && p.status === 'published')) planErrors.push(`seo.json topics lists ${t.path}, which is not a published page in content/pages; the footer would link to nothing`)
+  }
+  for (const p of pages) {
+    if (p.status === 'published' && !(seo.topics || []).some(t => t.path === p.url)) planErrors.push(`${p.url} is published but missing from seo.json topics, so no page links to it`)
+  }
+  return { seo, plan, posts, pages, results, pageResults, planErrors }
 }

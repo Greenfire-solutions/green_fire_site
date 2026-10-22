@@ -4,7 +4,7 @@ import { Flame, Mail, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSiteContent } from '../../context/ContentContext';
 import { siteConfig } from '../../config/siteConfig';
-import { PRIMARY_NAV, FOOTER_NAV, ROUTES, isStaticPath } from '../../lib/routes';
+import { PRIMARY_NAV, FOOTER_NAV, TOPIC_NAV, ROUTES, isStaticPath } from '../../lib/routes';
 import { usePageMeta } from '../../lib/usePageMeta';
 
 /* A router Link to the static blog would render an empty app page, so those
@@ -143,6 +143,13 @@ export function SiteLayout({ children }: SiteLayoutProps) {
               ))}
             </nav>
           </div>
+          <nav className="mb-8 flex flex-wrap gap-x-6 gap-y-2" aria-label="Topics">
+            {TOPIC_NAV.map((t) => (
+              <NavLink key={t.path} to={t.path} className="text-stone-400 hover:text-emerald-300 text-xs">
+                {t.label}
+              </NavLink>
+            ))}
+          </nav>
           <div className="border-t border-white/5 pt-6 text-center">
             {(settings.socialLinks || []).filter((l) => l.label && l.url).length > 0 && (
               <div className="flex flex-wrap justify-center gap-4 mb-4">

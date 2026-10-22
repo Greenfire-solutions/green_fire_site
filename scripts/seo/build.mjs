@@ -8,6 +8,9 @@
      blog/<slug>/index.html          each post, full HTML, zero JavaScript
      blog/topic/<cluster>/index.html each topic hub, pillar post first
      blog/feed.xml                   RSS, for readers and for aggregators
+     <topic>/index.html              each topic page (content/pages/*.md), the
+                                     evergreen hubs for solarpunk, bioregional
+                                     AI and the rest, at a short address
      <route>/index.html              a real HTML file per SPA page, with its own
                                      title, description, canonical and heading,
                                      so a crawler that runs no JavaScript sees
@@ -33,14 +36,16 @@ if (!existsSync(join(DIST, 'index.html'))) {
   process.exit(1)
 }
 
-const { seo, plan, results, planErrors } = checkAll()
+const { seo, plan, results, pageResults, planErrors } = checkAll()
 const SITE = seo.siteUrl.replace(/\/$/, '')
 const abs = p => SITE + p
 
 const failing = results.filter(r => r.post.status === 'published' && r.errors.length)
-if (planErrors.length || failing.length) {
+const failingPages = pageResults.filter(r => r.page.status === 'published' && r.errors.length)
+if (planErrors.length || failing.length || failingPages.length) {
   for (const m of planErrors) console.error('plan: ' + m)
   for (const r of failing) for (const m of r.errors) console.error(`${r.post.slug}: ${m}`)
+  for (const r of failingPages) for (const m of r.errors) console.error(`${r.page.url}: ${m}`)
   console.error('\nBlog build refused. Fix the above, or set the post back to `status: draft`.')
   process.exit(1)
 }
@@ -53,6 +58,8 @@ if (withDrafts && process.env.VERCEL) { console.error('BLOG_DRAFTS is for local 
 const published = results.filter(r => r.post.status === 'published' || (withDrafts && !r.errors.length)).map(r => r.post)
 const isDraft = p => p.status !== 'published'
 const live = published.filter(p => !isDraft(p))
+const topics = pageResults.filter(r => r.page.status === 'published' || (withDrafts && !r.errors.length)).map(r => r.page)
+const liveTopics = topics.filter(t => t.status === 'published')
 const clusterOf = id => plan.clusters.find(c => c.id === id)
 const fmtDate = d => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
 
@@ -113,6 +120,9 @@ footer span{margin-right:auto}
 `
 
 const NAV = [['/', 'Home'], ['/start', 'AI Help'], ['/tech', 'Tech'], ['/open-source', 'Open Source'], ['/blog/', 'Blog'], ['/get-involved', 'Get Involved']]
+/* Every static page's footer carries every topic, so each topic page is one
+   link from anywhere a crawler lands. */
+const topicFooter = () => liveTopics.map(t => `<a href="${t.url}">${esc(t.nav)}</a>`).join('')
 
 function page({ path, title, description, body, head = '', graph = [], type = 'website', image, noindex = false }) {
   const img = abs(image || seo.defaultImage)
@@ -142,7 +152,7 @@ ${head}${ld}
 <body>
 <header class="top"><div class="in"><a class="brand" href="/"><i aria-hidden="true">&#128293;</i>${esc(seo.siteName)}</a><nav aria-label="Primary">${nav}</nav></div></header>
 ${body}
-<footer><div class="in"><span>&copy; ${new Date().getFullYear()} ${esc(seo.organization)}</span><a href="/blog/">Blog</a><a href="/blog/feed.xml">RSS</a><a href="/how-it-works">About</a><a href="/contact">Contact</a></div></footer>
+<footer><div class="in"><span>&copy; ${new Date().getFullYear()} ${esc(seo.organization)}</span>${topicFooter()}<a href="/blog/">Blog</a><a href="/blog/feed.xml">RSS</a><a href="/how-it-works">About</a><a href="/contact">Contact</a></div></footer>
 </body>
 </html>
 `
@@ -150,7 +160,7 @@ ${body}
 
 /* --- shared JSON-LD pieces ----------------------------------------------- */
 
-const ORG = { '@type': 'Organization', '@id': abs('/#org'), name: seo.organization, url: abs('/'), logo: abs(seo.defaultImage) }
+const ORG = { '@type': 'Organization', '@id': abs('/#org'), name: seo.organization, alternateName: seo.alternateNames, url: abs('/'), logo: abs(seo.defaultImage), description: seo.routes['/'].description, knowsAbout: seo.knowsAbout, sameAs: seo.organizationSameAs, founder: { '@id': abs('/#author') } }
 const PERSON = { '@type': 'Person', '@id': abs('/#author'), name: seo.author.name, jobTitle: seo.author.role, description: seo.author.bio, sameAs: seo.author.sameAs, worksFor: { '@id': abs('/#org') } }
 const crumbs = items => ({
   '@type': 'BreadcrumbList',
@@ -164,6 +174,7 @@ const CTAS = {
   start: { h: 'Want this working in your business?', p: 'Take a seat at the AI workshop, book a one to one dashboard session, or have the dashboard built for you.', href: '/start', btn: 'See the AI options' },
   tech: { h: 'Show people the project before it exists', p: 'Interactive 3D maps and walkthroughs for land projects, builds, festivals and fundraising.', href: '/tech', btn: 'See the 3D work' },
   'open-source': { h: 'Bring it to your community', p: 'The Greenfire Creator Commons and BioRegional OS are open for any community to adapt.', href: '/open-source', btn: 'Explore the open source work' },
+  land: { h: 'Bring your land project in', p: 'Tell us about the land, the people and what you want to build. We will show you the map, the software and the first steps.', href: '/contact', btn: 'Start a land project conversation' },
   contact: { h: 'Talk it through', p: 'Tell us what you are working on and we will point you to the right help.', href: '/contact', btn: 'Get in touch' }
 }
 const ctaHtml = key => { const c = CTAS[key] || CTAS.contact; return `<aside class="cta"><h2>${esc(c.h)}</h2><p>${esc(c.p)}</p><a class="btn" href="${c.href}">${esc(c.btn)}</a></aside>` }
@@ -216,6 +227,59 @@ ${related.length ? `<h2 style="margin:56px 0 0;font-size:22px">Keep reading</h2>
   write(`blog/${p.slug}/index.html`, page({ path, title: `${p.title} | ${seo.siteName}`, description: p.description, body, head, graph, type: 'article', image: p.image, noindex: isDraft(p) }))
 }
 
+/* --- topic pages ---------------------------------------------------------- */
+
+/* "## Common questions" with "### question" under it becomes FAQPage data,
+   read from the same text the reader sees, so the two can never disagree. */
+function faqOf(md) {
+  const m = md.match(/^## Common questions\s*$([\s\S]*?)(?=^## |(?![\s\S]))/m)
+  if (!m) return []
+  return m[1].split(/^### /m).slice(1).map(chunk => {
+    const [q, ...rest] = chunk.split('\n')
+    const a = rest.join(' ').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' ').trim()
+    return { '@type': 'Question', name: q.trim(), acceptedAnswer: { '@type': 'Answer', text: a } }
+  }).filter(x => x.name && x.acceptedAnswer.text)
+}
+
+for (const t of topics) {
+  const { html, headings } = renderMarkdown(t.body)
+  const h2s = headings.filter(h => h.depth === 2)
+  const toc = h2s.length >= 3 ? `<nav class="toc" aria-label="Contents"><b>On this page</b><ol>${h2s.map(h => `<li><a href="#${h.id}">${esc(h.text)}</a></li>`).join('')}</ol></nav>` : ''
+  const trail = [['Home', '/'], [t.nav, t.url]]
+  const others = topics.filter(o => o.slug !== t.slug)
+  const related = live.filter(p => (t.tags || []).some(tag => [p.keyword, ...p.tags].join(' ').toLowerCase().includes(tag.toLowerCase()))).slice(0, 3)
+  const faq = faqOf(t.body)
+  const body = `<main class="wrap">
+${t.status !== 'published' ? '<p style="background:#78350f;color:#fef3c7;padding:10px 14px;border-radius:10px;font-weight:700">DRAFT preview. Not on the live site until it is set to published.</p>' : ''}
+${crumbHtml(trail)}
+<article>
+${t.kicker ? `<p class="kicker">${esc(t.kicker)}</p>` : ''}
+<h1>${esc(t.h1)}</h1>
+<p class="lede">${esc(t.description)}</p>
+<p class="meta">By ${esc(seo.author.name)} · Updated <time datetime="${t.updated || t.date}">${fmtDate(t.updated || t.date)}</time></p>
+${toc}
+${html}
+${ctaHtml(t.cta)}
+<div class="author"><div><b>${esc(seo.author.name)}</b>${esc(seo.author.bio)}</div></div>
+</article>
+${others.length ? `<h2 style="margin:56px 0 0;font-size:22px">More from Green Fire</h2><div class="cards">${others.map(o => `<a class="card" href="${o.url}"><small>${esc(o.kicker || 'Topic')}</small><h3>${esc(o.h1)}</h3><p>${esc(o.description)}</p></a>`).join('')}</div>` : ''}
+${related.length ? `<h2 style="margin:40px 0 0;font-size:22px">From the blog</h2><div class="cards">${related.map(cardHtml).join('')}</div>` : ''}
+</main>`
+  const graph = [
+    {
+      '@type': 'WebPage', '@id': abs(t.url) + '#page', url: abs(t.url), name: t.title, headline: t.h1, description: t.description,
+      datePublished: t.date, dateModified: t.updated || t.date, inLanguage: 'en-US',
+      about: (t.tags || []).map(name => ({ '@type': 'Thing', name })), keywords: [t.keyword, ...t.tags].filter(Boolean).join(', '),
+      author: { '@id': abs('/#author') }, publisher: { '@id': abs('/#org') }, isPartOf: { '@id': abs('/#site') },
+      breadcrumb: crumbs(trail)
+    },
+    ...(faq.length ? [{ '@type': 'FAQPage', '@id': abs(t.url) + '#faq', mainEntity: faq }] : []),
+    PERSON, ORG
+  ]
+  const head = `<meta name="author" content="${esc(seo.author.name)}">\n${t.tags.length ? `<meta name="keywords" content="${esc([t.keyword, ...t.tags].filter(Boolean).join(', '))}">\n` : ''}`
+  write(`${t.slug}/index.html`, page({ path: t.url, title: t.title, description: t.description, body, head, graph, noindex: t.status !== 'published' }))
+}
+
 /* --- blog index and topic hubs ------------------------------------------- */
 
 const topicNav = on => `<nav class="topics" aria-label="Topics"><a href="/blog/"${on ? '' : ' class="on"'}>All</a>${plan.clusters.map(c => `<a href="/blog/topic/${c.id}/"${on === c.id ? ' class="on"' : ''}>${esc(c.name)}</a>`).join('')}</nav>`
@@ -248,10 +312,10 @@ ${posts.length ? `<div class="cards">${posts.map(cardHtml).join('')}</div>` : '<
    so visitors see the app as before, and a crawler that never runs the app
    still reads the same title, description and heading the app would show. */
 const shell = readFileSync(join(DIST, 'index.html'), 'utf8')
-const routeLinks = [...NAV, ['/offerings', 'Offerings'], ['/contact', 'Contact']]
+const routeLinks = [...NAV, ['/offerings', 'Offerings'], ['/contact', 'Contact'], ...liveTopics.map(t => [t.url, t.nav])]
 for (const [route, m] of Object.entries(seo.routes)) {
   const graph = route === '/'
-    ? [ORG, { '@type': 'WebSite', '@id': abs('/#site'), name: seo.siteName, url: abs('/'), publisher: { '@id': abs('/#org') } }, PERSON]
+    ? [ORG, { '@type': 'WebSite', '@id': abs('/#site'), name: seo.siteName, alternateName: seo.alternateNames, url: abs('/'), publisher: { '@id': abs('/#org') }, about: seo.knowsAbout }, PERSON]
     : [crumbs([['Home', '/'], [m.h1, route]]), ORG]
   const head = `<link rel="canonical" href="${esc(abs(route))}">
     <meta property="og:site_name" content="${esc(seo.siteName)}">
@@ -264,7 +328,7 @@ for (const [route, m] of Object.entries(seo.routes)) {
     <link rel="alternate" type="application/rss+xml" title="${esc(seo.siteName)} blog" href="/blog/feed.xml">
     <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c')}</script>
   </head>`
-  const fallback = `<div id="root"><div style="background:#0a0a0a;color:#f5f5f4;min-height:100vh;padding:48px 16px;font-family:system-ui,sans-serif"><div style="max-width:720px;margin:0 auto"><h1 style="font-size:32px;line-height:1.2">${esc(m.h1)}</h1><p style="color:#d6d3d1;font-size:18px">${esc(m.description)}</p><nav aria-label="Site" style="display:flex;flex-wrap:wrap;gap:8px 16px">${routeLinks.map(([h, l]) => `<a href="${h}" style="color:#34d399">${l}</a>`).join('')}</nav></div></div></div>`
+  const fallback = `<div id="root"><div style="background:#0a0a0a;color:#f5f5f4;min-height:100vh;padding:48px 16px;font-family:system-ui,sans-serif"><div style="max-width:720px;margin:0 auto"><h1 style="font-size:32px;line-height:1.2">${esc(m.h1)}</h1><p style="color:#d6d3d1;font-size:18px">${esc(m.description)}</p>${(m.about || []).map(t => `<p style="color:#a8a29e;font-size:16px;line-height:1.7">${esc(t)}</p>`).join('')}<nav aria-label="Site" style="display:flex;flex-wrap:wrap;gap:8px 16px">${routeLinks.map(([h, l]) => `<a href="${h}" style="color:#34d399">${l}</a>`).join('')}</nav></div></div></div>`
   let html = shell
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(m.title)}</title>`)
     .replace(/<meta\s+name="description"[\s\S]*?\/>/, `<meta name="description" content="${esc(m.description)}" />`)
@@ -278,6 +342,7 @@ for (const [route, m] of Object.entries(seo.routes)) {
 
 const urls = [
   ...Object.keys(seo.routes).filter(r => !seo.noindex.includes(r)).map(r => ({ loc: abs(r) })),
+  ...liveTopics.map(t => ({ loc: abs(t.url), lastmod: t.updated || t.date })),
   { loc: abs('/blog/'), lastmod: live[0]?.updated || live[0]?.date },
   ...plan.clusters.filter(c => live.some(p => p.cluster === c.id)).map(c => ({ loc: abs(`/blog/topic/${c.id}/`) })),
   ...live.map(p => ({ loc: abs(p.url), lastmod: p.updated || p.date }))
@@ -322,6 +387,9 @@ ${seo.author.bio}
 ## Pages
 ${Object.entries(seo.routes).filter(([r]) => !seo.noindex.includes(r)).map(([r, m]) => `- [${m.h1}](${abs(r)}): ${m.description}`).join('\n')}
 
+## Topics
+${liveTopics.map(t => `- [${t.h1}](${abs(t.url)}): ${t.description}`).join('\n') || '- None yet.'}
+
 ## Blog
 ${live.map(p => `- [${p.title}](${abs(p.url)}): ${p.description}`).join('\n') || '- No posts yet.'}
 `)
@@ -332,4 +400,4 @@ write('404.html', page({
 }))
 
 const drafts = results.filter(r => r.post.status !== 'published')
-console.log(`blog: ${live.length} published, ${drafts.length} draft${drafts.length === 1 ? '' : 's'} ${withDrafts ? 'previewed (noindex)' : 'held back'}; ${Object.keys(seo.routes).length} route pages; sitemap ${urls.length} URLs`)
+console.log(`blog: ${live.length} published, ${drafts.length} draft${drafts.length === 1 ? '' : 's'} ${withDrafts ? 'previewed (noindex)' : 'held back'}; ${liveTopics.length} topic pages; ${Object.keys(seo.routes).length} route pages; sitemap ${urls.length} URLs`)

@@ -1,3 +1,4 @@
+import seo from '../config/seo.json';
 export const ROUTES = {
   home: '/',
   howItWorks: '/how-it-works',
@@ -63,4 +64,9 @@ export const FOOTER_NAV = [
 ] as const;
 
 /** The blog is plain HTML outside the app, so it needs a full page load, not a router push. */
-export const isStaticPath = (path: string) => path === ROUTES.blog || path.startsWith('/blog');
+/* The evergreen topic pages (/solarpunk and the rest) are static files too,
+   listed once in seo.json beside their text in content/pages. */
+export const TOPIC_NAV: { path: string; label: string }[] = seo.topics;
+
+export const isStaticPath = (path: string) =>
+  path === ROUTES.blog || path.startsWith('/blog') || TOPIC_NAV.some((t) => t.path === path);

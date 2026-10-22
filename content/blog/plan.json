@@ -1,5 +1,5 @@
 {
-  "_comment": "THE BLOG PLAN. Four topic clusters, each one pointed at the page that earns money or support. Every planned post names `proof`: the first hand thing only Jordan has (a tool he built, a number he measured, a client job, a show). A post with no proof is not written, because a post that only summarises what already ranks is exactly what Google's scaled content policy removes. Search volumes are NOT here on purpose: nothing on this Mac has measured them, and a guessed number would be quoted as a fact. Measure in Search Console once the site has a few weeks of impressions, then reorder.",
+  "_comment": "THE BLOG PLAN. The topic clusters, each one pointed at the page that earns money or support. Every planned post names `proof`: the first hand thing only Jordan has (a tool he built, a number he measured, a client job, a show). A post with no proof is not written, because a post that only summarises what already ranks is exactly what Google's scaled content policy removes. Search volumes are NOT here on purpose: nothing on this Mac has measured them, and a guessed number would be quoted as a fact. Measure in Search Console once the site has a few weeks of impressions, then reorder.",
   "cadence": "One post a week, at most two. Depth over count: ten posts that each answer one question fully beat fifty that skim.",
   "clusters": [
     {
@@ -10,11 +10,41 @@
       "cta": "start",
       "pillar": "ai-dashboard-for-small-business",
       "posts": [
-        { "slug": "ai-dashboard-for-small-business", "phrase": "ai dashboard for small business", "intent": "learn then buy", "proof": "the GMS operator: what it runs every day, what broke, what it cost", "status": "drafted" },
-        { "slug": "what-to-automate-first-with-ai", "phrase": "what to automate first with ai small business", "intent": "learn", "proof": "the automations that backfired in GMS (money priorities memory) and the ones that paid", "status": "planned" },
-        { "slug": "ai-workflow-workshop-what-you-leave-with", "phrase": "ai workshop for small business owners", "intent": "buy", "proof": "the Nov 7 workshop outline and the starter dashboard template", "status": "planned" },
-        { "slug": "done-for-you-ai-dashboard-cost", "phrase": "how much does a custom ai dashboard cost", "intent": "buy", "proof": "the real $1,700 fixed scope and why it is fixed", "status": "planned" },
-        { "slug": "keep-ai-from-sending-the-wrong-email", "phrase": "ai automation mistakes small business", "intent": "learn", "proof": "the held sends, the daily cap and the yes card in the Fellowship", "status": "planned" }
+        {
+          "slug": "ai-dashboard-for-small-business",
+          "phrase": "ai dashboard for small business",
+          "intent": "learn then buy",
+          "proof": "the GMS operator: what it runs every day, what broke, what it cost",
+          "status": "drafted"
+        },
+        {
+          "slug": "what-to-automate-first-with-ai",
+          "phrase": "what to automate first with ai small business",
+          "intent": "learn",
+          "proof": "the automations that backfired in GMS (money priorities memory) and the ones that paid",
+          "status": "planned"
+        },
+        {
+          "slug": "ai-workflow-workshop-what-you-leave-with",
+          "phrase": "ai workshop for small business owners",
+          "intent": "buy",
+          "proof": "the Nov 7 workshop outline and the starter dashboard template",
+          "status": "planned"
+        },
+        {
+          "slug": "done-for-you-ai-dashboard-cost",
+          "phrase": "how much does a custom ai dashboard cost",
+          "intent": "buy",
+          "proof": "the real $1,700 fixed scope and why it is fixed",
+          "status": "planned"
+        },
+        {
+          "slug": "keep-ai-from-sending-the-wrong-email",
+          "phrase": "ai automation mistakes small business",
+          "intent": "learn",
+          "proof": "the held sends, the daily cap and the yes card in the Fellowship",
+          "status": "planned"
+        }
       ]
     },
     {
@@ -25,11 +55,41 @@
       "cta": "start",
       "pillar": "automate-your-music-business-with-ai",
       "posts": [
-        { "slug": "automate-your-music-business-with-ai", "phrase": "automate music business with ai", "intent": "learn then buy", "proof": "the GMS operator end to end, 100+ songs, the booking pipeline", "status": "drafted" },
-        { "slug": "ai-booking-emails-for-musicians", "phrase": "how to email venues for booking", "intent": "learn", "proof": "the four booking letters, what got replies, the em dash lesson", "status": "planned" },
-        { "slug": "register-songs-with-bmi-from-distributor-export", "phrase": "register songs with bmi", "intent": "learn", "proof": "the works registration skill and the BMI traps it found", "status": "planned" },
-        { "slug": "post-music-to-instagram-automatically", "phrase": "schedule music posts instagram automatically", "intent": "learn", "proof": "the posting page, the Meta traps, stories with baked in songs", "status": "planned" },
-        { "slug": "public-domain-art-for-band-merch", "phrase": "public domain art for merch", "intent": "learn", "proof": "the merch designer and its rights gate", "status": "planned" }
+        {
+          "slug": "automate-your-music-business-with-ai",
+          "phrase": "automate music business with ai",
+          "intent": "learn then buy",
+          "proof": "the GMS operator end to end, 100+ songs, the booking pipeline",
+          "status": "drafted"
+        },
+        {
+          "slug": "ai-booking-emails-for-musicians",
+          "phrase": "how to email venues for booking",
+          "intent": "learn",
+          "proof": "the four booking letters, what got replies, the em dash lesson",
+          "status": "planned"
+        },
+        {
+          "slug": "register-songs-with-bmi-from-distributor-export",
+          "phrase": "register songs with bmi",
+          "intent": "learn",
+          "proof": "the works registration skill and the BMI traps it found",
+          "status": "planned"
+        },
+        {
+          "slug": "post-music-to-instagram-automatically",
+          "phrase": "schedule music posts instagram automatically",
+          "intent": "learn",
+          "proof": "the posting page, the Meta traps, stories with baked in songs",
+          "status": "planned"
+        },
+        {
+          "slug": "public-domain-art-for-band-merch",
+          "phrase": "public domain art for merch",
+          "intent": "learn",
+          "proof": "the merch designer and its rights gate",
+          "status": "planned"
+        }
       ]
     },
     {
@@ -40,10 +100,34 @@
       "cta": "tech",
       "pillar": "interactive-3d-maps-for-land-projects",
       "posts": [
-        { "slug": "interactive-3d-maps-for-land-projects", "phrase": "interactive 3d map for land development", "intent": "learn then buy", "proof": "the /tech parcel viewer, 12.9 kB measured, no 3D library", "status": "drafted" },
-        { "slug": "3d-festival-map", "phrase": "interactive festival map", "intent": "buy", "proof": "Festival OS and the festival demo films", "status": "planned" },
-        { "slug": "360-virtual-tour-real-estate-development", "phrase": "360 virtual tour for new development", "intent": "buy", "proof": "the Pepper Creek demo and the 140 degree panorama trap", "status": "planned" },
-        { "slug": "show-donors-the-project-in-3d", "phrase": "fundraising visualization for land project", "intent": "learn", "proof": "Civil X showcase films for eco villages", "status": "planned" }
+        {
+          "slug": "interactive-3d-maps-for-land-projects",
+          "phrase": "interactive 3d map for land development",
+          "intent": "learn then buy",
+          "proof": "the /tech parcel viewer, 12.9 kB measured, no 3D library",
+          "status": "drafted"
+        },
+        {
+          "slug": "3d-festival-map",
+          "phrase": "interactive festival map",
+          "intent": "buy",
+          "proof": "Festival OS and the festival demo films",
+          "status": "planned"
+        },
+        {
+          "slug": "360-virtual-tour-real-estate-development",
+          "phrase": "360 virtual tour for new development",
+          "intent": "buy",
+          "proof": "the Pepper Creek demo and the 140 degree panorama trap",
+          "status": "planned"
+        },
+        {
+          "slug": "show-donors-the-project-in-3d",
+          "phrase": "fundraising visualization for land project",
+          "intent": "learn",
+          "proof": "Civil X showcase films for eco villages",
+          "status": "planned"
+        }
       ]
     },
     {
@@ -54,9 +138,72 @@
       "cta": "open-source",
       "pillar": "what-is-a-bioregional-commons",
       "posts": [
-        { "slug": "what-is-a-bioregional-commons", "phrase": "what is a bioregional commons", "intent": "learn", "proof": "BioRegional OS: what it does and what it deliberately refuses to do", "status": "planned" },
-        { "slug": "consent-first-community-data", "phrase": "community data consent", "intent": "learn", "proof": "the BioRegional OS consent and licence registry rules", "status": "planned" },
-        { "slug": "software-for-eco-villages", "phrase": "software for eco villages", "intent": "learn then buy", "proof": "Civil X and BioRegional OS, built for real eco village work", "status": "planned" }
+        {
+          "slug": "what-is-a-bioregional-commons",
+          "phrase": "what is a bioregional commons",
+          "intent": "learn",
+          "proof": "BioRegional OS: what it does and what it deliberately refuses to do",
+          "status": "planned"
+        },
+        {
+          "slug": "consent-first-community-data",
+          "phrase": "community data consent",
+          "intent": "learn",
+          "proof": "the BioRegional OS consent and licence registry rules",
+          "status": "planned"
+        },
+        {
+          "slug": "software-for-eco-villages",
+          "phrase": "software for eco villages",
+          "intent": "learn then buy",
+          "proof": "Civil X and BioRegional OS, built for real eco village work",
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "solarpunk-land-tech",
+      "name": "Solarpunk and land tech",
+      "intro": "Solarpunk technology in practice: AI and software for permaculture, eco villages and land projects, built local first and owned by the people on the land.",
+      "moneyPage": "/solarpunk",
+      "cta": "land",
+      "pillar": "solarpunk-technology-that-exists-today",
+      "posts": [
+        {
+          "slug": "solarpunk-technology-that-exists-today",
+          "phrase": "solarpunk technology examples",
+          "intent": "learn",
+          "proof": "BioRegional OS, Civil X and the 13 kB 3D viewer, and the five questions on /solarpunk",
+          "status": "planned"
+        },
+        {
+          "slug": "permaculture-site-assessment-with-ai",
+          "phrase": "permaculture site assessment ai",
+          "intent": "learn",
+          "proof": "a real BioRegional OS dossier for one site: soil, watershed, gauges, species, and what it got wrong on the ground",
+          "status": "planned"
+        },
+        {
+          "slug": "eco-village-task-software",
+          "phrase": "eco village software",
+          "intent": "learn then buy",
+          "proof": "Civil X tasks on the map, fingerprinted before and after photos, the pay off/budget/credits switch",
+          "status": "planned"
+        },
+        {
+          "slug": "bioregional-ai-with-consent-gates",
+          "phrase": "bioregional ai",
+          "intent": "learn",
+          "proof": "why no dataset may close a consent gate in BioRegional OS, and the AI using the same tools as a steward over MCP",
+          "status": "planned"
+        },
+        {
+          "slug": "ai-land-onboarding-what-happens",
+          "phrase": "ai for land projects",
+          "intent": "buy",
+          "proof": "the land onboarding steps: dossier, 3D map, Civil X copy, AI dashboard, showcase film",
+          "status": "planned"
+        }
       ]
     }
   ]

@@ -5,7 +5,7 @@ export const openSourceContent = {
   headline: 'Built to Be Adapted, Not Copied Without Context',
   intro:
     'Greenfire Creator Commons is being developed as an open-source framework that communities can adapt according to their land, culture, needs, laws, resources, and relationships. The purpose is not to make every community identical. The purpose is to provide useful starting structures that local people can reshape.',
-  status: statusItem('planned', 'Open-source release is planned — no published license or repository yet.'),
+  status: statusItem('active', 'BioRegional OS is published on GitHub under the AGPL. More Creator Commons materials are being prepared.'),
   mayInclude: [
     'Website source code',
     'Community intake templates',

@@ -1,10 +1,10 @@
 /** External and form endpoints — leave empty until verified; never invent URLs */
 export const linksConfig = {
   donationUrl: '' as string,
-  repositoryUrl: '' as string,
+  repositoryUrl: 'https://github.com/Greenfire-solutions/Bioregional-OS' as string,
   documentationUrl: '' as string,
   eventTicketUrl: '' as string,
-  openSourceStatus: 'planned' as 'planned' | 'preparing-release' | 'published',
+  openSourceStatus: 'published' as 'planned' | 'preparing-release' | 'published',
   forms: {
     communityIntakeConfigured: Boolean(import.meta.env.VITE_WEB3FORMS_ACCESS_KEY),
     generalContactConfigured: Boolean(import.meta.env.VITE_WEB3FORMS_ACCESS_KEY),
