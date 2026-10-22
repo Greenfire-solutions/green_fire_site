@@ -21,6 +21,10 @@
       "destination": "/blog/:path*/index.html"
     },
     {
+      "source": "/p/:token",
+      "destination": "/api/share?t=:token"
+    },
+    {
       "source": "/((?!api/)(?!assets/).*)",
       "destination": "/index.html"
     }
