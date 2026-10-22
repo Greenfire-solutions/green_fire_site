@@ -1,6 +1,7 @@
 {
   "_comment": "THE ONE HOME for search. The site address, and the title, description and heading every public page shows to Google and to AI crawlers. The SPA reads it on every route change (src/lib/usePageMeta.ts) and the build writes a real HTML file per route from it (scripts/seo/build.mjs), so a crawler that runs no JavaScript still sees the right page. Change the domain here and canonicals, the sitemap, the feed and every blog page follow. The evergreen topic pages (/solarpunk, /bioregional-ai...) have their text in content/pages/*.md; `topics` here only lists them in footer order with their short label, so the app's footer and the static pages link the same set (the gate fails if the two disagree). `about` paragraphs are extra crawlable text in a route's static HTML. Titles under 60 characters, descriptions 70 to 160. No em dashes: Jordan reads them as machine written.",
   "siteUrl": "https://green-fire-site.vercel.app",
+  "indexNowKey": "da4fd0e9d44ddd662cac925065c50730",
   "siteName": "Green Fire",
   "organization": "Green Fire Research and Innovation Center",
   "alternateNames": [

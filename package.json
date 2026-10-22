@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/seo/build.mjs",
+    "build": "vite build && node scripts/seo/build.mjs && node scripts/seo/indexnow.mjs",
     "preview": "vite preview",
     "blog:check": "node scripts/seo/check.mjs",
     "blog:preview": "vite build && BLOG_DRAFTS=1 node scripts/seo/build.mjs && vite preview"
