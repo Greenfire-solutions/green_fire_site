@@ -7,7 +7,7 @@ import data from '../data/startOffers.json';
    Everything on it comes from startOffers.json, the same file the Greenfire
    operator and Pip read, so the page cannot quote a price the till disagrees with. */
 
-type Offer = (typeof data.offers)[number] & { when?: string; terms?: string; book_url?: string; video?: string; poster?: string };
+type Offer = (typeof data.offers)[number] & { when?: string; terms?: string; book_url?: string; video?: string; poster?: string; after?: string };
 const offers = data.offers as Offer[];
 
 /* The 25 second intro, rendered by _TOOLS/intro-videos/render.py. The poster
@@ -44,9 +44,17 @@ function OfferCard({ o, onAsk }: { o: Offer; onAsk: (id: string) => void }) {
       {o.terms && <p className="mt-3 text-xs text-stone-500">{o.terms}</p>}
       <div className="mt-auto pt-6 flex flex-col gap-2">
         {o.checkout_url ? (
-          <a href={o.checkout_url} className="rounded-xl bg-emerald-500 px-4 py-3 text-center text-sm font-semibold text-black hover:bg-emerald-400">
-            {o.button}
-          </a>
+          <>
+            {/* What happens after paying, and the name Stripe will show. The
+                checkout runs on the GMS Stripe account, so a buyer who was not
+                told sees a different business on the payment page and their
+                statement at the exact moment they decide whether to trust it. */}
+            {o.after && <p className="text-xs text-stone-300">{o.after}</p>}
+            <a href={o.checkout_url} className="rounded-xl bg-emerald-500 px-4 py-3 text-center text-sm font-semibold text-black hover:bg-emerald-400">
+              {o.button}
+            </a>
+            <p className="text-[11px] leading-snug text-stone-500">{data.page.checkout_note}</p>
+          </>
         ) : (
           <button onClick={() => onAsk(o.id)} className="rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-black hover:bg-emerald-400">
             {o.button}
