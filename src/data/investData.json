@@ -1,0 +1,297 @@
+{
+  "_comment": "THE ONE HOME for the /invest page. Every number here comes from _PLANS/00_Current/GREENFIRE_CANON.md (private plans folder). Change the canon first, then this file. No em dashes. Never state sales, members, partners, land or funding that are not real.",
+  "hero": {
+    "label": "For funders, landowners and partners",
+    "title": "Land based learning campuses where kids, makers and artists build regenerative communities",
+    "subtitle": "Greenfire is built to turn a piece of land and a community's real needs into a working campus: a youth academy and maker space, a media and music studio, regenerative land systems and a council that decides together. We will build wherever the land is best and the chance to work with kids, education and regenerative practice lines up. Central Texas is one candidate location among several.",
+    "cta": "Request the full plan set"
+  },
+  "status": {
+    "title": "Where we are, honestly",
+    "have": [
+      "Early revenue from AI services run through Greenfire: workshops, one to one onboarding and AI dashboard builds for artists and small businesses",
+      "Working software we built ourselves and can demonstrate: BioRegional OS, an open source platform for a bioregional commons, plus Civil X for tasks and proof of work, Festival OS and our own operator dashboards",
+      "A complete plan set: academy and maker space, campus and site selection, financial model, governance, impact framework, market and funding research",
+      "Jordan Larsen tours as a musician and runs events, which is how Greenfire plans to gather people"
+    ],
+    "not_yet": [
+      "No land, lease or site is signed yet. We are choosing the first site",
+      "No investors, grants, partners or fiscal sponsor are committed yet",
+      "Greenfire's entities are still to be formed. The nonprofit arm will start under a fiscal sponsor",
+      "The academy has early interest from a first survey of 4 families. The next step is a paid pre sale"
+    ]
+  },
+  "loop": {
+    "title": "How a Greenfire campus works",
+    "intro": "Every campus will run the same loop. A real local need goes in. A built solution, a story and a funded next project come out.",
+    "steps": [
+      [
+        "Listen",
+        "Community intake and council name the real needs"
+      ],
+      [
+        "Sense the land",
+        "Water, soil, heat, food and energy data set the priorities"
+      ],
+      [
+        "Design",
+        "Youth, makers, artists and elders design the response together"
+      ],
+      [
+        "Build",
+        "The maker space and land team build the smallest useful version"
+      ],
+      [
+        "Tell the story",
+        "The media studio documents it as film, music and lessons"
+      ],
+      [
+        "Gather",
+        "Events and shows bring people in and raise funds"
+      ],
+      [
+        "Fund the next one",
+        "20% of event net revenue goes to a community project fund the members vote on"
+      ],
+      [
+        "Measure and share",
+        "Impact is tracked openly, and what works becomes a toolkit for the next site"
+      ]
+    ]
+  },
+  "campus": {
+    "title": "What we build on each site",
+    "intro": "A wheel around a Council Fire. We build the weekly rhythm first and the buildings second.",
+    "zones": [
+      [
+        "Council Fire",
+        "The decision room: weekly council, project proposals, participatory budgeting, conflict repair."
+      ],
+      [
+        "Greenfire Academy and Maker Space",
+        "Week long camps and year round programs where kids learn by building real things on real land, plus maker memberships for adults outside camp hours."
+      ],
+      [
+        "Media and Music Studio",
+        "Podcast, film, recording and livestream. It documents every project and earns from studio and production services."
+      ],
+      [
+        "Regenerative land systems",
+        "Food forest, gardens, rain catchment, compost, shade and outdoor classrooms. The land is the classroom and the research lab."
+      ],
+      [
+        "Wellness",
+        "Movement, breath and community care, so the people doing the work stay well."
+      ],
+      [
+        "Gathering and events",
+        "Stage, fire circle and market space. Events are the cash flow engine and the front door."
+      ]
+    ]
+  },
+  "location": {
+    "title": "Where we build",
+    "intro": "Greenfire is not tied to one city. We score candidate sites and build where the land and the opportunities are strongest. More than one site over time is the plan: each one is a chapter.",
+    "criteria": [
+      "Land, water and soil quality, and the site's climate risks (heat, flood, fire, drought)",
+      "Price or partner terms, so the land does not eat the program budget",
+      "Kids nearby: schools, homeschool groups and families looking for programs",
+      "A regenerative ecosystem to work with: farms, land projects, eco villages, educators",
+      "Rules that allow youth camps, events and lodging without years of permits",
+      "Access, and a funder and community ecosystem that wants this to exist"
+    ],
+    "candidates": "Central Texas is our most fully worked example, and it is one candidate on equal footing with others: the Southwest and Mountain West (California, Arizona, Utah, Colorado) and existing eco village and land project sites where a landowner partner wants a campus. The site that scores best wins."
+  },
+  "academy": {
+    "title": "Greenfire Academy",
+    "intro": "In our first small survey of 4 families, kids wanted to make games, music and videos, and parents wanted confidence, real world skills and time in nature. The academy is designed to give both: real life is the game engine.",
+    "points": [
+      "Every module runs Experience, Translate, Create, Share, and is designed to end with something the child made: a game, a track, a film, a garden system",
+      "Flagship programs: Game Creator Lab, Beat Lab, Creator Studio, Survival Builder Lab, Fire Kitchen Lab, and hybrids like Build Your World, where kids map the land and turn it into a playable game",
+      "Week long summer camps come first. In our first parent survey, every family that answered picked week long summer camps, and none picked weekend workshops. The sample was small, so the next step is a paid pre sale",
+      "Safety and licensing are designed in from day one: background checks, trained staff, guardian consent for any photo or video, and state youth camp licensing where it applies",
+      "Teens 14 to 18 can grow into a paid apprentice crew for Greenfire media and builds"
+    ]
+  },
+  "phases": {
+    "title": "The phased plan",
+    "intro": "Each phase has to prove itself before the next is funded. We do not buy the dream before the engine runs.",
+    "rows": [
+      [
+        "Phase 0",
+        "Formation",
+        "0 to 90 days",
+        "$50,000",
+        "Entities and fiscal sponsor, the first site shortlist, intake, first council and first event plan"
+      ],
+      [
+        "Phase 1",
+        "Pop up pilot",
+        "3 to 9 months",
+        "$150,000",
+        "First camps and events on a partner site, first community project, first impact report"
+      ],
+      [
+        "Phase 2",
+        "Leased hub",
+        "9 to 24 months",
+        "$800K target ($650K floor)",
+        "Media and maker labs running, monthly councils and events, year round youth programs"
+      ],
+      [
+        "Phase 3",
+        "Partner land campus",
+        "1 to 3 years",
+        "$1.5M",
+        "Land based campus with gardens, water systems, outdoor classrooms and event capacity"
+      ],
+      [
+        "Phase 4",
+        "Owned campus",
+        "2 to 5 years",
+        "$5M to $8M",
+        "Permanent flagship held in a land trust, the model ready to copy to the next site"
+      ]
+    ]
+  },
+  "model": {
+    "title": "The three year model",
+    "note": "This is a planning model built on Central Texas example costs, not a forecast. It assumes a leased or partner hub and diversified revenue. Year one is the cost of proving the engine.",
+    "rows": [
+      [
+        "Year 1",
+        "$680,500",
+        "$933,000",
+        "-$252,500"
+      ],
+      [
+        "Year 2",
+        "$1,535,000",
+        "$1,585,000",
+        "-$50,000"
+      ],
+      [
+        "Year 3",
+        "$3,000,000",
+        "$2,735,000",
+        "+$265,000"
+      ]
+    ],
+    "streams": "Revenue comes from many streams so no single one carries the hub: memberships, events and shows, media services, studio and maker rentals, camps and workshops, grants and sponsors, products and consulting."
+  },
+  "money": {
+    "title": "How the money moves",
+    "split_title": "Every event's net revenue is split the same way",
+    "split": [
+      [
+        "Operations",
+        35
+      ],
+      [
+        "Artists, creators and crew",
+        25
+      ],
+      [
+        "Community project fund",
+        20
+      ],
+      [
+        "Elder and youth fund",
+        10
+      ],
+      [
+        "Reserve and maintenance",
+        10
+      ]
+    ],
+    "structure": [
+      [
+        "Greenfire Studios LLC (to be formed)",
+        "Earned revenue: media, events, studio services, AI services, products"
+      ],
+      [
+        "Greenfire Commons nonprofit (to be formed)",
+        "Youth programs, community projects and grants. Starts under a fiscal sponsor"
+      ],
+      [
+        "Land trust (a later layer, formed only when land is in play)",
+        "Would hold land long term so the community is not priced out of the value it creates"
+      ]
+    ],
+    "credits": "Members earn Greenfire credits for verified work. Credits unlock studio time, tools and workshops. They are not money, not tradable and never a vote. Governance is one member, one voice."
+  },
+  "impact": {
+    "title": "What we will measure",
+    "intro": "Targets, not results. Greenfire has not yet run a hub. Each site measures its own baseline in its first 90 days, ecological targets scale to what that site makes possible, and any percentage on fewer than 10 people is reported as a count.",
+    "targets": [
+      [
+        "Youth reached by Phase 3",
+        "200 to 350 camper weeks a year"
+      ],
+      [
+        "Youth confidence gain, self rated before and after",
+        "+1.0 on a 5 point scale"
+      ],
+      [
+        "Serious youth safety incidents",
+        "Zero"
+      ],
+      [
+        "Event net paid to artists, creators and crew",
+        "25%"
+      ],
+      [
+        "Community project fund deployed by member vote",
+        "80% within 12 months"
+      ],
+      [
+        "Rain captured, as a share of what each site's catchment can harvest",
+        "70% by Phase 3"
+      ],
+      [
+        "Volunteer hours as a share of project hours, so no one works unpaid by default",
+        "20% or less"
+      ],
+      [
+        "New members who reach a first real result within 14 days",
+        "70% or more"
+      ],
+      [
+        "Monthly public finance summary",
+        "Published on time, every month"
+      ]
+    ]
+  },
+  "ways": {
+    "title": "Ways to take part",
+    "items": [
+      [
+        "Seed funders",
+        "Fund Phase 0 and the first pilot. Donations will go through a fiscal sponsor once one is signed."
+      ],
+      [
+        "Landowners",
+        "Host an event, a six month pilot hub, or a full chapter. No land transfer is needed to start."
+      ],
+      [
+        "Program sponsors",
+        "Fund a camp cohort, scholarships, the maker space or the media lab."
+      ],
+      [
+        "Grant makers",
+        "Youth education, creative workforce, environmental education and climate resilience programs."
+      ],
+      [
+        "Lenders",
+        "Later phases only: equipment, buildout and land, once the pilot has operating proof."
+      ]
+    ],
+    "legal": "Greenfire is not offering or accepting investments. Its entities are not yet formed, and donations earn no return. Any future loan or investment would be offered only through separate documents prepared by securities counsel, to eligible persons where the law allows. The figures on this page are a planning model and targets, not a forecast or a promise."
+  },
+  "contact": {
+    "title": "Request the full plan set",
+    "body": "The full plan set includes the academy and maker space plan, campus and site selection plan, financial plan with a working model, governance and risk, impact framework, and market and funding research. Write to Jordan and say a little about you and what interests you. He will send you an access code for the private data room, where every document can be read and downloaded.",
+    "email": "civilizationexplorer@gmail.com",
+    "subject": "Greenfire investor plan set"
+  }
+}

@@ -79,6 +79,15 @@
       "description": "AI workshops, one to one AI dashboard onboarding, and done for you AI dashboards built around how your business already works.",
       "h1": "Get AI working for you"
     },
+    "/invest": {
+      "title": "Greenfire for Funders, Landowners and Partners",
+      "description": "Greenfire plans land based campuses with a youth academy, maker space, media studio and regenerative land systems. See the phased plan and how to take part.",
+      "h1": "Greenfire for funders, landowners and partners",
+      "about": [
+        "Greenfire is built to turn a piece of land and a community's real needs into a working campus: a youth academy and maker space, a media and music studio, regenerative land systems and a council that decides together.",
+        "We build wherever the land is best and the chance to work with kids, education and regenerative practice lines up. Each phase has to prove itself before the next is funded."
+      ]
+    },
     "/tech": {
       "title": "Interactive 3D Maps for Land Projects | Green Fire",
       "description": "Interactive 3D maps and walkthroughs for land projects, eco villages, construction, festivals and fundraising, plus custom AI and UX work.",

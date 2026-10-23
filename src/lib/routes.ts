@@ -12,6 +12,7 @@ export const ROUTES = {
   getInvolved: '/get-involved',
   contact: '/contact',
   start: '/start',
+  invest: '/invest',
   pilotRoadmap: '/pilot-roadmap',
   /** Static HTML written at build time by scripts/seo/build.mjs, not a React route. */
   blog: '/blog/',
@@ -56,6 +57,7 @@ export const FOOTER_NAV = [
   { path: ROUTES.howItWorks, label: 'About' },
   { path: ROUTES.blog, label: 'Blog' },
   { path: ROUTES.pilotRoadmap, label: 'Pilot Roadmap' },
+  { path: ROUTES.invest, label: 'Funders and Partners' },
   { path: ROUTES.tech, label: 'Tech and 3D' },
   { path: ROUTES.getInvolved, label: 'Community Intake' },
   { path: ROUTES.getInvolved, label: 'Partner With Greenfire' },

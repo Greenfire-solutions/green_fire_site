@@ -9,7 +9,14 @@ import { verifyAdminToken } from './_lib/auth.js';
    POST is how the page gets there: an admin-signed upload straight from the
    Mac to Blob, because a film is bigger than a function may receive. */
 const TOKEN = /^[a-z0-9-]{12,80}$/;
-const SHARE_FILE = /^shares\/[a-z0-9-]{12,80}\/(index\.html|(img|films)\/[a-z0-9-]+\.(jpg|mp4))$/;
+const SHARE_FILE = /^shares\/[a-z0-9-]{12,80}\/(index\.html|(img|films)\/[a-z0-9-]+\.(jpg|mp4)|docs\/[a-z0-9-]+\.(docx|xlsx|pptx|pdf))$/;
+/* Documents for an investor data room: Word, Excel, PowerPoint and PDF. */
+const DOC_TYPES = [
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/pdf',
+];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
@@ -44,7 +51,7 @@ async function upload(req: VercelRequest, res: VercelResponse) {
         if (!verifyAdminToken(clientPayload ?? undefined)) throw new Error('Admin login required.');
         if (!SHARE_FILE.test(pathname)) throw new Error('Not a share file.');
         return {
-          allowedContentTypes: ['text/html', 'video/mp4', 'image/jpeg'],
+          allowedContentTypes: ['text/html', 'video/mp4', 'image/jpeg', ...DOC_TYPES],
           maximumSizeInBytes: 40 * 1024 * 1024,
           addRandomSuffix: false,
         };

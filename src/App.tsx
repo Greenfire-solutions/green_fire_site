@@ -15,6 +15,7 @@ import { StudioPage } from './pages/StudioPage';
 import { WorkshopsPage } from './pages/WorkshopsPage';
 import { ContactPage } from './pages/ContactPage';
 import { StartPage, StartThanksPage } from './pages/StartPage';
+import { InvestPage } from './pages/InvestPage';
 import { AdminApp } from './admin/AdminApp';
 
 // The 3D scenes only download for visitors who actually open /tech.
@@ -72,6 +73,7 @@ function PublicSite() {
             <Route path="/pilot-roadmap" element={<PilotRoadmapPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/start" element={<StartPage />} />
+            <Route path="/invest" element={<InvestPage />} />
             <Route path="/start/thanks" element={<StartThanksPage />} />
             <Route path="/ai" element={<Navigate to="/start" replace />} />
             <Route path="/blog/*" element={<BlogFallback />} />
