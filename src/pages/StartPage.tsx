@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SectionLabel } from '../components/ui';
 import data from '../data/startOffers.json';
@@ -29,7 +29,7 @@ function Intro({ o }: { o: Offer }) {
 
 function OfferCard({ o, onAsk }: { o: Offer; onAsk: (id: string) => void }) {
   return (
-    <div className="flex flex-col rounded-2xl border border-white/10 bg-neutral-950 p-6">
+    <div id={o.id} className="flex scroll-mt-24 flex-col rounded-2xl border border-white/10 bg-neutral-950 p-6">
       {o.video && <Intro o={o} />}
       <h3 className="text-xl font-semibold text-white">{o.title}</h3>
       <p className="mt-1 text-2xl font-semibold text-emerald-300">{o.price_label}</p>
@@ -132,6 +132,12 @@ function AskForm({ offer, setOffer }: { offer: string; setOffer: (s: string) => 
 
 export function StartPage() {
   const [offer, setOffer] = useState('unsure');
+  /* /start#workshop: old Great Medicine Show links to the AI classes forward
+     here (2026-10-24), so the page opens on the card they were about. */
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' });
+  }, [hash]);
   const ask = (id: string) => {
     setOffer(id);
     document.getElementById('ask')?.scrollIntoView({ behavior: 'smooth' });
@@ -192,7 +198,12 @@ export function StartThanksPage() {
         </a>
       </div>
       <p className="mt-6 text-sm text-stone-500">
-        {o?.book_url ? 'The calendar link above shows my open times; your Google Meet link arrives with the booking.' : 'I will email you within a day to set the time.'} Your receipt is on its way from Stripe.
+        {o?.book_url
+          ? 'The calendar link above shows my open times; your Google Meet link arrives with the booking.'
+          : o?.id === 'workshop'
+            ? 'Your confirmation with the date and time arrives by email within about 15 minutes, and the joining link comes before the day.'
+            : 'I will email you within a day to set the time.'}{' '}
+        Your receipt is on its way from Stripe.
       </p>
     </section>
   );
