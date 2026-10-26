@@ -47,6 +47,7 @@ export const PRIMARY_NAV = [
   { path: ROUTES.home, label: 'Home' },
   { path: ROUTES.howItWorks, label: 'How It Works' },
   { path: ROUTES.start, label: 'AI Help' },
+  { path: ROUTES.store, label: 'Store' },
   { path: ROUTES.offerings, label: 'Offerings' },
   { path: ROUTES.tech, label: 'Tech' },
   { path: ROUTES.blog, label: 'Blog' },
@@ -56,6 +57,7 @@ export const PRIMARY_NAV = [
 
 export const FOOTER_NAV = [
   { path: ROUTES.howItWorks, label: 'About' },
+  { path: ROUTES.store, label: 'App Store' },
   { path: ROUTES.blog, label: 'Blog' },
   { path: ROUTES.pilotRoadmap, label: 'Pilot Roadmap' },
   { path: ROUTES.invest, label: 'Funders and Partners' },

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Users, Video, Hammer } from 'lucide-react';
+import { ArrowRight, Users, Video, Hammer, Store } from 'lucide-react';
 import {
   homepageHero,
   centralIdea,
@@ -18,6 +18,7 @@ import {
   finalCta,
 } from '../data/homepageData';
 import { siteConfig } from '../config/siteConfig';
+import { ROUTES } from '../lib/routes';
 import { participationPathways } from '../data/participationData';
 import { exampleProject } from '../data/impactMetricsData';
 import { pilotRoadmap } from '../data/pilotRoadmapData';
@@ -56,6 +57,27 @@ export function HomePage() {
           </Link>
         </div>
       </PageHero>
+
+      <section className="border-b border-white/5 px-6 py-10">
+        <Link
+          to={ROUTES.store}
+          className="group mx-auto flex max-w-4xl flex-col gap-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-6 transition-colors hover:border-emerald-400/60 hover:bg-emerald-500/10 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="flex items-start gap-4">
+            <div className="shrink-0 rounded-xl bg-emerald-500/10 p-3 ring-1 ring-emerald-500/20">
+              <Store className="h-6 w-6 text-emerald-400" />
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-emerald-400/80">New: the App Store</p>
+              <h2 className="mt-1 text-xl font-bold text-white">Walk through every Greenfire app in 3D</h2>
+              <p className="mt-1 text-sm text-stone-400">Music, land, events, business and AI tools, each with a film, a short story and a price.</p>
+            </div>
+          </div>
+          <span className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-emerald-300 group-hover:text-emerald-200">
+            Open the store <ArrowRight className="h-4 w-4" />
+          </span>
+        </Link>
+      </section>
 
       <section className="border-b border-white/5 py-14 px-6">
         <div className="mx-auto max-w-3xl">
