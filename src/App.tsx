@@ -20,6 +20,8 @@ import { AdminApp } from './admin/AdminApp';
 
 // The 3D scenes only download for visitors who actually open /tech.
 const TechPage = lazy(() => import('./pages/TechPage').then((m) => ({ default: m.TechPage })));
+// The 3D store downloads three.js only for visitors who open /store.
+const StorePage = lazy(() => import('./pages/StorePage').then((m) => ({ default: m.StorePage })));
 import { ROUTES } from './lib/routes';
 
 /* Only reached when the app, not a blog file, is showing a /blog address.
@@ -65,6 +67,14 @@ function PublicSite() {
               element={
                 <Suspense fallback={<div className="min-h-[70vh]" />}>
                   <TechPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/store"
+              element={
+                <Suspense fallback={<div className="min-h-[70vh] bg-[#04110f]" />}>
+                  <StorePage />
                 </Suspense>
               }
             />

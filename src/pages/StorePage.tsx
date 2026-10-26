@@ -1,0 +1,399 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Box, Github, LayoutGrid, Loader2, Lock, Play, Sparkles, X } from 'lucide-react';
+import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from '../components/store/world';
+
+/* THE GREENFIRE APP STORE (2026-10-26). Every app Jordan built, as an object
+   on a floating island in a 3D night. The catalogue comes from /api/store,
+   which only the Greenfire operator's App store tab writes: what is listed,
+   its bio, film and price are all decided there, never typed into this file.
+
+   Buying and the $20 membership do not take money yet: the buttons collect
+   a request (name and email), which lands in the operator like every other
+   sign-up, so nobody pays before the download can actually be delivered. */
+
+type Catalog = { apps: StoreApp[]; genres: Record<string, Genre>; at?: string };
+type Want = { kind: 'app' | 'membership' | 'builder' | 'setup' | 'notify'; app?: StoreApp };
+
+const usd = (n: number) => `$${n}`;
+
+function webglOk(): boolean {
+  try {
+    const c = document.createElement('canvas');
+    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
+
+export function StorePage() {
+  const [cat, setCat] = useState<Catalog | null>(null);
+  const [error, setError] = useState('');
+  const [view, setView] = useState<'3d' | 'list'>(() => (typeof window !== 'undefined' && (window.innerWidth < 700 || !webglOk()) ? 'list' : '3d'));
+  const [selected, setSelected] = useState<string | null>(null);
+  const [hover, setHover] = useState<string | null>(null);
+  const [genre, setGenre] = useState<string | null>(null);
+  const [want, setWant] = useState<Want | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const worldRef = useRef<World | null>(null);
+  const tipRef = useRef<HTMLDivElement>(null);
+  const labelRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useEffect(() => {
+    document.title = 'App Store · Greenfire';
+    fetch('/api/store')
+      .then((r) => r.json())
+      .then((j: Catalog) => setCat({ apps: j.apps || [], genres: j.genres || {}, at: j.at }))
+      .catch(() => setError('The store could not load. Please try again in a minute.'));
+  }, []);
+
+  const apps = cat?.apps || [];
+
+  /* Share links: /store#velvet-desk opens that app, /store?view=list the list. */
+  useEffect(() => {
+    if (!cat) return;
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('view') === 'list') setView('list');
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (id && cat.apps.some((a) => a.id === id)) setTimeout(() => open(id), 400);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cat]);
+  const byId = useMemo(() => new Map(apps.map((a) => [a.id, a])), [apps]);
+  const genres = useMemo(() => Object.entries(cat?.genres || {}).filter(([g]) => apps.some((a) => a.genre === g)), [cat, apps]);
+
+  useEffect(() => {
+    if (view !== '3d' || !cat || !apps.length || !canvasRef.current) return;
+    let w: World | null = null;
+    try {
+      w = createWorld(canvasRef.current, apps, cat.genres, {
+        onHover: (id, x, y) => {
+          setHover((h) => (h === id ? h : id));
+          if (tipRef.current) tipRef.current.style.transform = `translate(${x + 14}px, ${y + 14}px)`;
+        },
+        onSelect: (id) => setSelected(id),
+        /* Every frame: move the island labels in place, without React. */
+        onLabels: (labels) => {
+          for (const l of labels) {
+            const el = labelRefs.current[l.genre];
+            if (!el) continue;
+            el.style.transform = `translate(-50%, -100%) translate(${l.x}px, ${l.y}px)`;
+            el.style.opacity = l.visible ? '1' : '0';
+          }
+        },
+      });
+    } catch {
+      setView('list');
+      return;
+    }
+    worldRef.current = w;
+    return () => {
+      w?.dispose();
+      worldRef.current = null;
+    };
+  }, [view, cat, apps]);
+
+  function open(id: string | null) {
+    setSelected(id);
+    worldRef.current?.focus(id);
+    window.history.replaceState(null, '', id ? `#${id}` : window.location.pathname + window.location.search);
+  }
+  const pickGenre = (g: string | null) => {
+    setGenre(g);
+    setSelected(null);
+    worldRef.current?.focusGenre(g);
+  };
+
+  const sel = selected ? byId.get(selected) || null : null;
+  const hov = hover ? byId.get(hover) || null : null;
+  const ready = apps.filter((a) => a.ready).length;
+
+  return (
+    <div className="relative">
+      <section className="relative h-[calc(100vh-64px)] min-h-[560px] overflow-hidden bg-[#04110f]">
+        {view === '3d' && <canvas ref={canvasRef} className="absolute inset-0 h-full w-full touch-none" style={{ cursor: 'grab' }} aria-label="The Greenfire app store in 3D. Use the list view for the same apps as text." />}
+
+        {view === '3d' &&
+          genres.map(([g, info]) => (
+            <button
+              key={g}
+              ref={(el) => (labelRefs.current[g] = el)}
+              onClick={() => pickGenre(g)}
+              className="pointer-events-auto absolute left-0 top-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-bold tracking-wide text-white backdrop-blur-sm transition-opacity"
+              style={{ borderColor: `${GENRE_COLOR[g]}80`, background: `${GENRE_COLOR[g]}22`, opacity: 0 }}
+            >
+              {info.label}
+            </button>
+          ))}
+
+        {view === '3d' && hov && !sel && (
+          <div ref={tipRef} className="pointer-events-none absolute left-0 top-0 z-20 max-w-[260px] rounded-xl border border-white/10 bg-neutral-950/90 px-3 py-2 text-xs shadow-xl">
+            <p className="font-bold text-white">{hov.title}</p>
+            <p className="mt-0.5 text-stone-300">{hov.line}</p>
+          </div>
+        )}
+        {view === '3d' && !hov && <div ref={tipRef} className="hidden" />}
+
+        {/* The header over the world. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-[#04110f] via-[#04110f]/70 to-transparent px-4 pb-10 pt-6 md:px-8">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-emerald-400">Greenfire App Store</p>
+              <h1 className="mt-1 text-2xl font-bold text-white md:text-4xl">Tools we built, ready for your work</h1>
+              <p className="mt-1 max-w-xl text-sm text-stone-300">
+                {apps.length ? `${apps.length} apps on ${genres.length} islands. ${ready} ready to take home.` : 'Loading the islands.'} Everything runs on your own computer.
+              </p>
+            </div>
+            <div className="pointer-events-auto flex flex-wrap gap-2">
+              <button onClick={() => setWant({ kind: 'membership' })} className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300">
+                Store membership, $20 a month
+              </button>
+              <button onClick={() => setWant({ kind: 'builder' })} className="rounded-full border border-emerald-400/50 px-4 py-2 text-xs font-bold text-emerald-200 hover:bg-emerald-400/10">
+                Builder, $100 a month
+              </button>
+              <button
+                onClick={() => setView(view === '3d' ? 'list' : '3d')}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-2 text-xs font-semibold text-stone-200 hover:bg-white/5"
+                aria-label={view === '3d' ? 'Show the apps as a list' : 'Show the 3D store'}
+              >
+                {view === '3d' ? <LayoutGrid size={14} /> : <Box size={14} />}
+                {view === '3d' ? 'List' : '3D'}
+              </button>
+            </div>
+          </div>
+          {genres.length > 0 && (
+            <div className="pointer-events-auto mx-auto mt-4 flex max-w-7xl flex-wrap gap-2">
+              <button onClick={() => pickGenre(null)} className={`rounded-full px-3 py-1 text-xs font-semibold ${genre === null ? 'bg-white text-neutral-950' : 'bg-white/5 text-stone-300 hover:bg-white/10'}`}>
+                All
+              </button>
+              {genres.map(([g, info]) => (
+                <button
+                  key={g}
+                  onClick={() => pickGenre(g)}
+                  className="rounded-full px-3 py-1 text-xs font-semibold"
+                  style={genre === g ? { background: GENRE_COLOR[g], color: '#0a0a0a' } : { background: `${GENRE_COLOR[g]}1a`, color: GENRE_COLOR[g] }}
+                >
+                  {info.label} <span className="opacity-70">{apps.filter((a) => a.genre === g).length}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {view === '3d' && !sel && apps.length > 0 && (
+          <p className="pointer-events-none absolute inset-x-0 bottom-5 z-10 text-center text-xs text-stone-400">Drag to look around. Scroll to zoom. Click anything glowing.</p>
+        )}
+
+        {!cat && !error && (
+          <div className="absolute inset-0 grid place-items-center text-stone-400">
+            <Loader2 className="animate-spin" />
+          </div>
+        )}
+        {error && <div className="absolute inset-0 grid place-items-center px-6 text-center text-stone-300">{error}</div>}
+        {cat && !apps.length && !error && (
+          <div className="absolute inset-0 grid place-items-center px-6 text-center text-stone-300">The shelves are being stocked. Come back soon.</div>
+        )}
+
+        {view === 'list' && apps.length > 0 && (
+          <div className="absolute inset-0 overflow-y-auto px-4 pb-16 pt-48 md:px-8 md:pt-44">
+            <div className="mx-auto max-w-7xl space-y-10">
+              {genres
+                .filter(([g]) => !genre || g === genre)
+                .map(([g, info]) => (
+                  <div key={g}>
+                    <h2 className="mb-3 text-sm font-bold uppercase tracking-widest" style={{ color: GENRE_COLOR[g] }}>
+                      {info.label}
+                    </h2>
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                      {apps
+                        .filter((a) => a.genre === g)
+                        .map((a) => (
+                          <button key={a.id} onClick={() => open(a.id)} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] text-left transition hover:border-white/25">
+                            <div className="relative aspect-video bg-neutral-900">
+                              {a.poster && <img src={a.poster} alt="" loading="lazy" className="h-full w-full object-cover opacity-90 transition group-hover:opacity-100" />}
+                              {a.video && (
+                                <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-bold text-white">
+                                  <Play size={10} /> film
+                                </span>
+                              )}
+                            </div>
+                            <div className="p-4">
+                              <div className="flex items-start justify-between gap-2">
+                                <p className="font-bold text-white">{a.title}</p>
+                                <PriceTag a={a} />
+                              </div>
+                              <p className="mt-1 text-sm text-stone-300">{a.line}</p>
+                            </div>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
+        {sel && <Panel a={sel} onClose={() => open(null)} onWant={setWant} genreLabel={cat?.genres[sel.genre]?.label || ''} />}
+      </section>
+
+      <section className="border-t border-white/5 bg-neutral-950 px-4 py-14 md:px-8">
+        <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 p-6">
+            <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Buy one app</p>
+            <p className="mt-2 text-2xl font-bold text-white">$50 to $200</p>
+            <p className="mt-2 text-sm text-stone-300">Yours to keep. A clean copy made for you, with a start here guide, delivered as a download.</p>
+          </div>
+          <div className="rounded-2xl border border-emerald-400/40 bg-emerald-400/[0.04] p-6">
+            <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Store membership</p>
+            <p className="mt-2 text-2xl font-bold text-white">$20 a month</p>
+            <p className="mt-2 text-sm text-stone-300">Take any two member apps every month. Free apps are always free.</p>
+            <button onClick={() => setWant({ kind: 'membership' })} className="mt-4 rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300">Join the list</button>
+          </div>
+          <div className="rounded-2xl border border-white/10 p-6">
+            <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Builder</p>
+            <p className="mt-2 text-2xl font-bold text-white">$100 a month</p>
+            <p className="mt-2 text-sm text-stone-300">Every app, including the bigger tools, plus a new tool every week and a monthly review.</p>
+            <Link to="/start" className="mt-4 inline-block text-xs font-bold text-emerald-300 hover:text-emerald-200">Or have Greenfire set it all up, from $500 &rarr;</Link>
+          </div>
+        </div>
+      </section>
+
+      {want && <Reserve want={want} onClose={() => setWant(null)} />}
+    </div>
+  );
+}
+
+function PriceTag({ a }: { a: StoreApp }) {
+  if (a.free) return <span className="shrink-0 rounded-full bg-emerald-400/15 px-2 py-0.5 text-[11px] font-bold text-emerald-300">Free</span>;
+  if (!a.ready) return <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-stone-300">Soon</span>;
+  return <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-white">{usd(a.price_usd)}</span>;
+}
+
+function Panel({ a, onClose, onWant, genreLabel }: { a: StoreApp; onClose: () => void; onWant: (w: Want) => void; genreLabel: string }) {
+  const color = GENRE_COLOR[a.genre] || '#8CC63F';
+  return (
+    <aside className="absolute inset-x-0 bottom-0 z-30 max-h-[78%] overflow-y-auto rounded-t-3xl border border-white/10 bg-neutral-950/95 shadow-2xl backdrop-blur md:inset-y-4 md:left-auto md:right-4 md:max-h-none md:w-[440px] md:rounded-3xl">
+      <div className="relative aspect-video overflow-hidden bg-black md:rounded-t-3xl">
+        {a.video ? (
+          <video key={a.video} src={a.video} poster={a.poster || undefined} controls muted autoPlay playsInline loop className="h-full w-full object-cover" />
+        ) : a.poster ? (
+          <img src={a.poster} alt={`${a.title} on screen`} className="h-full w-full object-cover" />
+        ) : null}
+        <button onClick={onClose} className="absolute right-3 top-3 rounded-full bg-black/60 p-1.5 text-white hover:bg-black/80" aria-label="Close">
+          <X size={16} />
+        </button>
+      </div>
+      <div className="p-6">
+        <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color }}>{genreLabel}</p>
+        <h2 className="mt-1 text-2xl font-bold text-white">{a.title}</h2>
+        <p className="mt-1 text-sm font-semibold text-stone-200">{a.line}</p>
+        <p className="mt-3 text-sm leading-relaxed text-stone-300">{a.bio}</p>
+
+        <div className="mt-6 space-y-3">
+          {a.free ? (
+            <>
+              <p className="text-sm text-stone-300"><b className="text-emerald-300">Free</b>, open source, for everyone.</p>
+              {a.github && (
+                <a href={a.github} target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+                  <Github size={16} /> Get it on GitHub
+                </a>
+              )}
+            </>
+          ) : a.ready ? (
+            <>
+              <button onClick={() => onWant({ kind: 'app', app: a })} className="w-full rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+                Get it, {usd(a.price_usd)}
+              </button>
+              <p className="flex items-start gap-2 text-xs text-stone-400">
+                {a.access === 'builder' ? <Lock size={14} className="mt-0.5 shrink-0" /> : <Sparkles size={14} className="mt-0.5 shrink-0" />}
+                {a.access === 'builder'
+                  ? 'One of the bigger tools: included for Builder members ($100 a month).'
+                  : 'Included in the $20 a month Store membership, as one of your two apps that month.'}
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-stone-300"><b className="text-white">Coming soon.</b> This one is being made ready for other people to use.</p>
+              <button onClick={() => onWant({ kind: 'notify', app: a })} className="w-full rounded-full border border-emerald-400/50 px-4 py-3 text-sm font-bold text-emerald-200 hover:bg-emerald-400/10">
+                Tell me when it is ready
+              </button>
+            </>
+          )}
+          <button onClick={() => onWant({ kind: 'setup', app: a })} className="w-full rounded-full border border-white/15 px-4 py-2.5 text-xs font-semibold text-stone-200 hover:bg-white/5">
+            Want it set up for you? From $500
+          </button>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function Reserve({ want, onClose }: { want: Want; onClose: () => void }) {
+  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
+  const [msg, setMsg] = useState('');
+  const title =
+    want.kind === 'membership' ? 'Store membership, $20 a month'
+      : want.kind === 'builder' ? 'Builder membership, $100 a month'
+        : want.kind === 'setup' ? `Set up ${want.app?.title} for me`
+          : want.kind === 'notify' ? `${want.app?.title}: tell me when it is ready`
+            : `${want.app?.title}, ${usd(want.app?.price_usd || 0)}`;
+  const note =
+    want.kind === 'setup' ? 'Greenfire installs it on your computer, connects your accounts and shows you how it works. Setup starts at $500.'
+      : want.kind === 'notify' ? 'One email when it is ready to download. Nothing else.'
+        : 'Checkout is opening soon. Leave your details and you will be the first to get it.';
+
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    setState('sending');
+    try {
+      const r = await fetch('/api/store?action=reserve', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          name: f.get('name'),
+          email: f.get('email'),
+          business: f.get('business'),
+          website: f.get('website'),
+          want: want.kind === 'notify' ? 'app' : want.kind,
+          app: want.app?.title || '',
+          message: want.kind === 'notify' ? 'Tell me when it is ready.' : '',
+        }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || 'Could not send that.');
+      setState('done');
+    } catch (err) {
+      setMsg(err instanceof Error ? err.message : 'Could not send that.');
+      setState('error');
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] grid place-items-center bg-black/70 px-4" onClick={onClose}>
+      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={title}>
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-lg font-bold text-white">{title}</h3>
+          <button onClick={onClose} className="rounded-full p-1 text-stone-400 hover:bg-white/5" aria-label="Close"><X size={18} /></button>
+        </div>
+        {state === 'done' ? (
+          <div className="mt-4">
+            <p className="text-sm text-stone-200">Got it. You are on the list, and Greenfire will write to you personally.</p>
+            <button onClick={onClose} className="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-bold text-neutral-950"><ArrowLeft size={14} /> Back to the store</button>
+          </div>
+        ) : (
+          <form onSubmit={submit} className="mt-3 space-y-3">
+            <p className="text-sm text-stone-300">{note}</p>
+            <input name="name" required placeholder="Your name" className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
+            <input name="email" type="email" required placeholder="Email" className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
+            <input name="business" placeholder="Your business or project (optional)" className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
+            <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+            {state === 'error' && <p className="text-sm text-rose-300">{msg}</p>}
+            <button disabled={state === 'sending'} className="w-full rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300 disabled:opacity-60">
+              {state === 'sending' ? 'Sending...' : want.kind === 'notify' ? 'Tell me' : 'Count me in'}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}

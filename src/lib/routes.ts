@@ -4,6 +4,7 @@ export const ROUTES = {
   howItWorks: '/how-it-works',
   offerings: '/offerings',
   tech: '/tech',
+  store: '/store',
   offeringsPackages: '/offerings/packages',
   offeringsCinematic: '/offerings/cinematic',
   offeringsStudio: '/offerings/studio',
