@@ -259,13 +259,13 @@ ${step(6, 'Project brief in the folder', 'Have your AI write your project brief'
   <button type="button" class="copy big" id="copyprompt">Copy the prompt</button>
   <p class="note">This brief is what Claude Code reads first. A detailed brief means a dashboard and agents that fit your project from day one.</p>`)}
 
-${step(7, 'Beginners Kit downloaded', 'Download the Greenfire Beginners Kit', 'About 2 minutes.', kit ? `
-  <p style="margin:0">This is the starter dashboard we will set up together for your project.</p>
+${step(7, 'Business Kit downloaded', 'Download the Greenfire Business Kit', 'About 2 minutes.', kit ? `
+  <p style="margin:0">Every tool we build your dashboard from: the command center, its seven agents, and the skills, workflows and automations behind them. Nothing in it belongs to anyone else; it fills in with your business.</p>
   <ol>
-    <li>Tap <b>Download the kit</b>. It opens in Google Drive.</li>
-    <li>Click the <b>Download</b> button (the arrow at the top right). If Google says it cannot scan the file for viruses, click <b>Download anyway</b>. It is too big to scan, that is all.</li>
-    <li>Find it in your <b>Downloads</b> folder and double click it to unzip it.</li>
-    <li>Drag the unzipped folder into your <span class="pname">Your Project</span> folder. Do not set anything up yet. We do that together.</li>
+    <li>Tap <b>Download the kit</b>. It saves a small zip file to your <b>Downloads</b> folder.</li>
+    <li>Double click it to unzip it. You get a folder called <b>Greenfire Business Kit</b>.</li>
+    <li>Drag that folder into your <span class="pname">Your Project</span> folder, next to your Project Brief from step 6.</li>
+    <li>Do not set anything up yet. In our session, Claude Code reads your brief and this kit and builds your dashboard with us.</li>
   </ol>
   <a class="go" href="${esc(kit)}" target="_blank" rel="noopener">Download the kit</a>` : `
   <p class="note">The download link goes here before your session. Check back on this page, or I will text it to you.</p>`)}
