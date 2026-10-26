@@ -29,6 +29,7 @@
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { checkAll, renderMarkdown, readingMinutes, esc, ROOT } from './lib.mjs'
+import { photoFor, creditOf } from './photos.mjs'
 
 const DIST = join(ROOT, 'dist')
 if (!existsSync(join(DIST, 'index.html'))) {
@@ -95,6 +96,7 @@ article h2{font-size:26px;line-height:1.3;margin:44px 0 12px}
 article h3{font-size:20px;margin:30px 0 8px}
 article p,article li{color:var(--soft)}article strong{color:var(--text)}
 article img{max-width:100%;height:auto;border-radius:12px}
+.hero{margin:24px 0 32px}.hero img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}.hero figcaption{margin-top:8px;font-size:13px;opacity:.7}.hero figcaption a{color:inherit}
 article blockquote{margin:24px 0;padding:4px 20px;border-left:3px solid var(--accent);color:var(--dim)}
 article code{background:var(--panel);padding:2px 6px;border-radius:6px;font-size:.9em}
 article pre{background:var(--panel);padding:16px;border-radius:12px;overflow-x:auto}article pre code{padding:0;background:none}
@@ -110,6 +112,7 @@ article table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin:20px 0 0}
 .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;text-decoration:none;color:var(--text)}
 .card:hover{border-color:rgba(52,211,153,.4)}.card h3{margin:6px 0 8px;font-size:19px;line-height:1.35}.card p{margin:0;color:var(--dim);font-size:15px}
+.card .thumb{display:block;width:calc(100% + 40px);margin:-20px -20px 14px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:16px 16px 0 0}
 .card small{color:var(--faint);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 .topics{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
 .topics a{font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--soft);text-decoration:none}.topics a:hover,.topics a.on{border-color:var(--accent);color:var(--accent)}
@@ -181,7 +184,7 @@ const ctaHtml = key => { const c = CTAS[key] || CTAS.contact; return `<aside cla
 
 const cardHtml = p => {
   const c = clusterOf(p.cluster)
-  return `<a class="card" href="${p.url}"><small>${esc(c ? c.name : '')} · ${esc(fmtDate(p.date))}</small><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p></a>`
+  return `<a class="card" href="${p.url}">${p.image ? `<img class="thumb" src="${esc(p.image)}" alt="" loading="lazy" decoding="async" width="560" height="315">` : ''}<small>${esc(c ? c.name : '')} · ${esc(fmtDate(p.date))}</small><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p></a>`
 }
 
 /* --- posts --------------------------------------------------------------- */
@@ -204,7 +207,7 @@ ${crumbHtml(trail)}
 <h1>${esc(p.title)}</h1>
 <p class="lede">${esc(p.description)}</p>
 <p class="meta">By ${esc(seo.author.name)} · <time datetime="${p.date}">${fmtDate(p.date)}</time>${updated} · ${readingMinutes(p.body)} min read</p>
-${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" width="1200" height="630">` : ''}
+${p.image ? `<figure class="hero"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" width="1600" height="900" fetchpriority="high">${creditOf(photoFor(p.image)) ? `<figcaption><a href="${esc(photoFor(p.image).page)}" rel="nofollow noopener">${esc(creditOf(photoFor(p.image)))}</a></figcaption>` : ''}</figure>` : ''}
 ${toc}
 ${html}
 ${ctaHtml(p.cta || c.cta)}

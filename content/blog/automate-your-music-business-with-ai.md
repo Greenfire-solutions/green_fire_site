@@ -3,6 +3,8 @@ title: How I Run My Music Business With AI, and What Broke
 description: An independent artist's real AI setup for booking, posting, merch and royalties, what each part does, and the mistakes that taught me where the limits are.
 date: 2026-10-26
 status: published
+image: /blog/photos/jordan-dj-set-red-brick.jpg
+image_alt: "Jordan Larsen smiling with an arm raised behind a synth rig under red light against a brick wall"
 cluster: ai-for-artists
 keyword: automate music business with ai
 tags: [musicians, independent artist, automation, booking]

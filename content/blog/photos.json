@@ -1,0 +1,78 @@
+{
+  "comment": "Real photographs only. See scripts/seo/photos.mjs before adding one.",
+  "photos": [
+    {
+      "file": "/blog/photos/jordan-dj-set-red-brick.jpg",
+      "source": "own",
+      "alt": "Jordan Larsen smiling with an arm raised behind a synth rig under red light against a brick wall",
+      "credit": "The Great Medicine Show",
+      "original": "The Great Medicine Show/20_Brand_Assets/22_Photos_Live/live-venue-brick-dj-set-red-blue.jpg",
+      "tags": [
+        "music business",
+        "musicians",
+        "independent artist",
+        "artists",
+        "booking",
+        "music"
+      ],
+      "added": "2026-10-26"
+    },
+    {
+      "file": "/blog/photos/ai-dashboard-for-small-business.jpg",
+      "source": "commons",
+      "alt": "A woman sits on the tiled steps of a small green storefront and checks her phone beside a wooden bench and a simple office desk with a copier.",
+      "credit": "PattayaPatrol",
+      "license": "CC BY-SA 4.0",
+      "camera": "NIKON CORPORATION NIKON Z fc",
+      "page": "https://commons.wikimedia.org/wiki/File:DFC_4008_A_woman_sits_on_the_steps_outside_a_small_green_storefront_checking_her_phone_beside_a_wooden_chair_and_a_modest_office_setup.jpg",
+      "tags": [
+        "small business office desk",
+        "file",
+        "dfc",
+        "4008",
+        "woman",
+        "sits",
+        "steps",
+        "outside",
+        "small",
+        "green",
+        "storefront",
+        "checking",
+        "her",
+        "phone",
+        "beside",
+        "wooden",
+        "chair",
+        "modest",
+        "office",
+        "setup",
+        "jpg"
+      ],
+      "added": "2026-10-26"
+    },
+    {
+      "file": "/blog/photos/interactive-3d-maps-for-land-projects.jpg",
+      "source": "commons",
+      "alt": "A lit three dimensional relief model of a canyon landscape sits in a lookout room with panoramic windows and information panels at dusk.",
+      "credit": "NPS Photo",
+      "license": "Public domain",
+      "camera": "NIKON CORPORATION NIKON D200",
+      "page": "https://commons.wikimedia.org/wiki/File:Tactile_topographical_relief_model_(f1e45f43-1dd8-b71b-0b54-4f40aedb8584).jpg",
+      "tags": [
+        "relief model landscape",
+        "file",
+        "tactile",
+        "topographical",
+        "relief",
+        "model",
+        "f1e45f43",
+        "1dd8",
+        "b71b",
+        "0b54",
+        "4f40aedb8584",
+        "jpg"
+      ],
+      "added": "2026-10-26"
+    }
+  ]
+}

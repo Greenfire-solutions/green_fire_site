@@ -21,6 +21,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { dirname, join, resolve, basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Marked } from 'marked'
+import { checkImage } from './photos.mjs'
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 export const POSTS_DIR = join(ROOT, 'content', 'blog')
@@ -250,6 +251,7 @@ export function checkPost(post, { seo, plan, posts }) {
     if (!img.alt) e(`image ${img.image} has no alt text`)
   }
   if (post.image && !post.imageAlt) e('image is set but image_alt is not')
+  for (const m of checkImage(post, posts)) e(m)
   return { errors, warnings, words: n }
 }
 
