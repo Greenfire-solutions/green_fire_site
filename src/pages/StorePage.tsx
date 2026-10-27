@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Box, Github, LayoutGrid, Loader2, Lock, Play, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, Box, Check, ChevronDown, Github, LayoutGrid, Link2, Loader2, Lock, Play, Sparkles, X } from 'lucide-react';
 import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from '../components/store/world';
 
 /* THE GREENFIRE APP STORE (2026-10-26). Every app Jordan built, as an object
@@ -10,12 +9,35 @@ import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from 
 
    Buying and the $20 membership do not take money yet: the buttons collect
    a request (name and email), which lands in the operator like every other
-   sign-up, so nobody pays before the download can actually be delivered. */
+   sign-up, so nobody pays before the download can actually be delivered.
+
+   The sales shape (2026-10-27): what is ready, and its price, is visible
+   before anyone clicks (the shelf); a visitor finds their apps by who they
+   are, not by our island names; every app panel sets buying once beside the
+   membership with the real difference in dollars; and a panel never ends in
+   a dead end, it shows the rest of its island. */
 
 type Catalog = { apps: StoreApp[]; genres: Record<string, Genre>; at?: string };
 type Want = { kind: 'app' | 'membership' | 'builder' | 'setup' | 'notify'; app?: StoreApp };
 
 const usd = (n: number) => `$${n}`;
+const MEMBER = 20;
+const BUILDER = 100;
+
+/* Who each island is for, in the visitor's words. The catalogue's own label
+   is used for any island not named here. */
+const WHO: Record<string, string> = {
+  music: 'I make music or perform',
+  land: 'I work with land or build',
+  events: 'I run events',
+  business: 'I run a small business',
+  ai: 'I want an AI workstation',
+  story: 'I make stories for kids',
+};
+
+/* Ready to buy first, then free, then the ones still being made ready. */
+const rank = (a: StoreApp) => (a.ready && !a.free ? 0 : a.free ? 1 : 2);
+const byRank = (x: StoreApp, y: StoreApp) => rank(x) - rank(y) || y.price_usd - x.price_usd || x.title.localeCompare(y.title);
 
 function webglOk(): boolean {
   try {
@@ -33,11 +55,15 @@ export function StorePage() {
   const [selected, setSelected] = useState<string | null>(null);
   const [hover, setHover] = useState<string | null>(null);
   const [genre, setGenre] = useState<string | null>(null);
+  const [readyOnly, setReadyOnly] = useState(false);
   const [want, setWant] = useState<Want | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const worldRef = useRef<World | null>(null);
   const tipRef = useRef<HTMLDivElement>(null);
+  const tipAt = useRef({ x: 0, y: 0 });
   const labelRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const headRef = useRef<HTMLDivElement>(null);
+  const shelfRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.title = 'App Store · Greenfire';
@@ -48,18 +74,37 @@ export function StorePage() {
   }, []);
 
   const apps = cat?.apps || [];
+  const byId = useMemo(() => new Map(apps.map((a) => [a.id, a])), [apps]);
+  const genres = useMemo(() => Object.entries(cat?.genres || {}).filter(([g]) => apps.some((a) => a.genre === g)), [cat, apps]);
 
-  /* Share links: /store#velvet-desk opens that app, /store?view=list the list. */
+  /* Share links: /store#velvet-desk opens that app, /store?view=list the list.
+     A link pressed while already on the store changes only the hash, so that
+     is listened for too. */
   useEffect(() => {
     if (!cat) return;
     const q = new URLSearchParams(window.location.search);
     if (q.get('view') === 'list') setView('list');
-    const id = decodeURIComponent(window.location.hash.slice(1));
-    if (id && cat.apps.some((a) => a.id === id)) setTimeout(() => open(id), 400);
+    const fromHash = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      if (id && cat.apps.some((a) => a.id === id)) setTimeout(() => open(id), 400);
+    };
+    fromHash();
+    window.addEventListener('hashchange', fromHash);
+    return () => window.removeEventListener('hashchange', fromHash);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cat]);
-  const byId = useMemo(() => new Map(apps.map((a) => [a.id, a])), [apps]);
-  const genres = useMemo(() => Object.entries(cat?.genres || {}).filter(([g]) => apps.some((a) => a.genre === g)), [cat, apps]);
+
+  /* Escape closes the form first, then the app. */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      if (want) setWant(null);
+      else if (selected) open(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [want, selected]);
 
   useEffect(() => {
     if (view !== '3d' || !cat || !apps.length || !canvasRef.current) return;
@@ -68,16 +113,22 @@ export function StorePage() {
       w = createWorld(canvasRef.current, apps, cat.genres, {
         onHover: (id, x, y) => {
           setHover((h) => (h === id ? h : id));
+          tipAt.current = { x, y };
           if (tipRef.current) tipRef.current.style.transform = `translate(${x + 14}px, ${y + 14}px)`;
         },
-        onSelect: (id) => setSelected(id),
+        onSelect: (id) => select(id),
         /* Every frame: move the island labels in place, without React. */
         onLabels: (labels) => {
+          /* A label under the header or the shelf would sit on their buttons. */
+          const top = (headRef.current?.offsetHeight || 0) - 30;
+          const bottom = shelfRef.current ? shelfRef.current.offsetTop + 30 : Infinity;
           for (const l of labels) {
             const el = labelRefs.current[l.genre];
             if (!el) continue;
+            const show = l.visible && l.y - 26 > top && l.y < bottom;
             el.style.transform = `translate(-50%, -100%) translate(${l.x}px, ${l.y}px)`;
-            el.style.opacity = l.visible ? '1' : '0';
+            el.style.opacity = show ? '1' : '0';
+            el.style.pointerEvents = show ? 'auto' : 'none';
           }
         },
       });
@@ -86,101 +137,167 @@ export function StorePage() {
       return;
     }
     worldRef.current = w;
+    const fit = () => w?.setInsets((headRef.current?.offsetHeight || 0) - 40, shelfRef.current ? shelfRef.current.offsetHeight - 30 : 0);
+    fit();
+    const ro = new ResizeObserver(fit);
+    if (headRef.current) ro.observe(headRef.current);
+    if (shelfRef.current) ro.observe(shelfRef.current);
     return () => {
+      ro.disconnect();
       w?.dispose();
       worldRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, cat, apps]);
 
-  function open(id: string | null) {
+  function select(id: string | null) {
     setSelected(id);
-    worldRef.current?.focus(id);
+    const a = id ? byIdRef.current.get(id) : null;
+    document.title = a ? `${a.title} · Greenfire App Store` : 'App Store · Greenfire';
     window.history.replaceState(null, '', id ? `#${id}` : window.location.pathname + window.location.search);
+  }
+  const byIdRef = useRef(byId);
+  byIdRef.current = byId;
+  function open(id: string | null) {
+    select(id);
+    worldRef.current?.focus(id);
   }
   const pickGenre = (g: string | null) => {
     setGenre(g);
-    setSelected(null);
+    select(null);
     worldRef.current?.focusGenre(g);
   };
 
   const sel = selected ? byId.get(selected) || null : null;
   const hov = hover ? byId.get(hover) || null : null;
-  const ready = apps.filter((a) => a.ready).length;
+  const ready = apps.filter((a) => a.ready && !a.free).length;
+  const soon = apps.filter((a) => !a.ready).length;
+  const shown = (a: StoreApp) => (!genre || a.genre === genre) && (!readyOnly || a.ready);
+  const shelf = apps.filter((a) => a.ready && !a.free && (!genre || a.genre === genre)).sort(byRank);
+  const memberTop = Math.max(0, ...apps.filter((a) => a.ready && !a.free && a.access === 'member').map((a) => a.price_usd));
+  const is3d = view === '3d';
 
   return (
     <div className="relative">
-      <section className="relative h-[calc(100vh-64px)] min-h-[560px] overflow-hidden bg-[#04110f]">
-        {view === '3d' && <canvas ref={canvasRef} className="absolute inset-0 h-full w-full touch-none" style={{ cursor: 'grab' }} aria-label="The Greenfire app store in 3D. Use the list view for the same apps as text." />}
+      <section className={is3d ? 'relative h-[calc(100vh-64px)] min-h-[600px] overflow-hidden bg-[#04110f]' : 'relative min-h-[calc(100vh-64px)] bg-[#04110f]'}>
+        {is3d && <canvas ref={canvasRef} className="absolute inset-0 h-full w-full touch-none" style={{ cursor: 'grab' }} aria-label="The Greenfire app store in 3D. Use the list view for the same apps as text." />}
 
-        {view === '3d' &&
+        {is3d &&
           genres.map(([g, info]) => (
             <button
               key={g}
               ref={(el) => (labelRefs.current[g] = el)}
               onClick={() => pickGenre(g)}
-              className="pointer-events-auto absolute left-0 top-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-bold tracking-wide text-white backdrop-blur-sm transition-opacity"
+              className="absolute left-0 top-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs font-bold tracking-wide text-white backdrop-blur-sm transition-opacity"
               style={{ borderColor: `${GENRE_COLOR[g]}80`, background: `${GENRE_COLOR[g]}22`, opacity: 0 }}
             >
               {info.label}
             </button>
           ))}
 
-        {view === '3d' && hov && !sel && (
-          <div ref={tipRef} className="pointer-events-none absolute left-0 top-0 z-20 max-w-[260px] rounded-xl border border-white/10 bg-neutral-950/90 px-3 py-2 text-xs shadow-xl">
-            <p className="font-bold text-white">{hov.title}</p>
+        {is3d && hov && !sel && (
+          <div
+            ref={tipRef}
+            className="pointer-events-none absolute left-0 top-0 z-20 max-w-[260px] rounded-xl border border-white/10 bg-neutral-950/90 px-3 py-2 text-xs shadow-xl"
+            style={{ transform: `translate(${tipAt.current.x + 14}px, ${tipAt.current.y + 14}px)` }}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <p className="font-bold text-white">{hov.title}</p>
+              <PriceTag a={hov} />
+            </div>
             <p className="mt-0.5 text-stone-300">{hov.line}</p>
           </div>
         )}
-        {view === '3d' && !hov && <div ref={tipRef} className="hidden" />}
 
-        {/* The header over the world. */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-[#04110f] via-[#04110f]/70 to-transparent px-4 pb-10 pt-6 md:px-8">
+        {/* The header: over the world in 3D, in the page flow in the list. */}
+        <div ref={headRef} className={is3d ? 'pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-[#04110f] via-[#04110f]/75 to-transparent px-4 pb-10 pt-6 md:px-8' : 'relative px-4 pb-2 pt-6 md:px-8'}>
           <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-emerald-400">Greenfire App Store</p>
-              <h1 className="mt-1 text-2xl font-bold text-white md:text-4xl">Tools we built, ready for your work</h1>
-              <p className="mt-1 max-w-xl text-sm text-stone-300">
-                {apps.length ? `${apps.length} apps on ${genres.length} islands. ${ready} ready to take home.` : 'Loading the islands.'} Everything runs on your own computer.
+              <h1 className="mt-1 text-2xl font-bold text-white md:text-4xl">Software you own, made for real work</h1>
+              <p className="mt-1 max-w-2xl text-sm text-stone-300">
+                Pay once and keep it, or take two apps a month for {usd(MEMBER)}. Everything runs on your own computer, so your files stay yours.
               </p>
+              {apps.length > 0 && (
+                <p className="mt-2 text-xs font-semibold text-emerald-300/90">
+                  {ready} ready to download today{soon ? `, ${soon} more on the way` : ''}.
+                </p>
+              )}
             </div>
             <div className="pointer-events-auto flex flex-wrap gap-2">
               <button onClick={() => setWant({ kind: 'membership' })} className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300">
-                Store membership, $20 a month
+                Membership, {usd(MEMBER)} a month
               </button>
-              <button onClick={() => setWant({ kind: 'builder' })} className="rounded-full border border-emerald-400/50 px-4 py-2 text-xs font-bold text-emerald-200 hover:bg-emerald-400/10">
-                Builder, $100 a month
-              </button>
+              <a href="#pricing" className="rounded-full border border-emerald-400/50 px-4 py-2 text-xs font-bold text-emerald-200 hover:bg-emerald-400/10">
+                Compare plans
+              </a>
               <button
-                onClick={() => setView(view === '3d' ? 'list' : '3d')}
+                onClick={() => { select(null); setView(is3d ? 'list' : '3d'); }}
                 className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-2 text-xs font-semibold text-stone-200 hover:bg-white/5"
-                aria-label={view === '3d' ? 'Show the apps as a list' : 'Show the 3D store'}
+                aria-label={is3d ? 'Show the apps as a list' : 'Show the 3D store'}
               >
-                {view === '3d' ? <LayoutGrid size={14} /> : <Box size={14} />}
-                {view === '3d' ? 'List' : '3D'}
+                {is3d ? <LayoutGrid size={14} /> : <Box size={14} />}
+                {is3d ? 'List' : '3D'}
               </button>
             </div>
           </div>
           {genres.length > 0 && (
-            <div className="pointer-events-auto mx-auto mt-4 flex max-w-7xl flex-wrap gap-2">
+            <div className="pointer-events-auto mx-auto mt-4 flex max-w-7xl flex-wrap items-center gap-2">
+              <span className="mr-1 text-xs font-semibold text-stone-400">Find yours:</span>
               <button onClick={() => pickGenre(null)} className={`rounded-full px-3 py-1 text-xs font-semibold ${genre === null ? 'bg-white text-neutral-950' : 'bg-white/5 text-stone-300 hover:bg-white/10'}`}>
-                All
+                Everything
               </button>
               {genres.map(([g, info]) => (
                 <button
                   key={g}
-                  onClick={() => pickGenre(g)}
+                  onClick={() => pickGenre(genre === g ? null : g)}
+                  title={info.label}
                   className="rounded-full px-3 py-1 text-xs font-semibold"
                   style={genre === g ? { background: GENRE_COLOR[g], color: '#0a0a0a' } : { background: `${GENRE_COLOR[g]}1a`, color: GENRE_COLOR[g] }}
                 >
-                  {info.label} <span className="opacity-70">{apps.filter((a) => a.genre === g).length}</span>
+                  {WHO[g] || info.label} <span className="opacity-70">{apps.filter((a) => a.genre === g).length}</span>
                 </button>
               ))}
+              {!is3d && (
+                <label className="ml-1 inline-flex cursor-pointer items-center gap-1.5 text-xs font-semibold text-stone-300">
+                  <input type="checkbox" checked={readyOnly} onChange={(e) => setReadyOnly(e.target.checked)} className="accent-emerald-400" />
+                  Ready now only
+                </label>
+              )}
             </div>
           )}
         </div>
 
-        {view === '3d' && !sel && apps.length > 0 && (
-          <p className="pointer-events-none absolute inset-x-0 bottom-5 z-10 text-center text-xs text-stone-400">Drag to look around. Scroll to zoom. Click anything glowing.</p>
+        {/* The shelf: what can be taken home today, with its price, before anyone has to find it on an island. */}
+        {is3d && !sel && shelf.length > 0 && (
+          <div ref={shelfRef} className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[#04110f] via-[#04110f]/85 to-transparent px-4 pb-4 pt-10 md:px-8">
+            <div className="mx-auto max-w-7xl">
+              <div className="mb-2 flex items-baseline justify-between gap-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">Ready to download today</p>
+                <p className="hidden text-[11px] text-stone-400 sm:block">Drag to look around. Scroll to zoom. Click any object for its film and price.</p>
+              </div>
+              <div className="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]">
+                {shelf.map((a) => (
+                  <button
+                    key={a.id}
+                    onClick={() => open(a.id)}
+                    onMouseEnter={() => setHover(null)}
+                    className="group flex w-[230px] shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-neutral-950/80 p-2 text-left backdrop-blur transition hover:border-emerald-400/50"
+                  >
+                    <div className="h-12 w-20 shrink-0 overflow-hidden rounded-lg bg-neutral-900">
+                      {a.poster && <img src={a.poster} alt="" loading="lazy" className="h-full w-full object-cover" />}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-white">{a.title}</p>
+                      <p className="text-xs font-semibold" style={{ color: GENRE_COLOR[a.genre] }}>
+                        {usd(a.price_usd)} <span className="font-normal text-stone-400">or in a plan</span>
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
 
         {!cat && !error && (
@@ -193,11 +310,11 @@ export function StorePage() {
           <div className="absolute inset-0 grid place-items-center px-6 text-center text-stone-300">The shelves are being stocked. Come back soon.</div>
         )}
 
-        {view === 'list' && apps.length > 0 && (
-          <div className="absolute inset-0 overflow-y-auto px-4 pb-16 pt-48 md:px-8 md:pt-44">
+        {!is3d && apps.length > 0 && (
+          <div className="px-4 pb-16 pt-6 md:px-8">
             <div className="mx-auto max-w-7xl space-y-10">
               {genres
-                .filter(([g]) => !genre || g === genre)
+                .filter(([g]) => apps.some((a) => a.genre === g && shown(a)))
                 .map(([g, info]) => (
                   <div key={g}>
                     <h2 className="mb-3 text-sm font-bold uppercase tracking-widest" style={{ color: GENRE_COLOR[g] }}>
@@ -205,15 +322,19 @@ export function StorePage() {
                     </h2>
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {apps
-                        .filter((a) => a.genre === g)
+                        .filter((a) => a.genre === g && shown(a))
+                        .sort(byRank)
                         .map((a) => (
-                          <button key={a.id} onClick={() => open(a.id)} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] text-left transition hover:border-white/25">
+                          <button key={a.id} onClick={() => open(a.id)} className={`group overflow-hidden rounded-2xl border bg-white/[0.03] text-left transition hover:border-white/25 ${a.ready ? 'border-white/10' : 'border-white/5 opacity-80'}`}>
                             <div className="relative aspect-video bg-neutral-900">
                               {a.poster && <img src={a.poster} alt="" loading="lazy" className="h-full w-full object-cover opacity-90 transition group-hover:opacity-100" />}
                               {a.video && (
                                 <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-bold text-white">
                                   <Play size={10} /> film
                                 </span>
+                              )}
+                              {a.ready && !a.free && (
+                                <span className="absolute right-2 top-2 rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-bold text-neutral-950">Ready now</span>
                               )}
                             </div>
                             <div className="p-4">
@@ -232,27 +353,94 @@ export function StorePage() {
           </div>
         )}
 
-        {sel && <Panel a={sel} onClose={() => open(null)} onWant={setWant} genreLabel={cat?.genres[sel.genre]?.label || ''} />}
+        {sel && (
+          <Panel
+            a={sel}
+            fixed={!is3d}
+            onClose={() => open(null)}
+            onWant={setWant}
+            onOpen={open}
+            genreLabel={cat?.genres[sel.genre]?.label || ''}
+            more={apps.filter((x) => x.genre === sel.genre && x.id !== sel.id).sort(byRank).slice(0, 3)}
+          />
+        )}
       </section>
 
-      <section className="border-t border-white/5 bg-neutral-950 px-4 py-14 md:px-8">
-        <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 p-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Buy one app</p>
-            <p className="mt-2 text-2xl font-bold text-white">$50 to $200</p>
-            <p className="mt-2 text-sm text-stone-300">Yours to keep. A clean copy made for you, with a start here guide, delivered as a download.</p>
+      <section id="pricing" className="scroll-mt-20 border-t border-white/5 bg-neutral-950 px-4 py-16 md:px-8">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-2xl font-bold text-white md:text-3xl">Three ways to get your tools</h2>
+          <p className="mt-2 max-w-2xl text-sm text-stone-300">Every app is a clean copy made for you, with a start here guide, delivered as a download. Free apps are always free.</p>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            <div className="flex flex-col rounded-2xl border border-white/10 p-6">
+              <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Buy one app</p>
+              <p className="mt-2 text-3xl font-bold text-white">$50 to $200</p>
+              <p className="text-xs text-stone-400">once, yours to keep</p>
+              <ul className="mt-4 space-y-2 text-sm text-stone-300">
+                <Tick>Pay once, no monthly bill</Tick>
+                <Tick>Runs on your own computer</Tick>
+                <Tick>A start here guide in the box</Tick>
+              </ul>
+              <button onClick={() => { pickGenre(null); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-auto pt-6 text-left text-xs font-bold text-emerald-300 hover:text-emerald-200">
+                Pick an app &rarr;
+              </button>
+            </div>
+            <div className="relative flex flex-col rounded-2xl border-2 border-emerald-400/70 bg-emerald-400/[0.06] p-6 shadow-[0_0_40px_-12px_rgba(52,211,153,0.5)]">
+              <span className="absolute -top-3 left-6 rounded-full bg-emerald-400 px-3 py-0.5 text-[11px] font-bold text-neutral-950">Best value</span>
+              <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Store membership</p>
+              <p className="mt-2 text-3xl font-bold text-white">{usd(MEMBER)}<span className="text-base font-semibold text-stone-300"> a month</span></p>
+              <p className="text-xs text-stone-400">{memberTop > MEMBER ? `two apps a month that sell for up to ${usd(memberTop)} each` : 'two apps a month'}</p>
+              <ul className="mt-4 space-y-2 text-sm text-stone-300">
+                <Tick>Take any two member apps every month</Tick>
+                <Tick>New apps land on the shelf as they are made ready</Tick>
+                <Tick>Picks do not roll over, so use them</Tick>
+              </ul>
+              <button onClick={() => setWant({ kind: 'membership' })} className="mt-6 rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+                Join for {usd(MEMBER)} a month
+              </button>
+            </div>
+            <div className="flex flex-col rounded-2xl border border-white/10 p-6">
+              <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Builder</p>
+              <p className="mt-2 text-3xl font-bold text-white">{usd(BUILDER)}<span className="text-base font-semibold text-stone-300"> a month</span></p>
+              <p className="text-xs text-stone-400">every app, nothing to choose</p>
+              <ul className="mt-4 space-y-2 text-sm text-stone-300">
+                <Tick>Every app, including the bigger tools</Tick>
+                <Tick>A new tool every week</Tick>
+                <Tick>A monthly review of how you use them</Tick>
+              </ul>
+              <button onClick={() => setWant({ kind: 'builder' })} className="mt-6 rounded-full border border-emerald-400/50 px-4 py-3 text-sm font-bold text-emerald-200 hover:bg-emerald-400/10">
+                Become a Builder
+              </button>
+            </div>
           </div>
-          <div className="rounded-2xl border border-emerald-400/40 bg-emerald-400/[0.04] p-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Store membership</p>
-            <p className="mt-2 text-2xl font-bold text-white">$20 a month</p>
-            <p className="mt-2 text-sm text-stone-300">Take any two member apps every month. Free apps are always free.</p>
-            <button onClick={() => setWant({ kind: 'membership' })} className="mt-4 rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300">Join the list</button>
+          <div className="mt-6 flex flex-col items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:flex-row sm:items-center">
+            <div>
+              <p className="font-bold text-white">Would rather not install anything yourself?</p>
+              <p className="text-sm text-stone-300">Greenfire sets it up on your computer, connects your accounts and shows you how it works. From $500.</p>
+            </div>
+            <button onClick={() => setWant({ kind: 'setup' })} className="shrink-0 rounded-full border border-white/20 px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/5">
+              Have it set up for me
+            </button>
           </div>
-          <div className="rounded-2xl border border-white/10 p-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Builder</p>
-            <p className="mt-2 text-2xl font-bold text-white">$100 a month</p>
-            <p className="mt-2 text-sm text-stone-300">Every app, including the bigger tools, plus a new tool every week and a monthly review.</p>
-            <Link to="/start" className="mt-4 inline-block text-xs font-bold text-emerald-300 hover:text-emerald-200">Or have Greenfire set it all up, from $500 &rarr;</Link>
+
+          <div className="mt-14 max-w-3xl">
+            <h2 className="text-xl font-bold text-white">Questions</h2>
+            <div className="mt-4 divide-y divide-white/10 border-y border-white/10">
+              <Faq q="How do I get an app?">
+                Checkout is opening soon. Until then, press Get it and leave your email, and Greenfire writes to you personally to finish it. Every app arrives as a download with a start here guide.
+              </Faq>
+              <Faq q="What do I need to run it?">
+                A computer you can install things on. The start here guide walks you through it. If you would rather not, Greenfire will set it up for you, from $500.
+              </Faq>
+              <Faq q="How does the membership work?">
+                {usd(MEMBER)} a month lets you take any two member apps that month. Picks you do not use do not roll over. Builder, at {usd(BUILDER)} a month, includes every app, the bigger tools too.
+              </Faq>
+              <Faq q="What does Coming soon mean?">
+                The app is built, but the copy for other people is still being cleaned and checked so nothing private goes out with it. Press Tell me and you get one email when it is ready.
+              </Faq>
+              <Faq q="Does my information leave my computer?">
+                The apps run on your own computer and keep their files there. Where an app can connect to an outside service, like email or AI, you choose whether to connect it.
+              </Faq>
+            </div>
           </div>
         </div>
       </section>
@@ -262,16 +450,54 @@ export function StorePage() {
   );
 }
 
+function Tick({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex items-start gap-2">
+      <Check size={15} className="mt-0.5 shrink-0 text-emerald-400" />
+      <span>{children}</span>
+    </li>
+  );
+}
+
+function Faq({ q, children }: { q: string; children: React.ReactNode }) {
+  return (
+    <details className="group py-4">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold text-white">
+        {q}
+        <ChevronDown size={16} className="shrink-0 text-stone-400 transition group-open:rotate-180" />
+      </summary>
+      <p className="mt-2 text-sm leading-relaxed text-stone-300">{children}</p>
+    </details>
+  );
+}
+
 function PriceTag({ a }: { a: StoreApp }) {
   if (a.free) return <span className="shrink-0 rounded-full bg-emerald-400/15 px-2 py-0.5 text-[11px] font-bold text-emerald-300">Free</span>;
   if (!a.ready) return <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-stone-300">Soon</span>;
   return <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-white">{usd(a.price_usd)}</span>;
 }
 
-function Panel({ a, onClose, onWant, genreLabel }: { a: StoreApp; onClose: () => void; onWant: (w: Want) => void; genreLabel: string }) {
+function Panel({ a, fixed, onClose, onWant, onOpen, genreLabel, more }: {
+  a: StoreApp; fixed: boolean; onClose: () => void; onWant: (w: Want) => void; onOpen: (id: string) => void; genreLabel: string; more: StoreApp[];
+}) {
   const color = GENRE_COLOR[a.genre] || '#8CC63F';
+  const [copied, setCopied] = useState(false);
+  const share = async () => {
+    const url = `${window.location.origin}/store#${a.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* Clipboard blocked: the address bar already holds the same link. */
+    }
+  };
+  const save = a.price_usd - MEMBER;
   return (
-    <aside className="absolute inset-x-0 bottom-0 z-30 max-h-[78%] overflow-y-auto rounded-t-3xl border border-white/10 bg-neutral-950/95 shadow-2xl backdrop-blur md:inset-y-4 md:left-auto md:right-4 md:max-h-none md:w-[440px] md:rounded-3xl">
+    <aside
+      className={`${fixed ? 'fixed bottom-0 md:top-24' : 'absolute bottom-0 md:top-4'} inset-x-0 z-[55] max-h-[82%] overflow-y-auto rounded-t-3xl border border-white/10 bg-neutral-950/95 shadow-2xl backdrop-blur md:bottom-4 md:left-auto md:right-4 md:max-h-none md:w-[440px] md:rounded-3xl`}
+      aria-label={a.title}
+    >
       <div className="relative aspect-video overflow-hidden bg-black md:rounded-t-3xl">
         {a.video ? (
           <video key={a.video} src={a.video} poster={a.poster || undefined} controls muted autoPlay playsInline loop className="h-full w-full object-cover" />
@@ -283,7 +509,12 @@ function Panel({ a, onClose, onWant, genreLabel }: { a: StoreApp; onClose: () =>
         </button>
       </div>
       <div className="p-6">
-        <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color }}>{genreLabel}</p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-[11px] font-bold uppercase tracking-widest" style={{ color }}>{genreLabel}</p>
+          <button onClick={share} className="inline-flex items-center gap-1 text-[11px] font-semibold text-stone-400 hover:text-white">
+            <Link2 size={12} /> {copied ? 'Link copied' : 'Copy link'}
+          </button>
+        </div>
         <h2 className="mt-1 text-2xl font-bold text-white">{a.title}</h2>
         <p className="mt-1 text-sm font-semibold text-stone-200">{a.line}</p>
         <p className="mt-3 text-sm leading-relaxed text-stone-300">{a.bio}</p>
@@ -301,14 +532,26 @@ function Panel({ a, onClose, onWant, genreLabel }: { a: StoreApp; onClose: () =>
           ) : a.ready ? (
             <>
               <button onClick={() => onWant({ kind: 'app', app: a })} className="w-full rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
-                Get it, {usd(a.price_usd)}
+                Get it, {usd(a.price_usd)} once
               </button>
-              <p className="flex items-start gap-2 text-xs text-stone-400">
-                {a.access === 'builder' ? <Lock size={14} className="mt-0.5 shrink-0" /> : <Sparkles size={14} className="mt-0.5 shrink-0" />}
-                {a.access === 'builder'
-                  ? 'One of the bigger tools: included for Builder members ($100 a month).'
-                  : 'Included in the $20 a month Store membership, as one of your two apps that month.'}
-              </p>
+              {a.access === 'builder' ? (
+                <button onClick={() => onWant({ kind: 'builder', app: a })} className="w-full rounded-2xl border border-emerald-400/40 bg-emerald-400/[0.05] px-4 py-3 text-left hover:bg-emerald-400/10">
+                  <span className="flex items-center gap-2 text-sm font-bold text-emerald-200"><Lock size={14} /> Or Builder, {usd(BUILDER)} a month</span>
+                  <span className="mt-0.5 block text-xs text-stone-300">One of the bigger tools. Builder includes it and every other app.</span>
+                </button>
+              ) : (
+                <button onClick={() => onWant({ kind: 'membership', app: a })} className="w-full rounded-2xl border border-emerald-400/40 bg-emerald-400/[0.05] px-4 py-3 text-left hover:bg-emerald-400/10">
+                  <span className="flex items-center gap-2 text-sm font-bold text-emerald-200"><Sparkles size={14} /> Or take it with the membership, {usd(MEMBER)} a month</span>
+                  <span className="mt-0.5 block text-xs text-stone-300">
+                    This app plus one more this month{save > 0 ? `, ${usd(save)} less than buying this one alone` : ''}.
+                  </span>
+                </button>
+              )}
+              <ul className="space-y-1.5 pt-1 text-xs text-stone-300">
+                <Tick>A clean copy made for you, with a start here guide</Tick>
+                <Tick>Runs on your own computer</Tick>
+                <Tick>Delivered as a download</Tick>
+              </ul>
             </>
           ) : (
             <>
@@ -322,6 +565,26 @@ function Panel({ a, onClose, onWant, genreLabel }: { a: StoreApp; onClose: () =>
             Want it set up for you? From $500
           </button>
         </div>
+
+        {more.length > 0 && (
+          <div className="mt-8">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-stone-400">Also on this island</p>
+            <div className="mt-2 space-y-2">
+              {more.map((m) => (
+                <button key={m.id} onClick={() => onOpen(m.id)} className="flex w-full items-center gap-3 rounded-xl border border-white/10 p-2 text-left hover:border-white/25">
+                  <div className="h-10 w-16 shrink-0 overflow-hidden rounded-md bg-neutral-900">
+                    {m.poster && <img src={m.poster} alt="" loading="lazy" className="h-full w-full object-cover" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-white">{m.title}</p>
+                    <p className="truncate text-xs text-stone-400">{m.line}</p>
+                  </div>
+                  <PriceTag a={m} />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   );
@@ -330,16 +593,19 @@ function Panel({ a, onClose, onWant, genreLabel }: { a: StoreApp; onClose: () =>
 function Reserve({ want, onClose }: { want: Want; onClose: () => void }) {
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
   const [msg, setMsg] = useState('');
+  const app = want.app;
   const title =
-    want.kind === 'membership' ? 'Store membership, $20 a month'
-      : want.kind === 'builder' ? 'Builder membership, $100 a month'
-        : want.kind === 'setup' ? `Set up ${want.app?.title} for me`
-          : want.kind === 'notify' ? `${want.app?.title}: tell me when it is ready`
-            : `${want.app?.title}, ${usd(want.app?.price_usd || 0)}`;
+    want.kind === 'membership' ? `Store membership, ${usd(MEMBER)} a month`
+      : want.kind === 'builder' ? `Builder, ${usd(BUILDER)} a month`
+        : want.kind === 'setup' ? (app ? `Set up ${app.title} for me` : 'Set it up for me')
+          : want.kind === 'notify' ? `${app?.title}: tell me when it is ready`
+            : `${app?.title}, ${usd(app?.price_usd || 0)}`;
   const note =
     want.kind === 'setup' ? 'Greenfire installs it on your computer, connects your accounts and shows you how it works. Setup starts at $500.'
       : want.kind === 'notify' ? 'One email when it is ready to download. Nothing else.'
-        : 'Checkout is opening soon. Leave your details and you will be the first to get it.';
+        : want.kind === 'membership' && app ? `Checkout is opening soon. Leave your details and you will be first in, starting with ${app.title}.`
+          : want.kind === 'builder' && app ? `Checkout is opening soon. Leave your details and you will be first in, with ${app.title} and every other app.`
+            : 'Checkout is opening soon. Leave your details and you will be the first to get it.';
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -354,9 +620,9 @@ function Reserve({ want, onClose }: { want: Want; onClose: () => void }) {
           email: f.get('email'),
           business: f.get('business'),
           website: f.get('website'),
-          want: want.kind === 'notify' ? 'app' : want.kind,
-          app: want.app?.title || '',
-          message: want.kind === 'notify' ? 'Tell me when it is ready.' : '',
+          want: want.kind,
+          app: app?.title || '',
+          message: '',
         }),
       });
       const j = await r.json().catch(() => ({}));
@@ -377,20 +643,23 @@ function Reserve({ want, onClose }: { want: Want; onClose: () => void }) {
         </div>
         {state === 'done' ? (
           <div className="mt-4">
-            <p className="text-sm text-stone-200">Got it. You are on the list, and Greenfire will write to you personally.</p>
+            <p className="text-sm text-stone-200">
+              {want.kind === 'notify' ? `Got it. You will get one email when ${app?.title} is ready.` : 'Got it. You are on the list, and Greenfire will write to you personally.'}
+            </p>
             <button onClick={onClose} className="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-bold text-neutral-950"><ArrowLeft size={14} /> Back to the store</button>
           </div>
         ) : (
           <form onSubmit={submit} className="mt-3 space-y-3">
             <p className="text-sm text-stone-300">{note}</p>
-            <input name="name" required placeholder="Your name" className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
-            <input name="email" type="email" required placeholder="Email" className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
+            <input name="name" required autoFocus autoComplete="name" placeholder="Your name" className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
+            <input name="email" type="email" required autoComplete="email" placeholder="Email" className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
             <input name="business" placeholder="Your business or project (optional)" className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
             <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
             {state === 'error' && <p className="text-sm text-rose-300">{msg}</p>}
             <button disabled={state === 'sending'} className="w-full rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300 disabled:opacity-60">
               {state === 'sending' ? 'Sending...' : want.kind === 'notify' ? 'Tell me' : 'Count me in'}
             </button>
+            <p className="text-center text-[11px] text-stone-500">No payment now. Your email is only used to reach you about this.</p>
           </form>
         )}
       </div>

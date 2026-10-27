@@ -69,7 +69,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         email,
         offer: 'unsure',
         business: field(b.business, 160),
-        message: `Store: wants ${want === 'membership' ? 'the $20 Store membership' : want === 'builder' ? 'the $100 Builder membership' : want === 'setup' ? `it set up for them: ${app}` : `the app ${app}`}. ${String(b.message ?? '').trim().slice(0, 1000)}`.trim(),
+        message: `Store: ${
+          want === 'membership' ? `wants the $20 Store membership${app ? `, starting with ${app}` : ''}`
+            : want === 'builder' ? `wants the $100 Builder membership${app ? `, for ${app}` : ''}`
+              : want === 'setup' ? `wants it set up for them${app ? `: ${app}` : ''}`
+                : want === 'notify' ? `asked for one email when ${app} is ready (not a purchase yet)`
+                  : `wants to buy the app ${app}`
+        }. ${String(b.message ?? '').trim().slice(0, 1000)}`.trim(),
         who: 'individual',
         where: 'online',
         source: `store:${want}${app ? ':' + app : ''}`.slice(0, 60),
