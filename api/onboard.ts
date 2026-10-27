@@ -22,10 +22,15 @@ import { activatePage } from './_lib/activatePage.js';
 
 type Offer = { id: string; title: string; when?: string; unit?: string };
 
-function offers(): Offer[] {
+/* The page lists /start's offers plus any private one a /start card sells
+   (the one to one way to take the $500 class, its `alt`), so that buyer can
+   pick theirs. `all` adds every offer sold by hand, for checking a reply. */
+function offers(all = false): Offer[] {
   try {
     const raw = JSON.parse(readFileSync(join(process.cwd(), 'src/data/startOffers.json'), 'utf8'));
-    return (raw.offers || []).map((o: Offer) => ({ id: o.id, title: o.title, when: o.when, unit: o.unit }));
+    const sold = new Set((raw.offers || []).map((o: { alt?: { offer?: string } }) => o.alt?.offer).filter(Boolean));
+    const priv = (raw.private_offers || []).filter((o: Offer) => all || sold.has(o.id));
+    return [...(raw.offers || []), ...priv].map((o: Offer) => ({ id: o.id, title: o.title, when: o.when, unit: o.unit }));
   } catch {
     return [];
   }
@@ -66,7 +71,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!name) return res.status(400).json({ error: 'Please add your name.' });
   if (!EMAIL.test(email)) return res.status(400).json({ error: 'Please check your email address.' });
   const activation = b.form === 'activation';
-  const known = offers().map((o) => o.id);
+  const known = offers(true).map((o) => o.id);
   const offer = activation ? 'activation' : known.includes(String(b.offer)) ? String(b.offer) : 'unsure';
   if (activation && !line(b.business, 160)) return res.status(400).json({ error: 'Please add the name of your business or project.' });
 

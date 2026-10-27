@@ -7,64 +7,88 @@ import data from '../data/startOffers.json';
    Everything on it comes from startOffers.json, the same file the Greenfire
    operator and Pip read, so the page cannot quote a price the till disagrees with. */
 
-type Offer = (typeof data.offers)[number] & { when?: string; terms?: string; book_url?: string; video?: string; poster?: string; after?: string };
+type Offer = (typeof data.offers)[number] & {
+  when?: string; terms?: string; book_url?: string; video?: string; poster?: string; video_len?: string;
+  after?: string; step?: string; alt?: { label: string; offer: string };
+};
 const offers = data.offers as Offer[];
+const hidden = (data.private_offers || []) as { id: string; checkout_url?: string; title: string }[];
+const member = data.membership;
 
-/* The 25 second intro, rendered by _TOOLS/intro-videos/render.py. The poster
-   stands in until pressed so four videos do not load with the page. */
+/* The intro film, rendered by _TOOLS/intro-videos/v2. The poster stands in
+   until pressed so three films do not load with the page. */
 function Intro({ o }: { o: Offer }) {
   const [on, setOn] = useState(false);
-  const box = 'mb-5 aspect-video w-full overflow-hidden rounded-xl border border-emerald-500/20 bg-black';
+  const box = 'aspect-video w-full overflow-hidden rounded-2xl border border-emerald-500/20 bg-black shadow-[0_30px_80px_-30px_rgba(16,185,129,0.35)]';
   if (on) return <video src={o.video} poster={o.poster} controls autoPlay playsInline className={box} />;
   return (
-    <button onClick={() => setOn(true)} aria-label={`Play: ${o.title} in 25 seconds`} className={`group relative block ${box}`}>
+    <button onClick={() => setOn(true)} aria-label={`Play the video: ${o.title}`} className={`group relative block ${box}`}>
       <img src={o.poster} alt="" loading="lazy" className="h-full w-full object-cover opacity-90 transition group-hover:opacity-100" />
-      <span className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full bg-emerald-500 py-1 pl-2 pr-3 text-xs font-semibold text-black shadow-[0_0_24px_rgba(46,230,160,0.4)] transition group-hover:bg-emerald-400">
-        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-black"><path d="M8 5v14l11-7z" /></svg>
-        Watch 0:25
+      <span className="absolute inset-0 flex items-center justify-center">
+        <span className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/90 shadow-[0_0_50px_rgba(46,230,160,0.55)] transition group-hover:scale-105 group-hover:bg-emerald-400">
+          <svg viewBox="0 0 24 24" className="ml-1 h-8 w-8 fill-black"><path d="M8 5v14l11-7z" /></svg>
+        </span>
       </span>
+      {o.video_len && (
+        <span className="absolute bottom-3 left-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white">Watch {o.video_len}</span>
+      )}
     </button>
   );
 }
 
-function OfferCard({ o, onAsk }: { o: Offer; onAsk: (id: string) => void }) {
+/* One offer as a full row: the film big on one side, what you get and the
+   button on the other. Rows alternate sides so the page reads as three steps. */
+function OfferRow({ o, i, onAsk }: { o: Offer; i: number; onAsk: (id: string) => void }) {
+  const alt = o.alt && hidden.find((h) => h.id === o.alt!.offer);
   return (
-    <div id={o.id} className="flex scroll-mt-24 flex-col rounded-2xl border border-white/10 bg-neutral-950 p-6">
-      {o.video && <Intro o={o} />}
-      <h3 className="text-xl font-semibold text-white">{o.title}</h3>
-      <p className="mt-1 text-2xl font-semibold text-emerald-300">{o.price_label}</p>
-      <p className="text-xs uppercase tracking-wider text-stone-500">{o.unit}</p>
-      {o.when && <p className="mt-2 text-sm text-orange-200">Next: {o.when}</p>}
-      <p className="mt-4 text-sm text-stone-300">{o.for}</p>
-      <ul className="mt-4 space-y-1 text-sm text-stone-400">
-        {o.includes.map((i) => (
-          <li key={i}>• {i}</li>
-        ))}
-      </ul>
-      {o.terms && <p className="mt-3 text-xs text-stone-500">{o.terms}</p>}
-      <div className="mt-auto pt-6 flex flex-col gap-2">
-        {o.checkout_url ? (
-          <>
-            {/* What happens after paying, and the name Stripe will show. The
-                checkout runs on the GMS Stripe account, so a buyer who was not
-                told sees a different business on the payment page and their
-                statement at the exact moment they decide whether to trust it. */}
-            {o.after && <p className="text-xs text-stone-300">{o.after}</p>}
-            <a href={o.checkout_url} className="rounded-xl bg-emerald-500 px-4 py-3 text-center text-sm font-semibold text-black hover:bg-emerald-400">
+    <article id={o.id} className="grid scroll-mt-24 items-center gap-8 rounded-3xl border border-white/10 bg-neutral-950 p-5 md:p-8 lg:grid-cols-5 lg:gap-12">
+      <div className={`lg:col-span-3 ${i % 2 ? 'lg:order-2' : ''}`}>{o.video ? <Intro o={o} /> : null}</div>
+      <div className="lg:col-span-2">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
+          {i + 1}. {o.step}
+        </p>
+        <h3 className="mt-2 text-3xl font-semibold text-white">{o.title}</h3>
+        <p className="mt-3 text-4xl font-semibold text-emerald-300">{o.price_label}</p>
+        <p className="mt-1 text-xs uppercase tracking-wider text-stone-500">{o.unit}</p>
+        {o.when && <p className="mt-3 text-sm text-orange-200">Next class: {o.when}</p>}
+        <p className="mt-5 text-base text-stone-200">{o.for}</p>
+        <ul className="mt-4 space-y-2 text-sm text-stone-300">
+          {o.includes.map((x) => (
+            <li key={x} className="flex gap-2">
+              <span className="mt-0.5 text-emerald-400">✓</span>
+              <span>{x}</span>
+            </li>
+          ))}
+        </ul>
+        {o.terms && <p className="mt-4 text-xs text-stone-500">{o.terms}</p>}
+        <div className="mt-6 flex flex-col gap-2">
+          {o.checkout_url ? (
+            <>
+              {/* What happens after paying, and the name Stripe will show. The
+                  checkout runs on the GMS Stripe account, so a buyer who was not
+                  told sees a different business on the payment page and their
+                  statement at the exact moment they decide whether to trust it. */}
+              <a href={o.checkout_url} className="rounded-xl bg-emerald-500 px-5 py-4 text-center text-base font-semibold text-black hover:bg-emerald-400">
+                {o.button}
+              </a>
+              {o.after && <p className="text-xs text-stone-300">{o.after}</p>}
+            </>
+          ) : (
+            <button onClick={() => onAsk(o.id)} className="rounded-xl bg-emerald-500 px-5 py-4 text-base font-semibold text-black hover:bg-emerald-400">
               {o.button}
+            </button>
+          )}
+          {alt?.checkout_url && (
+            <a href={alt.checkout_url} className="text-sm text-emerald-300 underline decoration-emerald-500/40 hover:text-emerald-200">
+              {o.alt!.label}
             </a>
-            <p className="text-[11px] leading-snug text-stone-500">{data.page.checkout_note}</p>
-          </>
-        ) : (
-          <button onClick={() => onAsk(o.id)} className="rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-black hover:bg-emerald-400">
-            {o.button}
+          )}
+          <button onClick={() => onAsk(o.id)} className="self-start text-xs text-stone-400 underline hover:text-stone-200">
+            Questions first? Ask me
           </button>
-        )}
-        <button onClick={() => onAsk(o.id)} className="text-xs text-stone-400 underline hover:text-stone-200">
-          Questions first? Ask me
-        </button>
+        </div>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -150,18 +174,44 @@ export function StartPage() {
           <SectionLabel text="AI with Greenfire" />
           <h1 className="text-4xl md:text-5xl font-semibold text-white mb-6">{data.page.headline}</h1>
           <p className="max-w-2xl text-lg text-stone-400 leading-relaxed">{data.page.intro}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {offers.map((o, i) => (
+              <a key={o.id} href={`#${o.id}`} className="rounded-full border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-sm text-stone-200 hover:bg-emerald-500/15">
+                <span className="text-emerald-400">{i + 1}.</span> {o.title} <span className="text-emerald-300">{o.price_label}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="py-14 px-6">
-        <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {offers.map((o) => (
-            <OfferCard key={o.id} o={o} onAsk={ask} />
+      <section className="px-6 py-14">
+        <div className="mx-auto flex max-w-6xl flex-col gap-8">
+          {offers.map((o, i) => (
+            <OfferRow key={o.id} o={o} i={i} onAsk={ask} />
           ))}
+          <p className="text-center text-[11px] leading-snug text-stone-500">{data.page.checkout_note}</p>
         </div>
-        <div className="mx-auto mt-8 max-w-7xl rounded-2xl border border-orange-500/20 bg-orange-500/5 p-6">
-          <p className="font-semibold text-orange-200">{data.care_plan.title}: {data.care_plan.price_label}</p>
-          <p className="mt-1 text-sm text-stone-300">{data.care_plan.about}</p>
+      </section>
+
+      <section id="membership" className="scroll-mt-24 border-t border-white/5 px-6 py-14">
+        <div className="mx-auto grid max-w-6xl gap-8 rounded-3xl border border-orange-500/25 bg-gradient-to-br from-orange-500/10 via-neutral-950 to-emerald-500/10 p-6 md:p-10 lg:grid-cols-2">
+          <div>
+            <SectionLabel text="Keep building" color="orange" />
+            <h2 className="text-3xl font-semibold text-white">{member.title}</h2>
+            <p className="mt-2 text-3xl font-semibold text-orange-200">{member.price_label}</p>
+            <p className="mt-4 text-stone-300">{member.about}</p>
+            <a href={member.checkout_url} className="mt-6 inline-block rounded-xl bg-orange-400 px-6 py-3 text-sm font-semibold text-black hover:bg-orange-300">
+              {member.button}
+            </a>
+          </div>
+          <ul className="space-y-3 self-center text-sm text-stone-200">
+            {member.includes.map((x) => (
+              <li key={x} className="flex gap-3 rounded-xl border border-white/10 bg-black/30 px-4 py-3">
+                <span className="text-orange-300">✦</span>
+                <span>{x}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -179,7 +229,9 @@ export function StartPage() {
 /* Where Stripe sends a buyer after paying. */
 export function StartThanksPage() {
   const id = new URLSearchParams(useLocation().search).get('offer') || '';
-  const o = offers.find((x) => x.id === id);
+  /* A one to one buyer comes back with offer=onboarding, a private offer, and
+     still needs its calendar link. */
+  const o = [...offers, ...(hidden as Offer[])].find((x) => x.id === id);
   return (
     <section className="mx-auto max-w-2xl px-6 py-24 text-center">
       <SectionLabel text="Payment received" />
