@@ -16,6 +16,8 @@ export type StoreApp = {
   object: string;
   ready: boolean;
   github: string | null;
+  /* The Stripe payment link, only when it charges exactly price_usd. */
+  buy_url?: string | null;
 };
 export type Genre = { label: string; sector?: string };
 

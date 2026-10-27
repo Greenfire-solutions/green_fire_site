@@ -7,9 +7,11 @@ import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from 
    which only the Greenfire operator's App store tab writes: what is listed,
    its bio, film and price are all decided there, never typed into this file.
 
-   Buying and the $20 membership do not take money yet: the buttons collect
-   a request (name and email), which lands in the operator like every other
-   sign-up, so nobody pays before the download can actually be delivered.
+   Paying (2026-10-27): Get it and both plans are Stripe payment links the
+   operator made (store-sell.mjs), carried in the catalogue as buy_url and
+   plans. After paying, Stripe sends the buyer to /store/account, which
+   checks the payment and hands over the download. An app or plan without a
+   link yet falls back to the request form, so no button is ever dead.
 
    The sales shape (2026-10-27): what is ready, and its price, is visible
    before anyone clicks (the shelf); a visitor finds their apps by who they
@@ -17,10 +19,20 @@ import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from 
    membership with the real difference in dollars; and a panel never ends in
    a dead end, it shows the rest of its island. */
 
-type Catalog = { apps: StoreApp[]; genres: Record<string, Genre>; at?: string };
+type Plans = { store?: string | null; builder?: string | null };
+type Catalog = { apps: StoreApp[]; genres: Record<string, Genre>; at?: string; plans?: Plans };
 type Want = { kind: 'app' | 'membership' | 'builder' | 'setup' | 'notify'; app?: StoreApp };
 
 const usd = (n: number) => `$${n}`;
+/* The checkout this browser last finished, so a buyer can find their apps again. */
+const MINE = 'gf-store-account';
+const savedAccount = () => {
+  try {
+    return localStorage.getItem(MINE);
+  } catch {
+    return null;
+  }
+};
 const MEMBER = 20;
 const BUILDER = 100;
 
@@ -69,7 +81,7 @@ export function StorePage() {
     document.title = 'App Store · Greenfire';
     fetch('/api/store')
       .then((r) => r.json())
-      .then((j: Catalog) => setCat({ apps: j.apps || [], genres: j.genres || {}, at: j.at }))
+      .then((j: Catalog) => setCat({ apps: j.apps || [], genres: j.genres || {}, at: j.at, plans: j.plans || {} }))
       .catch(() => setError('The store could not load. Please try again in a minute.'));
   }, []);
 
@@ -176,6 +188,14 @@ export function StorePage() {
   const shelf = apps.filter((a) => a.ready && !a.free && (!genre || a.genre === genre)).sort(byRank);
   const memberTop = Math.max(0, ...apps.filter((a) => a.ready && !a.free && a.access === 'member').map((a) => a.price_usd));
   const is3d = view === '3d';
+  const plans = cat?.plans || {};
+  const mine = savedAccount();
+  /* A plan with a checkout goes to Stripe; without one, to the request form. */
+  const join = (kind: 'membership' | 'builder', app?: StoreApp) => {
+    const url = kind === 'membership' ? plans.store : plans.builder;
+    if (url) window.location.href = url;
+    else setWant({ kind, app });
+  };
 
   return (
     <div className="relative">
@@ -225,7 +245,12 @@ export function StorePage() {
               )}
             </div>
             <div className="pointer-events-auto flex flex-wrap gap-2">
-              <button onClick={() => setWant({ kind: 'membership' })} className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300">
+              {mine && (
+                <a href={`/store/account?s=${encodeURIComponent(mine)}`} className="rounded-full border border-white/20 px-4 py-2 text-xs font-bold text-white hover:bg-white/5">
+                  My apps
+                </a>
+              )}
+              <button onClick={() => join('membership')} className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300">
                 Membership, {usd(MEMBER)} a month
               </button>
               <a href="#pricing" className="rounded-full border border-emerald-400/50 px-4 py-2 text-xs font-bold text-emerald-200 hover:bg-emerald-400/10">
@@ -359,6 +384,7 @@ export function StorePage() {
             fixed={!is3d}
             onClose={() => open(null)}
             onWant={setWant}
+            onJoin={join}
             onOpen={open}
             genreLabel={cat?.genres[sel.genre]?.label || ''}
             more={apps.filter((x) => x.genre === sel.genre && x.id !== sel.id).sort(byRank).slice(0, 3)}
@@ -394,7 +420,7 @@ export function StorePage() {
                 <Tick>New apps land on the shelf as they are made ready</Tick>
                 <Tick>Picks do not roll over, so use them</Tick>
               </ul>
-              <button onClick={() => setWant({ kind: 'membership' })} className="mt-6 rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+              <button onClick={() => join('membership')} className="mt-6 rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
                 Join for {usd(MEMBER)} a month
               </button>
             </div>
@@ -407,7 +433,7 @@ export function StorePage() {
                 <Tick>A new tool every week</Tick>
                 <Tick>A monthly review of how you use them</Tick>
               </ul>
-              <button onClick={() => setWant({ kind: 'builder' })} className="mt-6 rounded-full border border-emerald-400/50 px-4 py-3 text-sm font-bold text-emerald-200 hover:bg-emerald-400/10">
+              <button onClick={() => join('builder')} className="mt-6 rounded-full border border-emerald-400/50 px-4 py-3 text-sm font-bold text-emerald-200 hover:bg-emerald-400/10">
                 Become a Builder
               </button>
             </div>
@@ -426,16 +452,19 @@ export function StorePage() {
             <h2 className="text-xl font-bold text-white">Questions</h2>
             <div className="mt-4 divide-y divide-white/10 border-y border-white/10">
               <Faq q="How do I get an app?">
-                Checkout is opening soon. Until then, press Get it and leave your email, and Greenfire writes to you personally to finish it. Every app arrives as a download with a start here guide.
+                Press Get it and pay by card through Stripe. You land straight on your download page, and the same link comes by email so you never lose it. Every app arrives as a zip with a start here guide inside.
               </Faq>
               <Faq q="What do I need to run it?">
                 A computer you can install things on. The start here guide walks you through it. If you would rather not, Greenfire will set it up for you, from $500.
               </Faq>
               <Faq q="How does the membership work?">
-                {usd(MEMBER)} a month lets you take any two member apps that month. Picks you do not use do not roll over. Builder, at {usd(BUILDER)} a month, includes every app, the bigger tools too.
+                {usd(MEMBER)} a month lets you pick any two member apps each month, from your membership page. Apps you pick stay yours. Picks you do not use do not roll over. Builder, at {usd(BUILDER)} a month, includes every app, the bigger tools too. Cancel any time by replying to your welcome email.
               </Faq>
               <Faq q="What does Coming soon mean?">
                 The app is built, but the copy for other people is still being cleaned and checked so nothing private goes out with it. Press Tell me and you get one email when it is ready.
+              </Faq>
+              <Faq q="I lost my download link">
+                <LostLink />
               </Faq>
               <Faq q="Does my information leave my computer?">
                 The apps run on your own computer and keep their files there. Where an app can connect to an outside service, like email or AI, you choose whether to connect it.
@@ -466,7 +495,7 @@ function Faq({ q, children }: { q: string; children: React.ReactNode }) {
         {q}
         <ChevronDown size={16} className="shrink-0 text-stone-400 transition group-open:rotate-180" />
       </summary>
-      <p className="mt-2 text-sm leading-relaxed text-stone-300">{children}</p>
+      <div className="mt-2 text-sm leading-relaxed text-stone-300">{children}</div>
     </details>
   );
 }
@@ -477,8 +506,8 @@ function PriceTag({ a }: { a: StoreApp }) {
   return <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-white">{usd(a.price_usd)}</span>;
 }
 
-function Panel({ a, fixed, onClose, onWant, onOpen, genreLabel, more }: {
-  a: StoreApp; fixed: boolean; onClose: () => void; onWant: (w: Want) => void; onOpen: (id: string) => void; genreLabel: string; more: StoreApp[];
+function Panel({ a, fixed, onClose, onWant, onJoin, onOpen, genreLabel, more }: {
+  a: StoreApp; fixed: boolean; onClose: () => void; onWant: (w: Want) => void; onJoin: (kind: 'membership' | 'builder', app?: StoreApp) => void; onOpen: (id: string) => void; genreLabel: string; more: StoreApp[];
 }) {
   const color = GENRE_COLOR[a.genre] || '#8CC63F';
   const [copied, setCopied] = useState(false);
@@ -531,26 +560,32 @@ function Panel({ a, fixed, onClose, onWant, onOpen, genreLabel, more }: {
             </>
           ) : a.ready ? (
             <>
-              <button onClick={() => onWant({ kind: 'app', app: a })} className="w-full rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
-                Get it, {usd(a.price_usd)} once
-              </button>
+              {a.buy_url ? (
+                <a href={a.buy_url} className="block w-full rounded-full bg-emerald-400 px-4 py-3 text-center text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+                  Get it, {usd(a.price_usd)} once
+                </a>
+              ) : (
+                <button onClick={() => onWant({ kind: 'app', app: a })} className="w-full rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+                  Get it, {usd(a.price_usd)} once
+                </button>
+              )}
               {a.access === 'builder' ? (
-                <button onClick={() => onWant({ kind: 'builder', app: a })} className="w-full rounded-2xl border border-emerald-400/40 bg-emerald-400/[0.05] px-4 py-3 text-left hover:bg-emerald-400/10">
+                <button onClick={() => onJoin('builder', a)} className="w-full rounded-2xl border border-emerald-400/40 bg-emerald-400/[0.05] px-4 py-3 text-left hover:bg-emerald-400/10">
                   <span className="flex items-center gap-2 text-sm font-bold text-emerald-200"><Lock size={14} /> Or Builder, {usd(BUILDER)} a month</span>
                   <span className="mt-0.5 block text-xs text-stone-300">One of the bigger tools. Builder includes it and every other app.</span>
                 </button>
               ) : (
-                <button onClick={() => onWant({ kind: 'membership', app: a })} className="w-full rounded-2xl border border-emerald-400/40 bg-emerald-400/[0.05] px-4 py-3 text-left hover:bg-emerald-400/10">
+                <button onClick={() => onJoin('membership', a)} className="w-full rounded-2xl border border-emerald-400/40 bg-emerald-400/[0.05] px-4 py-3 text-left hover:bg-emerald-400/10">
                   <span className="flex items-center gap-2 text-sm font-bold text-emerald-200"><Sparkles size={14} /> Or take it with the membership, {usd(MEMBER)} a month</span>
                   <span className="mt-0.5 block text-xs text-stone-300">
-                    This app plus one more this month{save > 0 ? `, ${usd(save)} less than buying this one alone` : ''}.
+                    Pick this app plus one more this month{save > 0 ? `, ${usd(save)} less than buying this one alone` : ''}.
                   </span>
                 </button>
               )}
               <ul className="space-y-1.5 pt-1 text-xs text-stone-300">
                 <Tick>A clean copy made for you, with a start here guide</Tick>
                 <Tick>Runs on your own computer</Tick>
-                <Tick>Delivered as a download</Tick>
+                <Tick>Download straight after paying, by card through Stripe</Tick>
               </ul>
             </>
           ) : (
@@ -587,6 +622,35 @@ function Panel({ a, fixed, onClose, onWant, onOpen, genreLabel, more }: {
         )}
       </div>
     </aside>
+  );
+}
+
+/* Sends nothing here: the operator emails the links, and only to an
+   address that has paid, so this cannot reveal who bought what. */
+function LostLink() {
+  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    setState('sending');
+    try {
+      const r = await fetch('/api/store?action=resend', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: f.get('email'), website: f.get('website') }) });
+      setState(r.ok ? 'done' : 'error');
+    } catch {
+      setState('error');
+    }
+  };
+  if (state === 'done') return <span>Thank you. If that address bought something, its links are on the way by email, usually within the hour.</span>;
+  return (
+    <span className="block">
+      Your download page link is in the email Greenfire sent after you paid. Cannot find it? Enter the email you paid with.
+      <form onSubmit={submit} className="mt-3 flex gap-2">
+        <input name="email" type="email" required autoComplete="email" placeholder="Email you paid with" className="min-w-0 flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
+        <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+        <button disabled={state === 'sending'} className="shrink-0 rounded-full bg-emerald-400 px-4 py-2 text-sm font-bold text-neutral-950 disabled:opacity-60">Send my links</button>
+      </form>
+      {state === 'error' && <span className="mt-2 block text-rose-300">That did not send. Please email civilizationexplorer@gmail.com.</span>}
+    </span>
   );
 }
 
