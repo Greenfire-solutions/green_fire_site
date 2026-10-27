@@ -37,7 +37,7 @@ const EMAIL = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/;
 const SESSION = /^cs_(live|test)_[A-Za-z0-9]{10,200}$/;
 const field = (v: unknown, n: number) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 
-type App = { id: string; title: string; access: string | null; free: boolean; ready: boolean; price_usd: number };
+type App = { id: string; title: string; access: string | null; free: boolean; ready: boolean; price_usd: number; builds?: { arch: string; label: string }[] | null };
 type Claim = { app: string; at: string; period: number };
 
 async function readBlob(token: string, pathname: string): Promise<string | null> {
@@ -118,9 +118,15 @@ async function account(token: string, sid: string) {
   };
 }
 
-async function newestZip(token: string, app: string) {
+/* The newest zip on the shelf for this app. An app with ready builds has one
+   zip per Mac, uploaded as <version>-intel and <version>-silicon (2026-10-27);
+   asked for an arch, only those count, so Intel never gets the Apple Silicon
+   build. With no arch, or none of that kind, the newest of all. */
+async function newestZip(token: string, app: string, arch = '') {
   const { blobs } = await list({ prefix: `${APPS}${app}/`, limit: 100, token });
-  return blobs.sort((a, b) => Date.parse(String(b.uploadedAt)) - Date.parse(String(a.uploadedAt)))[0] || null;
+  const newest = (xs: typeof blobs) => xs.sort((a, b) => Date.parse(String(b.uploadedAt)) - Date.parse(String(a.uploadedAt)))[0] || null;
+  const mine = arch ? blobs.filter((b) => b.pathname.includes(`-${arch}`)) : [];
+  return (mine.length ? newest(mine) : null) || newest(blobs);
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -146,7 +152,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const app = field(req.query.app, 80);
       const a = await account(token, String(req.query.s || ''));
       if (!a.owned.includes(app)) return res.status(403).json({ error: 'This checkout does not include that app.' });
-      const zip = await newestZip(token, app);
+      const arch = /^(intel|silicon)$/.test(String(req.query.arch || '')) ? String(req.query.arch) : '';
+      const zip = await newestZip(token, app, arch);
       if (!zip) return res.status(404).json({ error: 'The download is being prepared. Greenfire has been told and will email it to you.' });
       return res.redirect(302, zip.downloadUrl || zip.url);
     } catch (e) {

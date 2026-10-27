@@ -8,7 +8,7 @@ import { ArrowLeft, Check, Download, Loader2, Lock } from 'lucide-react';
    two picks. The session id is the buyer's key, so it is also kept in this
    browser and emailed to them by the operator (store-sell.mjs). */
 
-type App = { id: string; title: string; line: string; poster: string | null; access: 'member' | 'builder' | null; free: boolean; ready: boolean; price_usd: number };
+type App = { id: string; title: string; line: string; poster: string | null; access: 'member' | 'builder' | null; free: boolean; ready: boolean; price_usd: number; builds?: { arch: string; label: string }[] | null };
 type Account = {
   kind: 'purchase' | 'plan' | 'unpaid' | 'unknown';
   email?: string | null;
@@ -92,7 +92,9 @@ export function StoreAccountPage() {
   const byId = new Map(apps.map((a) => [a.id, a]));
   const owned = (acct?.owned || []).map((id) => byId.get(id) || ({ id, title: id, line: '', poster: null, access: null, free: false, ready: true, price_usd: 0 } as App));
   const canPick = acct?.plan === 'store' && acct.active ? apps.filter((a) => a.ready && !a.free && !acct.owned.includes(a.id)) : [];
-  const dl = (id: string) => `/api/store?action=download&s=${encodeURIComponent(s)}&app=${encodeURIComponent(id)}`;
+  const dl = (id: string, arch?: string) => `/api/store?action=download&s=${encodeURIComponent(s)}&app=${encodeURIComponent(id)}${arch ? `&arch=${arch}` : ''}`;
+  /* Some apps come ready-made, one zip per kind of Mac, with everything inside. */
+  const anyBuilds = owned.some((a) => a.builds?.length);
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-[#04110f] px-4 py-10 md:px-8">
@@ -162,12 +164,27 @@ export function StoreAccountPage() {
                         <p className="font-bold text-white">{a.title}</p>
                         <p className="text-sm text-stone-300">{a.line}</p>
                       </div>
-                      <a href={dl(a.id)} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-emerald-400 px-5 py-2.5 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
-                        <Download size={16} /> Download
-                      </a>
+                      {a.builds?.length ? (
+                        <div className="flex shrink-0 flex-col gap-2 sm:items-end">
+                          {a.builds.map((b) => (
+                            <a key={b.arch} href={dl(a.id, b.arch)} className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-400 px-5 py-2.5 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+                              <Download size={16} /> {b.label}
+                            </a>
+                          ))}
+                        </div>
+                      ) : (
+                        <a href={dl(a.id)} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-emerald-400 px-5 py-2.5 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
+                          <Download size={16} /> Download
+                        </a>
+                      )}
                     </div>
                   ))}
                 </div>
+                {anyBuilds && (
+                  <p className="mt-3 text-xs text-stone-300">
+                    Ready-made apps have everything inside: unzip, drag the folder into Applications, double-click Start. Which Mac do you have? Apple menu, About This Mac: a line that says <b>Chip</b> (Apple M1, M2...) means Apple Silicon; <b>Processor</b> (Intel Core) means Intel Mac.
+                  </p>
+                )}
                 <p className="mt-3 text-xs text-stone-400">Open GREENFIRE_START_HERE.md inside the zip first. Something not working? Reply to your email.</p>
               </div>
             )}
