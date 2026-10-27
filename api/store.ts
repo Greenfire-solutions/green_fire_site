@@ -67,7 +67,7 @@ async function entitlement(sid: string) {
   const email = s.customer_details?.email || null;
   if (s.status !== 'complete') return { kind: 'unpaid' as const, email };
   if (meta.gf_store_app) {
-    return { kind: 'purchase' as const, email, paid: s.payment_status === 'paid', app: meta.gf_store_app };
+    return { kind: 'purchase' as const, email, paid: ['paid', 'no_payment_required'].includes(String(s.payment_status)), app: meta.gf_store_app };
   }
   const plan = PLAN_SLUG[meta.gms_slug || ''];
   const sub = s.subscription && typeof s.subscription === 'object' ? s.subscription : null;
