@@ -189,7 +189,7 @@ ${SECTIONS.map((s) => `<section><h2>${esc(s.title)}</h2>${s.help ? `<p>${esc(s.h
   <h1>Thank you</h1>
   <p class="lead">I read every answer and shape our time around it. If anything is unclear I will write to you before we meet.</p>
 </div>
-<p class="foot">Greenfire &middot; <a href="/start">green-fire-site.vercel.app/start</a><br>Your answers go only to Jordan and are never shared.</p>
+<p class="foot">Greenfire &middot; <a href="/start">greenfire.earth/start</a><br>Your answers go only to Jordan and are never shared.</p>
 </main>
 <script>
 (function () {
