@@ -21,7 +21,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const setupSteps: string[] = [];
   if (!canPublish) {
     setupSteps.push(
-      'Recommended: Vercel → your project → Storage → Create Blob Store → Connect to project (adds BLOB_READ_WRITE_TOKEN automatically).',
+      'Set the R2 file store on the server (R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_PUBLIC_BASE).',
       'Then redeploy and try Publish Live again.',
       'Optional backup: add GITHUB_TOKEN in Vercel env vars (repo owner/name are auto-detected from your Vercel Git connection).',
     );

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { put } from '@vercel/blob';
 import { handleOptions, requireAdmin } from '../_lib/auth.js';
+import { r2Put } from '../_lib/r2.js';
 import { isBlobConfigured } from '../_lib/storage.js';
 
 const MAX_BYTES = 8 * 1024 * 1024; // 8MB
@@ -24,7 +24,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!isBlobConfigured()) {
     return res.status(503).json({
-      error: 'Image upload requires Vercel Blob. Connect Blob storage in Vercel, then redeploy.',
+      error: 'Image upload needs the file store (R2) configured on the server.',
     });
   }
 
@@ -54,13 +54,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const safeName = body.filename.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
     const pathname = `uploads/${Date.now()}-${safeName}`;
 
-    const blob = await put(pathname, buffer, {
-      access: 'public',
-      contentType: body.contentType,
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    });
-
-    return res.status(200).json({ success: true, url: blob.url });
+    const url = await r2Put(pathname, buffer, body.contentType, 31536000);
+    return res.status(200).json({ success: true, url });
   } catch (err) {
     return res.status(502).json({
       error: err instanceof Error ? err.message : 'Upload failed.',

@@ -31,8 +31,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(503).json({
       error: 'Publishing is not configured yet.',
       setupSteps: [
-        '1. Vercel → your project → Storage → Blob → Create / Connect (recommended — updates go live immediately).',
-        '2. Redeploy the site after connecting Blob.',
+        '1. Set the R2 file store on the server (the five R2_* variables); updates then go live immediately.',
+        '2. Redeploy the site after setting them.',
         '3. Try Publish Live again.',
         gh.hasToken
           ? 'GitHub token is set but repo could not be detected — ensure this project is linked to GitHub on Vercel.'

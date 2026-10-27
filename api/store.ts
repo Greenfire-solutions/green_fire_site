@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { put, list } from '@vercel/blob';
-import { generateClientTokenFromReadWriteToken } from '@vercel/blob/client';
+import { r2GetText, r2Put, r2PublicUrl, r2PresignPut, r2Configured, secretName } from './_lib/r2.js';
 import { requireAdmin } from './_lib/auth.js';
 import { writeLead } from './_lib/storage.js';
 
@@ -15,7 +14,8 @@ import { writeLead } from './_lib/storage.js';
      POST ?action=reserve        a visitor asks for a setup, or to be told
      POST ?action=resend         "I lost my link": the operator emails it
      POST ?action=publish        the operator pushes a new catalogue (admin only)
-     POST ?action=upload-token   the operator uploads a clean copy (admin only)
+     POST ?action=upload-token   a signed address the operator uploads a clean copy to (admin only)
+     POST ?action=shelve         the operator says that upload is done, so it can be sold (admin only)
 
    PAYING (2026-10-27). Every Buy and Join button is a Stripe payment link the
    operator made (store-checkout.mjs). After paying, Stripe sends the buyer to
@@ -25,12 +25,16 @@ import { writeLead } from './_lib/storage.js';
    metadata: gf_store_app on an app, gms_slug greenfire-member-store or
    greenfire-member-builder on a plan.
 
-   The zips are public blobs with a random name under store/private/apps/,
-   found only by listing with the server's token. Nobody is ever shown one
-   before Stripe says the session was paid. */
+   FILES (2026-10-27): everything lives in R2 (api/_lib/r2.ts), after Vercel
+   suspended the Blob store on the Hobby operations cap. The zips sit under
+   store/shelf/<name nobody can guess>/, each app's shelf listed in a small
+   manifest at a name derived from a server secret (secretName), so the
+   site never lists anything. Nobody is ever shown a zip before Stripe says
+   the session was paid; the address they get is the zip's own. */
 const CATALOG = 'store/catalog.json';
-const APPS = 'store/private/apps/';
-const CLAIMS = 'store/private/claims/';
+const shelfKey = (app: string) => `store/shelf/${secretName('shelf', app)}`;
+const claimsKey = (sub: string) => `store/claims/${secretName('claims', sub)}.json`;
+type Shelved = { version: string; key: string; bytes: number; at: string };
 const PICKS = 2;
 const PLAN_SLUG: Record<string, 'store' | 'builder'> = { 'greenfire-member-store': 'store', 'greenfire-member-builder': 'builder' };
 const EMAIL = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/;
@@ -39,14 +43,6 @@ const field = (v: unknown, n: number) => String(v ?? '').replace(/\s+/g, ' ').tr
 
 type App = { id: string; title: string; access: string | null; free: boolean; ready: boolean; price_usd: number; builds?: { arch: string; label: string }[] | null };
 type Claim = { app: string; at: string; period: number };
-
-async function readBlob(token: string, pathname: string): Promise<string | null> {
-  const { blobs } = await list({ prefix: pathname, limit: 5, token });
-  const match = blobs.find((b) => b.pathname === pathname);
-  if (!match) return null;
-  const r = await fetch(`${match.url}?v=${Date.parse(String(match.uploadedAt)) || Date.now()}`, { cache: 'no-store' });
-  return r.ok ? await r.text() : null;
-}
 
 async function stripe(path: string, init?: { method?: string; body?: URLSearchParams }) {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -85,18 +81,18 @@ async function entitlement(sid: string) {
   };
 }
 
-async function readClaims(token: string, sub: string): Promise<Claim[]> {
+async function readClaims(sub: string): Promise<Claim[]> {
   try {
-    const j = JSON.parse((await readBlob(token, `${CLAIMS}${sub}.json`)) || '{}');
+    const j = JSON.parse((await r2GetText(claimsKey(sub))) || '{}');
     return Array.isArray(j.claims) ? j.claims : [];
   } catch {
     return [];
   }
 }
 
-async function catalogApps(token: string): Promise<App[]> {
+async function catalogApps(): Promise<App[]> {
   try {
-    return (JSON.parse((await readBlob(token, CATALOG)) || '{}').apps || []) as App[];
+    return (JSON.parse((await r2GetText(CATALOG)) || '{}').apps || []) as App[];
   } catch {
     return [];
   }
@@ -104,13 +100,13 @@ async function catalogApps(token: string): Promise<App[]> {
 
 /* What this session may download now, and for a Store member, what is left.
    Apps a member picked stay theirs after they stop paying, like a purchase. */
-async function account(token: string, sid: string) {
+async function account(sid: string) {
   const e = await entitlement(sid);
   if (e.kind === 'purchase') return { ...e, owned: e.paid ? [e.app] : [] };
   if (e.kind !== 'plan') return { ...e, owned: [] as string[] };
-  const claims = await readClaims(token, e.sub);
+  const claims = await readClaims(e.sub);
   const used = claims.filter((c) => c.period === e.period).length;
-  const all = e.plan === 'builder' && e.active ? (await catalogApps(token)).filter((a) => a.ready && !a.free).map((a) => a.id) : [];
+  const all = e.plan === 'builder' && e.active ? (await catalogApps()).filter((a) => a.ready && !a.free).map((a) => a.id) : [];
   return {
     kind: e.kind, email: e.email, plan: e.plan, status: e.status, active: e.active, cancelling: e.cancelling, period_end: e.period_end,
     picks_left: e.plan === 'store' && e.active ? Math.max(0, PICKS - used) : 0,
@@ -118,19 +114,29 @@ async function account(token: string, sid: string) {
   };
 }
 
+/* What is on an app's shelf: one record per uploaded zip, newest last. */
+async function shelf(app: string): Promise<Shelved[]> {
+  try {
+    const j = JSON.parse((await r2GetText(`${shelfKey(app)}.json`)) || '{}');
+    return Array.isArray(j.zips) ? j.zips : [];
+  } catch {
+    return [];
+  }
+}
+
 /* The newest zip on the shelf for this app. An app with ready builds has one
    zip per Mac, uploaded as <version>-intel and <version>-silicon (2026-10-27);
    asked for an arch, only those count, so Intel never gets the Apple Silicon
    build. With no arch, or none of that kind, the newest of all. */
-async function newestZip(token: string, app: string, arch = '') {
-  const { blobs } = await list({ prefix: `${APPS}${app}/`, limit: 100, token });
-  const newest = (xs: typeof blobs) => xs.sort((a, b) => Date.parse(String(b.uploadedAt)) - Date.parse(String(a.uploadedAt)))[0] || null;
-  const mine = arch ? blobs.filter((b) => b.pathname.includes(`-${arch}`)) : [];
-  return (mine.length ? newest(mine) : null) || newest(blobs);
+async function newestZip(app: string, arch = '') {
+  const zips = await shelf(app);
+  const newest = (xs: Shelved[]) => xs.slice().sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0] || null;
+  const mine = arch ? zips.filter((z) => z.version.includes(`-${arch}`)) : [];
+  return (mine.length ? newest(mine) : null) || newest(zips);
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const token = process.env.BLOB_READ_WRITE_TOKEN || '';
+  const ready = r2Configured();
   const action = String(req.query.action || '');
   const fail = (e: unknown) => {
     const status = (e as { status?: number })?.status || 500;
@@ -140,7 +146,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET' && action === 'account') {
     res.setHeader('Cache-Control', 'no-store');
     try {
-      return res.status(200).json(await account(token, String(req.query.s || '')));
+      return res.status(200).json(await account(String(req.query.s || '')));
     } catch (e) {
       return fail(e);
     }
@@ -150,12 +156,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader('Cache-Control', 'no-store');
     try {
       const app = field(req.query.app, 80);
-      const a = await account(token, String(req.query.s || ''));
+      const a = await account(String(req.query.s || ''));
       if (!a.owned.includes(app)) return res.status(403).json({ error: 'This checkout does not include that app.' });
       const arch = /^(intel|silicon)$/.test(String(req.query.arch || '')) ? String(req.query.arch) : '';
-      const zip = await newestZip(token, app, arch);
+      const zip = await newestZip(app, arch);
       if (!zip) return res.status(404).json({ error: 'The download is being prepared. Greenfire has been told and will email it to you.' });
-      return res.redirect(302, zip.downloadUrl || zip.url);
+      return res.redirect(302, r2PublicUrl(zip.key));
     } catch (e) {
       return fail(e);
     }
@@ -164,7 +170,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
     try {
-      const json = token ? await readBlob(token, CATALOG) : null;
+      const json = ready ? await r2GetText(CATALOG) : null;
       res.setHeader('Content-Type', 'application/json');
       return res.status(200).send(json || '{"apps":[],"genres":{}}');
     } catch {
@@ -182,16 +188,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const e = await entitlement(sid);
       if (e.kind !== 'plan' || e.plan !== 'store') return res.status(400).json({ error: 'Picks are part of the Store membership.' });
       if (!e.active) return res.status(402).json({ error: 'Your membership is not active right now, so there are no picks this month.' });
-      const target = (await catalogApps(token)).find((x) => x.id === app);
+      const target = (await catalogApps()).find((x) => x.id === app);
       if (!target || !target.ready || target.free) return res.status(404).json({ error: 'That app cannot be picked right now.' });
       if (target.access !== 'member') return res.status(403).json({ error: 'That one is a bigger tool, included with Builder.' });
-      const claims = await readClaims(token, e.sub);
+      const claims = await readClaims(e.sub);
       if (!claims.some((c) => c.app === app)) {
         if (claims.filter((c) => c.period === e.period).length >= PICKS) return res.status(409).json({ error: 'Both picks are used this month. New picks arrive with your next payment.' });
         claims.push({ app, at: new Date().toISOString(), period: e.period });
-        await put(`${CLAIMS}${e.sub}.json`, JSON.stringify({ claims }), { access: 'public', contentType: 'application/json', addRandomSuffix: false, cacheControlMaxAge: 60, token });
+        await r2Put(claimsKey(e.sub), JSON.stringify({ claims }), 'application/json');
       }
-      return res.status(200).json(await account(token, sid));
+      return res.status(200).json(await account(sid));
     } catch (e) {
       return fail(e);
     }
@@ -201,24 +207,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!requireAdmin(req, res)) return;
     const cat = b.catalog as { apps?: unknown[] } | undefined;
     if (!cat || !Array.isArray(cat.apps)) return res.status(400).json({ error: 'No catalogue sent.' });
-    if (!token) return res.status(503).json({ error: 'Blob storage is not configured.' });
-    await put(CATALOG, JSON.stringify(cat), { access: 'public', contentType: 'application/json', addRandomSuffix: false, cacheControlMaxAge: 60, token });
+    if (!ready) return res.status(503).json({ error: 'File storage is not configured.' });
+    await r2Put(CATALOG, JSON.stringify(cat), 'application/json');
     return res.status(200).json({ ok: true, apps: cat.apps.length });
   }
 
-  /* A pass for one upload, straight from the operator to Blob: a clean copy
-     can be 20 MB and a function only takes 4.5. The pass names the one path
-     it may write, under the app's own folder, and lasts 15 minutes. */
-  if (action === 'upload-token') {
-    if (!requireAdmin(req, res)) return;
+  /* A pass for one upload, straight from the operator to R2: a clean copy
+     can be 100 MB and a function only takes 4.5. The pass is a signed PUT
+     address for the one name it may write, under the app's own shelf, good
+     for 15 minutes. The operator then says "shelve" and the zip is on sale. */
+  const named = () => {
     const app = field(b.app, 80).toLowerCase();
     const version = field(b.version, 60);
-    if (!/^[a-z0-9][a-z0-9._-]*$/.test(app) || !/^[A-Za-z0-9._-]+$/.test(version)) return res.status(400).json({ error: 'Bad app or version.' });
-    const pathname = `${APPS}${app}/${version}.zip`;
-    const clientToken = await generateClientTokenFromReadWriteToken({
-      token, pathname, addRandomSuffix: true, allowedContentTypes: ['application/zip'], maximumSizeInBytes: 500 * 1024 * 1024, validUntil: Date.now() + 15 * 60e3,
-    });
-    return res.status(200).json({ pathname, clientToken });
+    if (!/^[a-z0-9][a-z0-9._-]*$/.test(app) || !/^[A-Za-z0-9._-]+$/.test(version)) return null;
+    return { app, version, key: `${shelfKey(app)}/${version}.zip` };
+  };
+  if (action === 'upload-token') {
+    if (!requireAdmin(req, res)) return;
+    if (!ready) return res.status(503).json({ error: 'File storage is not configured.' });
+    const n = named();
+    if (!n) return res.status(400).json({ error: 'Bad app or version.' });
+    const pass = r2PresignPut(n.key, 'application/zip', 15 * 60);
+    return res.status(200).json({ pathname: n.key, url: pass.url, headers: pass.headers });
+  }
+  if (action === 'shelve') {
+    if (!requireAdmin(req, res)) return;
+    if (!ready) return res.status(503).json({ error: 'File storage is not configured.' });
+    const n = named();
+    if (!n) return res.status(400).json({ error: 'Bad app or version.' });
+    /* Only a zip that is really there goes on the shelf. */
+    const head = await fetch(r2PublicUrl(n.key), { method: 'HEAD', cache: 'no-store' });
+    if (!head.ok) return res.status(409).json({ error: 'That zip has not arrived.' });
+    const bytes = Number(head.headers.get('content-length') || b.bytes || 0);
+    const zips = (await shelf(n.app)).filter((z) => z.version !== n.version);
+    zips.push({ version: n.version, key: n.key, bytes, at: new Date().toISOString() });
+    await r2Put(`${shelfKey(n.app)}.json`, JSON.stringify({ zips }), 'application/json');
+    return res.status(200).json({ ok: true, app: n.app, version: n.version, bytes, zips: zips.length });
   }
 
   /* The hidden box only a bot fills. Answered as a success so it learns nothing. */
