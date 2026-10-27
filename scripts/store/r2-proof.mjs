@@ -2,11 +2,13 @@
 // run against the REAL R2 bucket under a throwaway prefix, with Stripe
 // answered by a fake. Nothing public is touched.
 //   node scripts/store/r2-proof.mjs     (R2_* from the environment, or the
-//   music site's .env.r2 on this Mac)import { execFileSync } from 'node:child_process';
+//   music site's .env.r2 on this Mac)
+import { execFileSync } from 'node:child_process';
 import { readFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import crypto from 'node:crypto';
-const SITE = new URL("../..", import.meta.url).pathname.replace(/\/$/, "");
+import crypto from "node:crypto";
+import { fileURLToPath } from "node:url";
+const SITE = fileURLToPath(new URL("../..", import.meta.url)).replace(/\/$/, "");
 const OUT = join(process.env.TMPDIR || "/tmp", "greenfire-store-proof"); mkdirSync(OUT, { recursive: true });
 const envf = process.env.R2_ACCOUNT_ID ? "" : (() => { try { return readFileSync('/Users/jordanlarsen/Desktop/Main projects/The Great Medicine Show/50_Website/.env.r2', "utf8"); } catch { return ""; } })();
 for (const l of envf.split('\n')) { const m = l.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)$/); if (m) process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, ''); }
