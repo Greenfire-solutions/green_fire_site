@@ -623,7 +623,7 @@ Talk to me in plain, friendly words. I am not technical. Never ask me to edit co
 PHASE 1. UNDERSTAND EVERYTHING
 - Read every file in this folder and every folder inside it: documents, PDFs, spreadsheets, slides, notes, the Business Brief, and anything else.
 - Look at every photo and image and note what it shows (products, place, people's roles, brand style).
-- For every video: install whatever free tools you need (like ffmpeg and a local Whisper model), pull out what is said and a few frames, and note what it shows.
+- For every video: pull out what is said and a few frames, and note what it shows. Use free tools (like ffmpeg and a local Whisper model). If a tool needs an admin password, a big installer, or more than 5 minutes to set up, skip it, note it in "_ai/questions.md", and keep going.
 - Make a folder called "_ai" and write "_ai/business-understanding.md": what the business is, who it serves, how it earns, goals, brand voice, the tools I use, and my biggest time drains.
 - Then ask me up to 10 short questions about anything important that is missing or unclear, all in one list. Wait for my answers.
 
@@ -639,13 +639,17 @@ PHASE 3. BUILD IT
 - Build the app inside "_ai/command-center" in this folder. It runs only on this computer and opens in my web browser. Make it beautiful, calm and simple, in my brand colours, readable by someone who has never used software like it.
 - Every button must do something real. No placeholders, no fake data. Where a section has nothing yet, say what will fill it and when.
 - Build the agents, skills, scripts and scheduled automations from the plan, starting with the biggest win.
-- Put a double-click launcher on my Desktop called "{{P}} Command Center" that starts everything and opens the dashboard.
+- Agents that write words (messages, captions, newsletters, replies) must use Claude on this computer through "claude -p", given my business understanding and brand voice, so every draft is specific and sounds like me. Fill-in-the-blank templates are only a fallback if that fails, and the screen must say when one was used.
+- Scheduled helpers must run even when the browser is closed. Use this computer's own scheduler (a LaunchAgent on Mac, Task Scheduler on Windows), and give each one an on and off switch in the app.
+- Build ONE inbox with at most one draft per person, merging everything known about them (payments, deposits, leads, lapsed, open questions). Show the 10 most valuable first, with the money at stake for each, so I can clear it in 10 minutes.
+- For every outside tool I use (booking, payments, email list, social, accounting), add a "Bring in new data" button that tells me exactly which export to download, where to drop it, and shows when that data was last updated.
+- Put a double-click launcher on my Desktop called "{{P}} Command Center" that starts everything and opens the dashboard. It must find this folder by itself and keep working if I rename or move the folder.
 - Keep any passwords or keys in the computer's secure keychain or a private settings file, never inside the code, and never show them on screen.
 - Save your progress with git after each working piece, and upload it to my private GitHub backup if one is connected, so nothing is ever lost.
 - If my website is connected (look in "_ai/website"), include a Website page and use what you learned there.
 
 PHASE 4. PROVE IT WORKS
-- Start the app, open it in the browser (use the Claude in Chrome extension), and click every button and page yourself.
+- Start the app, open it in the browser (use the Claude in Chrome extension), and click every button and page yourself. Test against a copy of the app's data, never the real data, and leave no test server running.
 - Fix everything that breaks, then test again. Only tell me it works once you have seen it work.
 
 PHASE 5. TEACH ME
@@ -657,7 +661,8 @@ RULES, ALWAYS
 - Never delete, move or change my original files. Work on copies.
 - Never spend money, sign up for paid services, send emails or messages, post online, or contact anyone without showing me first and getting my yes.
 - If something fails, fix it yourself and keep going. Only stop for something only I can do, like logging into an account, and then tell me exactly what to click.
-- Keep my private and customer information on this computer.</template>
+- Keep my private and customer information on this computer.
+- Only ever stop programs you started yourself, by their process ID. Never use pkill or killall, they can close my other apps.</template>
 
 <script>
 (function () {
