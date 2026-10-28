@@ -18,6 +18,8 @@ export type StoreApp = {
   github: string | null;
   /* The Stripe payment link, only when it charges exactly price_usd. */
   buy_url?: string | null;
+  /* Search tags from the operator's store-tags.mjs: who it is for, what it does, plain words. */
+  tags?: { who?: string[]; does?: string[]; words?: string[] } | null;
 };
 export type Genre = { label: string; sector?: string };
 

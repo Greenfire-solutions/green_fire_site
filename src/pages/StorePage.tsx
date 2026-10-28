@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, Box, Check, ChevronDown, Github, LayoutGrid, Link2, Loader2, Lock, Play, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, Box, Check, ChevronDown, Github, LayoutGrid, Link2, Loader2, Lock, Play, Search, Sparkles, X } from 'lucide-react';
 import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from '../components/store/world';
+import { search, suggestions } from '../lib/storeSearch';
 
 /* THE GREENFIRE APP STORE (2026-10-26). Every app Jordan built, as an object
    on a floating island in a 3D night. The catalogue comes from /api/store,
@@ -17,7 +18,11 @@ import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from 
    before anyone clicks (the shelf); a visitor finds their apps by who they
    are, not by our island names; every app panel sets buying once beside the
    membership with the real difference in dollars; and a panel never ends in
-   a dead end, it shows the rest of its island. */
+   a dead end, it shows the rest of its island.
+
+   Search (2026-10-27): the box under the headline takes plain words, what
+   the visitor does or wants, and lists the apps as they type. The matching
+   is lib/storeSearch.ts over each app's tags; see there. */
 
 type Plans = { store?: string | null; builder?: string | null };
 type Catalog = { apps: StoreApp[]; genres: Record<string, Genre>; at?: string; plans?: Plans };
@@ -88,6 +93,8 @@ export function StorePage() {
   const apps = cat?.apps || [];
   const byId = useMemo(() => new Map(apps.map((a) => [a.id, a])), [apps]);
   const genres = useMemo(() => Object.entries(cat?.genres || {}).filter(([g]) => apps.some((a) => a.genre === g)), [cat, apps]);
+  /* Stable, so the search does not re-run every time the 3D hover moves. */
+  const islandWords = useMemo(() => (g: string) => `${cat?.genres[g]?.label || ''} ${WHO[g] || ''}`, [cat]);
 
   /* Share links: /store#velvet-desk opens that app, /store?view=list the list.
      A link pressed while already on the store changes only the hash, so that
@@ -266,6 +273,9 @@ export function StorePage() {
               </button>
             </div>
           </div>
+          {apps.length > 0 && (
+            <StoreSearch apps={apps} genreLabel={islandWords} onOpen={open} onAsk={() => setWant({ kind: 'setup' })} />
+          )}
           {genres.length > 0 && (
             <div className="pointer-events-auto mx-auto mt-4 flex max-w-7xl flex-wrap items-center gap-2">
               <span className="mr-1 text-xs font-semibold text-stone-400">Find yours:</span>
@@ -475,6 +485,148 @@ export function StorePage() {
       </section>
 
       {want && <Reserve want={want} onClose={() => setWant(null)} />}
+    </div>
+  );
+}
+
+/* Examples that rotate in the empty box, so a visitor sees they can type a
+   sentence and not just a product name. */
+const EXAMPLES = ["I'm a DJ and need more gigs", 'make reels from my clips', 'plan my farm', 'run a festival', 'answer my booking emails', 'design my land'];
+
+function StoreSearch({ apps, genreLabel, onOpen, onAsk }: { apps: StoreApp[]; genreLabel: (g: string) => string; onOpen: (id: string) => void; onAsk: () => void }) {
+  /* /store?q=dj+gigs opens with that search typed and its results showing,
+     so a search can be shared as a link. */
+  const [q, setQ] = useState(() => (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('q') || '' : ''));
+  const [focus, setFocus] = useState(() => q.length > 0);
+  const [active, setActive] = useState(0);
+  const [example, setExample] = useState(0);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  /* On a near tie, what can be taken home today comes first. */
+  const hits = useMemo(
+    () => search(apps, q, genreLabel).map((h) => ({ ...h, score: h.score * (h.app.ready && !h.app.free ? 1.15 : 1) })).sort((x, y) => y.score - x.score).slice(0, 8),
+    [apps, q, genreLabel],
+  );
+  const starts = useMemo(() => suggestions(apps, 7), [apps]);
+  const typed = q.trim().length > 0;
+
+  useEffect(() => {
+    if (focus || typed) return;
+    const t = setInterval(() => setExample((i) => (i + 1) % EXAMPLES.length), 3200);
+    return () => clearInterval(t);
+  }, [focus, typed]);
+  useEffect(() => setActive(0), [q]);
+  /* A click anywhere else closes the results. */
+  useEffect(() => {
+    const away = (e: PointerEvent) => { if (boxRef.current && !boxRef.current.contains(e.target as Node)) setFocus(false); };
+    window.addEventListener('pointerdown', away);
+    return () => window.removeEventListener('pointerdown', away);
+  }, []);
+  /* "/" jumps to the box from anywhere on the store, as on most sites. */
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => {
+      if (e.key !== '/' || e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      e.preventDefault();
+      inputRef.current?.focus();
+    };
+    window.addEventListener('keydown', k);
+    return () => window.removeEventListener('keydown', k);
+  }, []);
+
+  const pick = (id: string) => { setFocus(false); inputRef.current?.blur(); onOpen(id); };
+  const onKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive((i) => Math.min(i + 1, hits.length - 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((i) => Math.max(i - 1, 0)); }
+    else if (e.key === 'Enter' && hits[active]) { e.preventDefault(); pick(hits[active].app.id); }
+    else if (e.key === 'Escape') { e.stopPropagation(); if (q) setQ(''); else { setFocus(false); inputRef.current?.blur(); } }
+  };
+  const open = focus && (typed || starts.length > 0);
+
+  return (
+    <div ref={boxRef} className="pointer-events-auto relative mx-auto mt-5 max-w-7xl">
+      <div className={`flex max-w-2xl items-center gap-3 rounded-2xl border bg-neutral-950/85 px-4 py-3 shadow-xl backdrop-blur transition ${focus ? 'border-emerald-400/70' : 'border-white/15'}`}>
+        <Search size={18} className="shrink-0 text-emerald-300" />
+        <input
+          ref={inputRef}
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onFocus={() => setFocus(true)}
+          onKeyDown={onKey}
+          placeholder={`Say what you do or need: "${EXAMPLES[example]}"`}
+          aria-label="Search the apps by what you do or what you need"
+          role="combobox"
+          aria-expanded={open}
+          aria-controls="store-search-results"
+          autoComplete="off"
+          spellCheck={false}
+          className="min-w-0 flex-1 bg-transparent text-sm text-white placeholder:text-stone-400 focus:outline-none md:text-base"
+        />
+        {q && (
+          <button onClick={() => { setQ(''); inputRef.current?.focus(); }} className="rounded-full p-1 text-stone-400 hover:bg-white/10 hover:text-white" aria-label="Clear the search">
+            <X size={15} />
+          </button>
+        )}
+      </div>
+
+      {open && (
+        <div id="store-search-results" role="listbox" className="absolute left-0 top-full z-40 mt-2 max-h-[60vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/10 bg-neutral-950/95 p-2 shadow-2xl backdrop-blur">
+          {!typed ? (
+            <div className="p-2">
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-stone-400">Start with who you are</p>
+              <div className="flex flex-wrap gap-2">
+                {starts.map((s) => (
+                  <button key={s} onClick={() => { setQ(s); inputRef.current?.focus(); }} className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold text-stone-200 hover:bg-emerald-400/15 hover:text-emerald-200">
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : hits.length ? (
+            <>
+              <p className="px-2 pb-1 pt-1 text-[11px] font-bold uppercase tracking-widest text-stone-400">
+                {hits.length === 1 ? 'One app fits' : `${hits.length} apps fit`}
+              </p>
+              {hits.map((h, i) => (
+                <button
+                  key={h.app.id}
+                  role="option"
+                  aria-selected={i === active}
+                  onMouseEnter={() => setActive(i)}
+                  onClick={() => pick(h.app.id)}
+                  className={`flex w-full items-center gap-3 rounded-xl p-2 text-left ${i === active ? 'bg-white/10' : 'hover:bg-white/5'}`}
+                >
+                  <div className="h-12 w-20 shrink-0 overflow-hidden rounded-lg bg-neutral-900">
+                    {h.app.poster && <img src={h.app.poster} alt="" loading="lazy" className="h-full w-full object-cover" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="truncate text-sm font-bold text-white">{h.app.title}</p>
+                      <PriceTag a={h.app} />
+                    </div>
+                    <p className="truncate text-xs text-stone-300">{h.app.line}</p>
+                    {h.why.length > 0 && (
+                      <p className="mt-1 flex flex-wrap gap-1">
+                        {h.why.map((w) => (
+                          <span key={w} className="rounded-full px-2 py-px text-[10px] font-semibold" style={{ background: `${GENRE_COLOR[h.app.genre] || '#8CC63F'}22`, color: GENRE_COLOR[h.app.genre] || '#8CC63F' }}>
+                            {w}
+                          </span>
+                        ))}
+                      </p>
+                    )}
+                  </div>
+                </button>
+              ))}
+            </>
+          ) : (
+            <div className="p-3 text-sm text-stone-300">
+              <p>No app matches that yet.</p>
+              <button onClick={() => { setFocus(false); onAsk(); }} className="mt-2 text-xs font-bold text-emerald-300 hover:text-emerald-200">
+                Tell Greenfire what you need, and we can build or set it up for you &rarr;
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
