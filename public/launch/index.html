@@ -87,7 +87,7 @@ details.stuck[open]{padding-bottom:12px}
 .check input{width:26px;height:26px;accent-color:var(--g)}
 .list li{margin:6px 0}
 /* ---- The little movie: a mock screen with a moving cursor ---- */
-.screen{position:relative;border-radius:14px;overflow:hidden;border:1px solid #44403c;background:#fafaf9;color:#1c1917;margin:12px 0 6px;
+.screen{max-width:calc(48vh * 1.6);margin-left:auto!important;margin-right:auto!important;position:relative;border-radius:14px;overflow:hidden;border:1px solid #44403c;background:#fafaf9;color:#1c1917;margin:12px 0 6px;
  box-shadow:0 18px 50px rgba(0,0,0,.45);aspect-ratio:16/10;font:14px/1.4 Inter,sans-serif;user-select:none}
 .screen .chrome{height:34px;display:flex;align-items:center;gap:6px;padding:0 10px;background:#e7e5e4;border-bottom:1px solid #d6d3d1}
 .screen .chrome i{width:11px;height:11px;border-radius:99px;background:#f87171;display:inline-block}
@@ -155,6 +155,9 @@ details.stuck[open]{padding-bottom:12px}
 .m-site{width:52%}
 .m-site .hero{height:70px;border-radius:8px;background:linear-gradient(135deg,#fde68a,#fca5a5);margin-bottom:8px}
 .m-site .ln{height:9px;border-radius:5px;background:#e7e5e4;margin:6px 0}
+.screen.term.winapp{background:#faf9f5;color:#1c1917}.screen.term.winapp .chrome{background:#f0eee6;border-color:#e7e5e4}
+.screen.term.winapp .url{color:#57534e}.screen.term.winapp .t-g{color:#047857}.screen.term.winapp .t-y{color:#b45309}.screen.term.winapp .t-m{color:#78716c}.screen.term.winapp .t-o{color:#c2410c}.screen.term.winapp .caret{background:#1c1917}
+body.os-win .screen .chrome i{display:none}
 .foot{margin-top:30px;text-align:center;color:#78716c;font-size:14px}
 @media (max-width:560px){h1{font-size:28px}h2{font-size:24px}body{font-size:17px}.screen{font-size:12px}.m-plans{gap:6px}.cap{font-size:13px}}
 @media (prefers-reduced-motion:reduce){.cursor{transition:none}.step{animation:none}}
@@ -221,7 +224,7 @@ details.stuck[open]{padding-bottom:12px}
     <ol class="do">
       <li data-os="mac">Go to your <b>Desktop</b>. Right click (or two-finger click) an empty spot and choose <b>New Folder</b>.</li>
       <li data-os="win">Go to your <b>Desktop</b>. Right click an empty spot, choose <b>New</b>, then <b>Folder</b>.</li>
-      <li>Name it exactly: <span class="pname">Your Business</span> <button class="btn small ghost" data-copy-name>Copy name</button></li>
+      <li>It appears as <b>untitled folder</b> with the name ready to type over. Tap <b>Copy name</b>, then paste (<span data-os="mac">Command + V</span><span data-os="win">Ctrl + V</span>) and press Enter. The name must be exactly: <span class="pname">Your Business</span> <button class="btn small ghost" data-copy-name>Copy name</button></li>
       <li>Drag copies of everything about your business into it: plans, price lists, menus, flyers, spreadsheets, notes, logos, photos, videos, and old emails you saved. From Google Drive or Dropbox, download them first, then drag them in.</li>
       <li>Do not sort anything. Your AI will organize it for you later.</li>
     </ol>
@@ -235,14 +238,14 @@ details.stuck[open]{padding-bottom:12px}
   <div class="tag">Step 3</div>
   <h2>Have ChatGPT write your business story</h2>
   <span class="time">15 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
-  <p class="lead">The AI you already talk to (ChatGPT, Gemini, or Claude) knows a lot about you. This prompt pulls all of it into one document for your folder.</p>
+  <p class="lead">This prompt has an AI write one full document about your business for your folder. Use ChatGPT if you already chat with it. No ChatGPT? Use Claude from step 1, it works the same.</p>
   <div class="movie" data-demo="brief"></div>
   <div class="card"><h3>Do it</h3>
     <ol class="do">
       <li>Tap <b>Copy the prompt</b>.</li>
       <li>Open ChatGPT (or whichever AI knows you best), start a new chat, paste it, and send.</li>
       <li>Answer its questions. Talk freely, the more detail the better.</li>
-      <li>Download the document it gives you and drop it into your <span class="pname">Your Business</span> folder.</li>
+      <li>Download the document it gives you. It lands in your <b>Downloads</b> folder. Drag it from there into your <span class="pname">Your Business</span> folder.</li>
     </ol>
     <textarea class="prompt" id="briefPrompt" readonly></textarea>
     <div class="row"><button class="btn" data-copy="briefPrompt" data-label="Copy the prompt">Copy the prompt</button><a class="btn ghost" href="https://chatgpt.com" target="_blank" rel="noopener">Open ChatGPT &#8599;</a></div>
@@ -274,7 +277,7 @@ details.stuck[open]{padding-bottom:12px}
     <div class="row" data-os="mac"><a class="btn" href="https://www.warp.dev/download" target="_blank" rel="noopener">Download Warp &#8599;</a></div>
     <ol class="do" data-os="win">
       <li>Tap <b>Get the Claude app</b>, run the installer, and sign in with your Claude account from step 1.</li>
-      <li>Tap <b>Get Git</b> and click through its installer, choosing the normal options every time. Claude needs it to work on your files.</li>
+      <li>Tap <b>Get Git</b> and click through its installer, choosing the normal options every time. Claude uses it in step 9 to back up your files.</li>
       <li>Restart your computer once both are installed.</li>
     </ol>
     <div class="row" data-os="win"><a class="btn" href="https://claude.ai/download" target="_blank" rel="noopener">Get the Claude app &#8599;</a><a class="btn ghost" href="https://git-scm.com/downloads/win" target="_blank" rel="noopener">Get Git &#8599;</a></div>
@@ -288,7 +291,8 @@ details.stuck[open]{padding-bottom:12px}
   <h2 data-os="mac">Install Claude Code with one paste</h2>
   <h2 data-os="win">Turn on Claude Code</h2>
   <span class="time">5 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
-  <p class="lead">This is the step that used to take three tries. The line below does the install and the fix together, so it works the first time on almost every computer.</p>
+  <p class="lead" data-os="mac">One paste, then wait a few minutes. The line below installs Claude Code and sets it up in one go.</p>
+  <p class="lead" data-os="win">Two clicks. The Claude app already includes Claude Code, you just switch it on.</p>
   <div class="movie" data-demo="code"></div>
   <div class="card"><h3><span class="who you">Only you can do this part</span> Do it</h3>
     <div data-os="mac">
@@ -297,15 +301,15 @@ details.stuck[open]{padding-bottom:12px}
       </ol>
       <div class="cmd"><code id="installMac">curl -fsSL https://claude.ai/install.sh | bash; grep -qs '.local/bin' ~/.zshrc || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc; export PATH="$HOME/.local/bin:$PATH"; claude --version</code><button class="copy" data-copy="installMac" data-label="Copy">Copy</button></div>
       <ol class="do" start="2">
-        <li>Wait a minute or two. You are done when the last line says something like <code>2.1.3 (Claude Code)</code>.</li>
-        <li>Type <code>claude</code> and press <b>Enter</b>. Pick <b>Claude account with subscription</b>. Your browser opens: click <b>Authorize</b>, then come back to Warp.</li>
+        <li>Wait up to 5 minutes. You may see a yellow note saying <b>not in your PATH</b>. Ignore it, the line already fixed that. You are done when the very last line says something like <code>2.1.3 (Claude Code)</code>.</li>
+        <li>Type <code>claude</code> and press <b>Enter</b>. If it first asks you to pick colours or a look, just press <b>Enter</b>. When it asks how to log in, pick <b>Claude account with subscription</b> (use the arrow keys to move, then <b>Enter</b>). Your browser opens: click <b>Authorize</b>, then come back to Warp. Press <b>Enter</b> through any welcome notes.</li>
         <li>When Claude says hello, type <code>/exit</code> and press Enter. Done.</li>
       </ol>
     </div>
     <div data-os="win">
       <ol class="do">
         <li>Open the <b>Claude</b> app and sign in.</li>
-        <li>At the top, click the <b>Code</b> tab.</li>
+        <li>In the sidebar on the left, click <b>Code</b>.</li>
         <li>If it asks to set up or download Claude Code, click yes and let it finish.</li>
         <li>You are done when you see a box asking you to choose a folder.</li>
       </ol>
@@ -321,7 +325,7 @@ details.stuck[open]{padding-bottom:12px}
       <p><b>4. Still stuck.</b> Take a screenshot (Command + Shift + 4) and send it to Jordan. We fix it together in five minutes.</p>
     </div>
     <div data-os="win">
-      <p><b>No Code tab:</b> update the app (Claude menu, Check for updates) and make sure your plan says Pro.</p>
+      <p><b>No Code tab:</b> update the app (<b>Help</b>, then <b>Check for Updates</b>) and make sure your plan says Pro.</p>
       <p><b>It says Git is missing:</b> install Git from step 4, then restart the computer.</p>
       <p><b>Still stuck:</b> press <b>Windows + Shift + S</b> to screenshot it and send it to Jordan.</p>
     </div>
@@ -345,19 +349,37 @@ details.stuck[open]{padding-bottom:12px}
       <div class="cmd"><code id="aliasCmd"></code><button class="copy" data-copy="aliasCmd" data-label="Copy">Copy</button></div>
       <ol class="do" start="2">
         <li>Type <code>ai</code> and press <b>Enter</b>.</li>
-        <li>It asks if you trust this folder: choose <b>Yes</b>. It asks about bypass permissions mode: choose <b>Yes, I accept</b>.</li>
+        <li>It asks if you trust this folder: press <b>Enter</b> for <b>Yes</b>. It asks about bypass permissions mode: the answer No is selected first, so press the <b>down arrow</b> once to <b>Yes, I accept</b>, then <b>Enter</b>.</li>
+        <li>You will see the word <code>dangerously</code> in the line. That is just the technical name for full power mode. It is how the pros run it.</li>
         <li>Type <code>/model</code> and press Enter. It should say <b>Opus</b>. If not, pick Opus from the list.</li>
       </ol>
     </div>
     <div data-os="win">
       <ol class="do">
-        <li>In the Claude app, open the <b>Code</b> tab and click <b>Select folder</b>. Choose <span class="pname">Your Business</span> on your Desktop.</li>
+        <li>First switch on full power once: open <b>Settings</b>, then <b>Code</b> (on some versions it is called <b>Claude Code</b>), and turn on <b>Allow bypass permissions mode</b>.</li>
+        <li>Click <b>Code</b> in the sidebar. Under the message box, click the first button and choose <b>Local</b>. Click the folder button next to it, choose <b>Open folder</b>, and pick <span class="pname">Your Business</span> on your Desktop.</li>
         <li>Find the model menu near the message box and choose <b>Opus</b>.</li>
-        <li>Find the mode menu (it often says <b>Ask permissions</b>) and choose <b>Bypass permissions</b>. If it is not in the list, open Settings, find Claude Code, and turn on <b>Allow bypass permissions mode</b>, then pick it.</li>
+        <li>Find the mode menu (it probably says <b>Manual</b>) and choose <b>Bypass permissions</b>.</li>
+        <li>If Windows put your Desktop inside <b>OneDrive</b>, that is fine. Just tell Claude when it asks.</li>
       </ol>
     </div>
   </div>
-  <div class="note warn">Full power means Claude acts on its own. That is what makes it fast. The build prompt in step 9 tells it the rules: never delete your originals, never spend money, never send or post anything without your yes.</div>
+  <div class="note warn">Full power means Claude acts on its own. That is what makes it fast. The build prompt in step 11 tells it the rules: never delete your originals, never spend money, never send or post anything without your yes.</div>
+  <details class="stuck"><summary>Stuck?</summary>
+    <div data-os="mac">
+      <p><b>It says "no such file or directory":</b> the folder name on your Desktop is not exactly <span class="pname">Your Business</span>. Go back to step 2, tap <b>Copy name</b>, rename the folder by clicking its name once and pasting (Command + V), then type <code>ai</code> again.</p>
+      <p><b>It says "command not found: ai":</b> quit Warp (Command + Q), open it again, and type <code>ai</code>.</p>
+    </div>
+    <div data-os="win">
+      <p><b>No Bypass permissions in the menu:</b> do the Settings switch in the first line again, then close and reopen the Claude app.</p>
+      <p><b>Cannot find the folder:</b> it may be in <b>OneDrive</b>, then <b>Desktop</b>.</p>
+    </div>
+  </details>
+  <div class="card"><h3><span class="who ai">Your first win, 2 minutes</span> Try it right now</h3>
+    <p style="margin:0">Before anything else, see what it can do. Paste this into Claude:</p>
+    <textarea class="prompt" id="winPrompt" readonly style="height:120px">Look through everything in this folder and tell me, in plain words: the three things costing my business the most time or money right now, and one thing you could do for me today that would help. Then do that one thing if I say yes.</textarea>
+    <button class="btn small" data-copy="winPrompt" data-label="Copy">Copy</button>
+  </div>
   <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>Claude is open &rarr;</button></div>
 </section>
 
@@ -392,18 +414,21 @@ details.stuck[open]{padding-bottom:12px}
   <div class="tag">Step 8</div>
   <h2>Give Claude hands: the browser and your computer</h2>
   <span class="time">5 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
-  <p class="lead">The Claude in Chrome extension lets your assistant open websites, fill forms and check its own work. Then you allow a few permissions so it can see and use your computer.</p>
+  <p class="lead">The Claude in Chrome extension lets your assistant open websites, fill forms and check its own work. Then you switch on the permissions it needs to use your computer.</p>
   <div class="movie" data-demo="chrome"></div>
   <div class="card"><h3>Do it</h3>
     <ol class="do">
       <li>Use <b>Google Chrome</b> (<a href="https://www.google.com/chrome/" target="_blank" rel="noopener">get it here</a> if you do not have it). Tap <b>Add the extension</b>, click <b>Add to Chrome</b>, and sign in with your Claude account.</li>
       <li>Allow everything it asks for. Pin it: click the puzzle piece at the top right of Chrome, then the pin next to Claude.</li>
-      <li>Back in Claude, type <code>/chrome</code> and press Enter, and choose to turn it on.</li>
+      <li data-os="mac">Back in Claude, type <code>/chrome</code> and press Enter, and check it says connected. (Your <code>ai</code> shortcut already turns Chrome on.)</li>
+      <li data-os="win">Nothing to type. Make sure the extension is signed in to the same Claude account as the app. To test, ask Claude: "open my website in my Chrome".</li>
+      <li data-os="win">In the Claude app, open <b>Settings</b>, find <b>This computer</b>, then <b>System</b>, and turn on <b>Enable computer use</b>.</li>
     </ol>
     <div class="row"><a class="btn" href="https://claude.ai/chrome" target="_blank" rel="noopener">Add the extension &#8599;</a></div>
     <div data-os="mac">
       <h3 style="margin-top:16px">Mac permissions</h3>
-      <p style="margin:0 0 8px">Tap each button, then find <b>Warp</b> in the list and switch it on. If Warp is not listed, click <b>+</b> and choose Warp from Applications.</p>
+      <p style="margin:0 0 8px">Tap each button (your Mac asks to open Settings, say yes). If you see a <b>padlock</b> at the bottom left, click it and type your Mac password first. Then find <b>Warp</b> in the list and switch it on. If Warp is not listed, click <b>+</b> and choose Warp from Applications.</p>
+      <p style="margin:0 0 8px;font-size:16px;color:var(--mute)">Why: Accessibility and Screen Recording let Claude click and see for you. Full Disk Access lets it read your business files wherever they are. Microphone is for voice. You can switch any of them off later.</p>
       <div class="row">
         <a class="btn small" href="x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility">Accessibility</a>
         <a class="btn small" href="x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture">Screen Recording</a>
@@ -492,6 +517,7 @@ details.stuck[open]{padding-bottom:12px}
       <li>Paste it into Claude and press Enter.</li>
       <li>Answer its questions (talk with your voice). When it shows the plan, read it and say <b>go</b>, or tell it what to change.</li>
       <li>Let it work. Leave the computer awake and plugged in. Check back now and then.</li>
+      <li>If Claude says you <b>hit your usage limit</b>, nothing is broken. Wait until the time it shows, then type <b>keep going</b>. (Building every day? The Max plan gives much more room.)</li>
     </ol>
     <textarea class="prompt" id="buildPrompt" readonly style="height:300px"></textarea>
     <button class="btn wide" data-copy="buildPrompt" data-label="Copy the build prompt">Copy the build prompt</button>
@@ -560,12 +586,12 @@ Give it to me as one downloadable Word document or PDF if you can make files, ot
 <template id="githubT">Set up GitHub backups for this folder, "{{P}}". I am not technical, so do every step yourself and only ask me for things only I can do.
 
 1. Make sure git works. If my computer asks to install developer tools, tell me to click Install and wait for me.
-2. Install the GitHub command line tool (gh) for {{OS}}. If you can, install it without needing my computer password.
-3. Run the GitHub login using the web browser method. Show me the one-time code in big plain text, open the page for me, and wait while I type it and click Authorize.
+2. Install the GitHub command line tool (gh) for {{OS}}. If you can, install it without needing my computer password (for example the official portable zip from GitHub's releases, placed in my user folder). If {{OS}} asks me to allow changes, tell me before it pops up.
+3. Run the GitHub login using the web browser method, in the background so you can read the one-time code out right away. Show me the code in big plain text, open the page for me, and wait while I type it and click Authorize. Then run gh auth setup-git so I never get a second sign-in window.
 4. Create a PRIVATE GitHub repository called {{SLUG}} and connect this folder to it.
-5. Before the first save, add a .gitignore that keeps out passwords, keys, .env files, anything with "secret" or "token" in its name, system junk files, and any single file over 50 MB (those big videos stay on this computer only).
+5. Before the first save, add a .gitignore that keeps out passwords, keys, .env files, anything with "secret" or "token" in its name, and system junk files. A .gitignore cannot filter by size, so the backup itself must skip any file over 50 MB on every run and list what it skipped (GitHub refuses files over 100 MB; big videos stay on this computer only).
 6. Save everything and upload it.
-7. Set up an automatic backup that saves and uploads any changes every day at 9pm, using the normal scheduler for {{OS}}. Make it skip quietly when nothing changed and keep a short log.
+7. Set up an automatic backup that saves and uploads any changes every day at 9pm, using the normal scheduler for {{OS}}. Make it skip quietly when nothing changed, run hidden with no window popping up, catch up if the computer was asleep at 9pm, and keep a short log. Put quotes around every folder path, because my folder name may contain spaces or symbols like &. If this folder is inside OneDrive or iCloud, tell me and suggest the safest setup.
 8. Test it: change a tiny test file, run the backup, check it reached GitHub, then remove the test file.
 9. Tell me in two plain sentences where to see my backup online and how to get my files back if something ever goes wrong.</template>
 
@@ -648,10 +674,10 @@ RULES, ALWAYS
   function clean(s) { return String(s || '').replace(/[\\\/:*?"<>|`$!]/g, '').replace(/\s+/g, ' ').trim() }
   function slug(s) { return clean(s).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'my-business' }
   var SITES = {
-    Wix: ['https://manage.wix.com', 'Wix has an official API with API keys; use the safest official route'],
-    Squarespace: ['https://account.squarespace.com', 'Squarespace has few automatic options, so plan to make approved changes through its editor in Chrome'],
+    Wix: ['https://manage.wix.com', 'Wix API keys reach business data like bookings and products, but page text and layout change only in the Wix editor, so plan approved edits there in Chrome'],
+    Squarespace: ['https://account.squarespace.com', 'Squarespace only offers an API for store data, so plan to make approved page changes through its editor in Chrome'],
     WordPress: ['{{URL}}/wp-admin', 'WordPress application passwords and its REST API'],
-    Shopify: ['https://admin.shopify.com', 'a Shopify custom app with only the permissions it needs'],
+    Shopify: ['https://admin.shopify.com', 'a custom app made in the Shopify Dev Dashboard, with only the permissions it needs'],
     GoDaddy: ['https://sso.godaddy.com', 'whatever the GoDaddy builder allows, most likely approved changes through its editor in Chrome'],
     Webflow: ['https://webflow.com/dashboard', 'the Webflow API with a site token'],
     other: ['my website, and first find out what it is built on', 'find out what it is built on, then use its official route']
@@ -718,7 +744,8 @@ RULES, ALWAYS
     b.addEventListener('click', function () {
       if (voice.speaking) { voice.cancel(); all('[data-read]').forEach(function (x) { x.classList.remove('live') }); if (b.classList.contains('live')) return }
       var s = b.closest('.step'), parts = []
-      all('h1,h2,.lead,.time,.card h3,.do li', s).forEach(function (e) { if (e.offsetParent !== null) parts.push(e.textContent) })
+      all('h1,h2,.lead,.time,.card h3,.do li', s).forEach(function (e) { if (e.offsetParent === null) return
+        var c = e.cloneNode(true); all('[data-os]:not([data-os=' + os + '])', c).forEach(function (x) { x.remove() }); parts.push(c.textContent) })
       var u = new SpeechSynthesisUtterance(parts.join('. ').replace(/\s+/g, ' ').replace(/\.\s*\./g, '.'))
       u.rate = 0.95; u.onend = function () { b.classList.remove('live') }
       b.classList.add('live'); voice.speak(u)
@@ -779,11 +806,11 @@ RULES, ALWAYS
         act: [['cap', 'Then install Git, normal options'], ['move', 'x-git'], ['tap', 'x-git'], ['wait', 900]] } ],
     code: os === 'mac' ? [
       term('<span class="t-g">~</span> <span id="x-t"></span><span class="caret"></span>\n<span id="x-out"></span>') ] : [
-      { kind: 'browser', url: 'Claude', html: '<div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px"><span class="m-btn" style="background:#e7e5e4;color:#1c1917">Chat</span><span class="m-btn" style="background:#e7e5e4;color:#1c1917" id="x-tab">Code</span></div><div class="m-h">Choose a folder to work in</div><div style="text-align:center"><span class="m-btn or">Select folder</span></div>',
+      { kind: 'browser', url: 'Claude', html: '<div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px"><span class="m-btn" style="background:#e7e5e4;color:#1c1917">Chat</span><span class="m-btn" style="background:#e7e5e4;color:#1c1917" id="x-tab">Code</span></div><div class="m-h">What should we code?</div><div style="text-align:center"><span class="m-btn" style="background:#e7e5e4;color:#1c1917">Local</span> <span class="m-btn or">Open folder</span></div>',
         act: [['cap', 'Open the Code tab'], ['move', 'x-tab'], ['tap', 'x-tab'], ['wait', 1600]] } ],
     start: os === 'mac' ? [
       term('<span class="t-g">~</span> <span id="x-t"></span><span class="caret"></span>\n<span id="x-out"></span>') ] : [
-      { kind: 'browser', url: 'Claude \u00b7 Code', html: '<div class="m-h">' + esc(p) + '</div><div class="m-in" style="max-width:420px">Ask Claude to do anything</div><div style="display:flex;gap:8px;justify-content:center"><span class="m-btn" id="x-mod" style="background:#e7e5e4;color:#1c1917">Sonnet</span><span class="m-btn" id="x-perm" style="background:#e7e5e4;color:#1c1917">Ask permissions</span></div>',
+      { kind: 'browser', url: 'Claude \u00b7 Code', html: '<div class="m-h">' + esc(p) + '</div><div class="m-in" style="max-width:420px">Ask Claude to do anything</div><div style="display:flex;gap:8px;justify-content:center"><span class="m-btn" id="x-mod" style="background:#e7e5e4;color:#1c1917">Sonnet</span><span class="m-btn" id="x-perm" style="background:#e7e5e4;color:#1c1917">Manual</span></div>',
         act: [['cap', 'Pick Opus'], ['move', 'x-mod'], ['tap', 'x-mod'], ['set', 'x-mod', 'Opus'], ['cap', 'Pick Bypass permissions'], ['move', 'x-perm'], ['tap', 'x-perm'], ['set', 'x-perm', 'Bypass permissions'], ['wait', 1400]] } ],
     voice: [
       term('<span class="t-o">\u273b Claude</span> <span class="t-m">Opus</span>\n\n<span class="t-g">&gt;</span> <span id="x-t"></span><span class="caret"></span>\n\n<span id="x-out" class="t-y"></span>'),
@@ -791,8 +818,10 @@ RULES, ALWAYS
     chrome: [
       { kind: 'browser', url: 'chromewebstore.google.com \u00b7 Claude', html: '<div class="m-h">Claude in Chrome</div><div style="text-align:center"><span class="m-btn" id="x-add" style="background:#2563eb">Add to Chrome</span></div>',
         act: [['cap', 'Add the extension'], ['move', 'x-add'], ['tap', 'x-add'], ['set', 'x-add', 'Added \u2713'], ['wait', 600]] },
-      { kind: 'browser', url: os === 'mac' ? 'System Settings \u00b7 Privacy & Security' : 'Settings', html: '<div class="m-h">' + (os === 'mac' ? 'Accessibility' : 'Permissions') + '</div><div class="m-toggle">' + (os === 'mac' ? 'Warp' : 'Claude') + '<span class="m-sw" id="x-sw1"></span></div><div class="m-toggle">Google Chrome<span class="m-sw" id="x-sw2"></span></div>',
-        act: [['cap', 'Switch on every permission it asks for'], ['move', 'x-sw1'], ['tap', 'x-sw1'], ['on', 'x-sw1'], ['move', 'x-sw2'], ['tap', 'x-sw2'], ['on', 'x-sw2'], ['wait', 1400]] } ],
+      os === 'mac' ? { kind: 'browser', url: 'System Settings \u00b7 Privacy & Security', html: '<div class="m-h">Accessibility</div><div class="m-toggle">Warp<span class="m-sw" id="x-sw1"></span></div><div class="m-toggle">Google Chrome<span class="m-sw" id="x-sw2"></span></div>',
+        act: [['cap', 'Switch on every permission it asks for'], ['move', 'x-sw1'], ['tap', 'x-sw1'], ['on', 'x-sw1'], ['move', 'x-sw2'], ['tap', 'x-sw2'], ['on', 'x-sw2'], ['wait', 1400]] }
+      : { kind: 'browser', url: 'Claude \u00b7 Settings', html: '<div class="m-h">This computer \u00b7 System</div><div class="m-toggle">Enable computer use<span class="m-sw" id="x-sw1"></span></div>',
+        act: [['cap', 'Turn on Enable computer use'], ['move', 'x-sw1'], ['tap', 'x-sw1'], ['on', 'x-sw1'], ['wait', 1600]] } ],
     github: [
       { kind: 'browser', url: 'github.com/signup', html: '<div class="m-h">Create your free account</div><div class="m-in" id="x-em"></div><div class="m-in" id="x-pw"></div><div style="text-align:center"><span class="m-btn gr" id="x-go">Create account</span></div>',
         act: [['cap', 'You make the account'], ['move', 'x-em'], ['tap', 'x-em'], ['type', 'x-em', 'hello@' + slug(p).replace(/-/g, '') + '.com'], ['move', 'x-pw'], ['tap', 'x-pw'], ['type', 'x-pw', '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'], ['move', 'x-go'], ['tap', 'x-go'], ['wait', 500]] },
@@ -809,15 +838,15 @@ RULES, ALWAYS
         act: [['cap', 'It checks every button, then asks before going live'], ['move', 'x-book'], ['tap', 'x-book'], ['wait', 1600]] } ] : [
       { kind: 'browser', url: clean2($('siteurl').value) || (slug(p) + '.com'), html: '<div class="m-site"><div class="hero"></div><div class="ln"></div><div class="ln" style="width:80%"></div><div class="ln" style="width:60%"></div></div><div class="m-claude" id="x-cl"><b>Claude</b><br><span id="x-say"></span></div>',
         act: [['cap', 'Claude opens your site in Chrome'], ['type', 'x-say', 'Reading your 12 pages...'], ['wait', 600]] },
-      { kind: 'browser', url: (SITES[st.site] || SITES.Wix)[0].replace(/^https:\/\//, '').replace('{{URL}}', clean2($('siteurl').value) || 'yoursite.com'), html: '<div class="m-h">Log in</div><div class="m-in" id="x-em"></div><div class="m-in" id="x-pw"></div><div style="text-align:center"><span class="m-btn" id="x-li">Log in</span></div>',
+      { kind: 'browser', url: (SITES[st.site] && st.site !== 'other' ? SITES[st.site][0].replace(/^https:\/\//, '').replace('{{URL}}', clean2($('siteurl').value) || 'yoursite.com') : (clean2($('siteurl').value) || 'yoursite.com') + ' \u00b7 log in'), html: '<div class="m-h">Log in</div><div class="m-in" id="x-em"></div><div class="m-in" id="x-pw"></div><div style="text-align:center"><span class="m-btn" id="x-li">Log in</span></div>',
         act: [['cap', 'You log in yourself. Claude never sees your password'], ['move', 'x-em'], ['tap', 'x-em'], ['type', 'x-em', 'you@' + slug(p).replace(/-/g, '') + '.com'], ['move', 'x-pw'], ['tap', 'x-pw'], ['type', 'x-pw', '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'], ['move', 'x-li'], ['tap', 'x-li'], ['wait', 400]] },
       { kind: 'browser', url: clean2($('siteurl').value) || (slug(p) + '.com'), html: '<div class="m-site"><div class="hero"></div><div class="ln"></div><div class="ln" style="width:80%"></div></div><div class="m-claude"><b>Claude</b><br><span id="x-say"></span><br><br><span class="m-btn gr" id="x-ok">Approve</span></div>',
         act: [['cap', 'It suggests fixes. You approve each one'], ['type', 'x-say', 'Found 10 ways to get more bookings. #1: add a Book now button on the home page.'], ['move', 'x-ok'], ['tap', 'x-ok'], ['wait', 1400]] } ],
     build: [
       term('<span class="t-o">\u273b Claude</span> <span class="t-m">Opus \u00b7 ' + esc(p) + '</span>\n\n<span class="t-g">&gt;</span> <span id="x-t"></span><span class="caret"></span>\n\n<span id="x-out"></span>') ],
     done: [
-      { kind: 'browser', url: 'localhost \u00b7 ' + p + ' Command Center', html: '<div class="m-dash"><div class="m-side"><div>\u2600 Today</div><div>$ Money</div><div>\u263a Customers</div><div>\u270e Marketing</div><div>\u2713 Tasks</div><div>\u2726 Agents</div></div><div class="m-tiles"><div class="m-tile">This week<b id="x-n1">$0</b></div><div class="m-tile">Hours saved<b id="x-n2">0</b></div><div class="m-tile">Posts ready<b>5</b></div><div class="m-tile">Waiting for your yes<b>3</b></div></div></div>',
-        act: [['cap', 'Your own AI dashboard, on your computer'], ['count', 'x-n1', 2480, '$'], ['count', 'x-n2', 11, ''], ['wait', 2200]] } ]
+      { kind: 'browser', url: 'localhost \u00b7 ' + p + ' Command Center', html: '<div class="m-dash"><div class="m-side"><div>\u2600 Today</div><div>$ Money</div><div>\u263a Customers</div><div>\u270e Marketing</div><div>\u2713 Tasks</div><div>\u2726 Agents</div></div><div class="m-tiles"><div class="m-tile">Example week<b id="x-n1">$0</b></div><div class="m-tile">Hours saved<b id="x-n2">0</b></div><div class="m-tile">Posts ready<b>5</b></div><div class="m-tile">Waiting for your yes<b>3</b></div></div></div>',
+        act: [['cap', 'Example: your own AI dashboard, on your computer'], ['count', 'x-n1', 2480, '$'], ['count', 'x-n2', 11, ''], ['wait', 2200]] } ]
   } }
 
   /* Typed terminal scripts for the Warp demos. */
@@ -865,7 +894,9 @@ RULES, ALWAYS
         for (var s = 0; s < scenes.length && alive(); s++) {
           var sc = scenes[s]
           scr.className = 'screen' + (sc.kind === 'term' ? ' term' : sc.kind === 'desk' ? ' desk' : '')
-          scr.querySelector('.url').textContent = sc.kind === 'term' ? (sc.title || 'Warp') : (sc.url || '')
+          var winApp = sc.kind === 'term' && os === 'win'
+          if (winApp) scr.className += ' winapp'
+          scr.querySelector('.url').textContent = winApp ? 'Claude \u00b7 Code' : sc.kind === 'term' ? (sc.title || 'Warp') : (sc.url || '')
           body.innerHTML = sc.html; cap.style.opacity = 0
           cur.style.display = sc.kind === 'term' ? 'none' : 'block'
           var acts = sc.act || TERM(id) || [['wait', 2500]]

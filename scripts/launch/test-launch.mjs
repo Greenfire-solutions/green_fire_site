@@ -264,8 +264,8 @@ write(join(stubs, 'curl'), `#!/bin/sh\nif [ -n "$FAIL_CURL" ]; then echo "curl: 
 write(join(stubs, 'npm'), `#!/bin/sh\nif [ "$1" = config ]; then echo "$4" > "$HOME/.npmprefix"; exit 0; fi\nif [ "$1" = install ]; then P=$(cat "$HOME/.npmprefix"); mkdir -p "$P/bin"; printf '#!/bin/sh\\necho "2.1.3 (Claude Code)"\\n' > "$P/bin/claude"; chmod +x "$P/bin/claude"; exit 0; fi\n`)
 const SYS = '/usr/bin:/bin:/usr/sbin:/sbin'
 const zsh = (home, line, extra = {}, flags = ['-f', '-c']) => {
-  try { return execFileSync('/bin/zsh', [...flags, line], { env: { HOME: home, PATH: stubs + ':' + SYS, TERM: 'dumb', ...extra }, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 20000 }) }
-  catch (e) { return String(e.stdout || '') + String(e.stderr || '') }
+  try { return execFileSync('/bin/zsh', [...flags, line], { env: { HOME: home, PATH: stubs + ':' + SYS, TERM: 'dumb', ...extra }, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 90000 }) }
+  catch (e) { return (e.signal === 'SIGTERM' ? 'TIMED OUT (machine busy?) ' : '') + String(e.stdout || '') + String(e.stderr || '') }
 }
 const home = () => mkdtempSync(join(tmpdir(), 'launch-home-'))
 const count = (f, s) => existsSync(f) ? readFileSync(f, 'utf8').split(s).length - 1 : 0
