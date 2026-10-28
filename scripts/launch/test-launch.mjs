@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Tests public/launch/index.html (greenfire.earth/launch) the way students hit it.
+/* Tests private/launch/index.html (greenfire.earth/launch, sent by api/store.ts after payment) the way students hit it.
 
    Part 1, the page, in real headless Chrome over a DevTools pipe:
      every business name that could break something x Mac and Windows x phone
@@ -23,7 +23,7 @@ import { join, dirname, extname } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public')
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'private')
 const PAGE = join(ROOT, 'launch', 'index.html')
 const QUICK = process.argv.includes('--quick')
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
@@ -36,7 +36,7 @@ const NAMES = ['Sunrise Bakery', "Joe's Café & Bar", 'The "Best" Co!', 'Ünïc�
 const SITES = ['Wix', 'Squarespace', 'WordPress', 'Shopify', 'GoDaddy', 'Webflow', 'other', 'none']
 const cleanName = (s) => s.replace(/[\\/:*?"<>|`$!]/g, '').replace(/\s+/g, ' ').trim()
 
-/* ---------------- static server: public/ with the /launch rewrite ---------------- */
+/* ---------------- static server: private/ with the /launch rewrite ---------------- */
 const TYPES = { '.html': 'text/html; charset=utf-8', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.css': 'text/css' }
 const server = createServer((req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname)

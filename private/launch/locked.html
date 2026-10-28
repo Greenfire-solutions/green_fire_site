@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Launch Your AI Command Center | Greenfire</title>
+<meta name="description" content="A step by step, animated course: set up Claude on your own computer and have it build an AI dashboard that runs your business. $100, or included with Greenfire Builder.">
+<meta property="og:title" content="Launch your AI Command Center">
+<meta property="og:description" content="Set up your own AI business assistant, one animated step at a time. No tech skills needed.">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<!--
+  The front of /launch for anyone without a paid key (api/store.ts action=launch
+  fills the NOTE, BUY and BUILDER slots). The course itself is private/launch/index.html and is
+  only ever sent after Stripe says the checkout was paid. No em dashes.
+-->
+<style>
+:root{color-scheme:dark;--g:#10b981;--g2:#34d399;--ink:#f5f5f4;--mute:#a8a29e;--card:#1c1917;--line:#292524;--bg:#0c0a09;--warn:#f59e0b}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.6 Inter,system-ui,sans-serif;
+ background-image:radial-gradient(900px 520px at 15% -10%,rgba(16,185,129,.14),transparent 60%)}
+a{color:var(--g2)}
+main{max-width:760px;margin:0 auto;padding:40px 16px 64px}
+.brand{font-weight:800;color:var(--g);letter-spacing:.08em;font-size:13px;text-transform:uppercase}
+h1{font-size:clamp(32px,6vw,48px);line-height:1.1;margin:12px 0 16px;font-weight:800}
+h2{font-size:22px;margin:0 0 12px}
+.lede{color:var(--mute);font-size:20px;margin:0 0 28px}
+.note{border:1px solid var(--warn);background:rgba(245,158,11,.08);border-radius:14px;padding:14px 16px;margin:0 0 24px}
+.note:empty{display:none}
+.cards{display:grid;gap:16px;grid-template-columns:1fr 1fr;margin:0 0 32px}
+@media (max-width:640px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px}
+.card.main{border-color:var(--g)}
+.price{font-size:40px;font-weight:800}
+.price small{font-size:16px;color:var(--mute);font-weight:600}
+.btn{display:block;text-align:center;text-decoration:none;font-weight:800;font-size:18px;border-radius:14px;padding:16px;background:var(--g);color:#052e1f;margin-top:auto}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid #44403c}
+.mute{color:var(--mute);font-size:16px;margin:0}
+ol{padding-left:22px;margin:0 0 32px}
+ol li{margin:0 0 8px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+form{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+input[type=email]{flex:1;min-width:0;font:18px Inter,sans-serif;color:#fff;background:var(--bg);border:2px solid #44403c;border-radius:12px;padding:12px 14px}
+button{font:800 17px Inter,sans-serif;border:0;border-radius:12px;padding:12px 18px;background:var(--g);color:#052e1f;cursor:pointer}
+.hp{position:absolute;left:-9999px}
+#sent{margin:10px 0 0;color:var(--g2)}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">Greenfire</div>
+  <h1>Launch your AI Command Center</h1>
+  <p class="lede">Set up Claude on your own computer, then have it read everything about your business and build you a dashboard that saves you hours every week. One animated step at a time. No tech skills needed.</p>
+  <div class="note">{{NOTE}}</div>
+  <div class="cards">
+    <div class="card main">
+      <h2>The course</h2>
+      <div class="price">$100 <small>one time, yours to keep</small></div>
+      <p class="mute">Go at your own pace. Your progress saves on your computer.</p>
+      <a class="btn" href="{{BUY}}">Get the course</a>
+    </div>
+    <div class="card">
+      <h2>Builder membership</h2>
+      <div class="price">$100 <small>a month</small></div>
+      <p class="mute">The course is included, plus every app in the Greenfire store, a weekly clinic and a monthly review of your build. Cancel any time.</p>
+      <a class="btn ghost" href="{{BUILDER}}">Become a member</a>
+    </div>
+  </div>
+  <h2>What you will have at the end</h2>
+  <ol>
+    <li>A Claude account and Claude Code running on your own Mac or PC, with the stuck fixes built in.</li>
+    <li>One folder holding everything about your business, plus a Business Brief written with ChatGPT.</li>
+    <li>Talking to your computer instead of typing, and Claude able to use Chrome for you.</li>
+    <li>One build prompt that has Claude read your whole folder and build an AI dashboard that runs your business: a morning briefing, one inbox, drafted replies and helpers on a schedule.</li>
+    <li>Automatic daily backups to a private GitHub, and your website plugged in, whatever it is built on.</li>
+    <li>A weekly tune-up prompt and a setup checkup prompt, so it keeps getting better without you needing help.</li>
+  </ol>
+  <div class="box">
+    <h2>Already paid?</h2>
+    <p class="mute">Open the link in your receipt email. Builder members: open your member page and press the course button. Lost it? Type the email you paid with and we will send your link again.</p>
+    <form id="resend">
+      <input type="email" name="email" required placeholder="you@example.com" autocomplete="email" aria-label="Your email">
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit">Send my link</button>
+    </form>
+    <p id="sent" hidden>Thank you. If that email paid, your link is on its way (it can take an hour).</p>
+  </div>
+</main>
+<script>
+document.getElementById('resend').addEventListener('submit', async function (e) {
+  e.preventDefault()
+  var f = new FormData(this), b = this.querySelector('button')
+  b.disabled = true
+  try {
+    var r = await fetch('/api/store?action=resend', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: f.get('email'), website: f.get('website') }) })
+    if (!r.ok) throw new Error((await r.json().catch(function () { return {} })).error || 'Please try again.')
+    this.hidden = true
+    document.getElementById('sent').hidden = false
+  } catch (err) {
+    b.disabled = false
+    b.textContent = 'Try again'
+    var m = document.getElementById('sent'); m.textContent = err.message; m.hidden = false
+  }
+})
+</script>
+</body>
+</html>

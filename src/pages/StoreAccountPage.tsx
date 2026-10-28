@@ -10,7 +10,7 @@ import { ArrowLeft, Check, Download, Loader2, Lock } from 'lucide-react';
 
 type App = { id: string; title: string; line: string; poster: string | null; access: 'member' | 'builder' | null; free: boolean; ready: boolean; price_usd: number; builds?: { arch: string; label: string }[] | null };
 type Account = {
-  kind: 'purchase' | 'plan' | 'unpaid' | 'unknown';
+  kind: 'purchase' | 'plan' | 'course' | 'unpaid' | 'unknown';
   email?: string | null;
   plan?: 'store' | 'builder';
   status?: string;
@@ -20,6 +20,7 @@ type Account = {
   picks_left?: number;
   owned: string[];
   paid?: boolean;
+  course?: boolean;
 };
 
 const MINE = 'gf-store-account';
@@ -60,6 +61,8 @@ export function StoreAccountPage() {
         return j as Account;
       })
       .then((j) => {
+        /* A course checkout's page is the course itself. */
+        if (j.kind === 'course') return window.location.replace(`/launch?s=${encodeURIComponent(s)}`);
         setAcct(j);
         if (j.kind === 'purchase' || j.kind === 'plan') {
           remember(s);
@@ -148,6 +151,12 @@ export function StoreAccountPage() {
                     : `${acct.picks_left === 0 ? 'Both picks are used this month' : `You have ${acct.picks_left} pick${acct.picks_left === 1 ? '' : 's'} left this month`}${acct.period_end ? `. New picks arrive on ${day(acct.period_end)}` : ''}. Apps you pick stay yours.`}
                 {acct.cancelling && acct.active ? ' Your membership is set to end at the close of this month.' : ''}
               </p>
+            )}
+            {acct.course && (
+              <a href={`/launch?s=${encodeURIComponent(s)}`} className="mt-4 block rounded-2xl border border-emerald-400/50 bg-emerald-400/10 p-4 text-white hover:bg-emerald-400/15">
+                <span className="block font-bold">Launch your AI Command Center</span>
+                <span className="block text-sm text-stone-300">Your Builder membership includes the step by step setup course. Open it here.</span>
+              </a>
             )}
             <p className="mt-3 rounded-xl border border-emerald-400/30 bg-emerald-400/[0.06] px-4 py-3 text-xs text-emerald-100">
               This page is your key to your apps. The same link is in the email sent to {acct.email || 'you'}, and this browser remembers it under My apps on the store.

@@ -170,6 +170,14 @@
       "note": "People learning for themselves: Learn to Build."
     }
   ],
+  "self_serve": {
+    "title": "Rather do it yourself?",
+    "price_label": "$100 once",
+    "about": "The self-serve course: set up Claude on your own computer and have it build your AI dashboard, one animated step at a time, with buttons that copy exactly what to paste. Included with the Builder membership.",
+    "button": "See the course",
+    "url": "/launch",
+    "_note": "greenfire.earth/launch, gated in api/store.ts (2026-10-28). Its $100 link is gf_settings checkout:course (store-sell.mjs makeCourseLink)."
+  },
   "membership": {
     "title": "Builder membership",
     "price_label": "$100 a month",
@@ -179,7 +187,8 @@
       "A new tool every week from the Greenfire collective",
       "Updates to your toolkit as it grows",
       "One 20 minute review of your build each month",
-      "Every app in the Greenfire store, including the bigger tools kept for members"
+      "Every app in the Greenfire store, including the bigger tools kept for members",
+      "The self-serve AI Command Center setup course ($100 on its own)"
     ],
     "button": "Become a member",
     "checkout_url": "https://buy.stripe.com/14A6oJghU5zpfckfIj1kA0n",

@@ -14,7 +14,7 @@
     },
     {
       "source": "/launch",
-      "destination": "/launch/index.html"
+      "destination": "/api/store?action=launch"
     },
     {
       "source": "/blog",
@@ -106,6 +106,9 @@
   "functions": {
     "api/onboard.ts": {
       "includeFiles": "src/data/startOffers.json"
+    },
+    "api/store.ts": {
+      "includeFiles": "private/launch/**"
     }
   }
 }

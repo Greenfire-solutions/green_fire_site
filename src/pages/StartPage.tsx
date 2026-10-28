@@ -193,6 +193,18 @@ export function StartPage() {
         </div>
       </section>
 
+      <section id="course" className="scroll-mt-24 px-6 pb-14">
+        <div className="mx-auto flex max-w-6xl flex-col items-start gap-4 rounded-3xl border border-emerald-500/30 bg-emerald-500/[0.06] p-6 md:flex-row md:items-center md:justify-between md:p-8">
+          <div>
+            <h2 className="text-2xl font-semibold text-white">{data.self_serve.title} <span className="text-emerald-300">{data.self_serve.price_label}</span></h2>
+            <p className="mt-2 max-w-3xl text-stone-300">{data.self_serve.about}</p>
+          </div>
+          <a href={data.self_serve.url} className="shrink-0 rounded-xl bg-emerald-400 px-6 py-3 text-sm font-semibold text-black hover:bg-emerald-300">
+            {data.self_serve.button}
+          </a>
+        </div>
+      </section>
+
       <section id="membership" className="scroll-mt-24 border-t border-white/5 px-6 py-14">
         <div className="mx-auto grid max-w-6xl gap-8 rounded-3xl border border-orange-500/25 bg-gradient-to-br from-orange-500/10 via-neutral-950 to-emerald-500/10 p-6 md:p-10 lg:grid-cols-2">
           <div>

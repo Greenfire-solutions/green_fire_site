@@ -1,4 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { r2GetText, r2Put, r2PublicUrl, r2PresignPut, r2Configured, secretName } from './_lib/r2.js';
 import { requireAdmin } from './_lib/auth.js';
 import { writeLead } from './_lib/storage.js';
@@ -10,6 +12,7 @@ import { writeLead } from './_lib/storage.js';
      GET                         the public catalogue (what /store draws)
      GET  ?action=account&s=     what a checkout bought: one app, or a plan
      GET  ?action=download&s=&app=   the download, after the payment is checked
+     GET  ?action=launch[&s=]    /launch: the setup course for a paid key, else its sales page
      POST ?action=claim          a Store member takes one of this month's 2 picks
      POST ?action=reserve        a visitor asks for a setup, or to be told
      POST ?action=resend         "I lost my link": the operator emails it
@@ -24,6 +27,12 @@ import { writeLead } from './_lib/storage.js';
    made-up or unpaid id gets nothing. What a product is lives in its Stripe
    metadata: gf_store_app on an app, gms_slug greenfire-member-store or
    greenfire-member-builder on a plan.
+
+   THE COURSE (2026-10-28). /launch is rewritten here. The course page lives in
+   private/launch/ (never in public/), and goes only to a checkout that bought
+   it (product metadata gf_course=launch, $100, store-sell.mjs makeCourseLink)
+   or to an active Builder plan. The key arrives as ?s= from Stripe or the
+   receipt email and is kept in a cookie so the bare /launch keeps working.
 
    FILES (2026-10-27): everything lives in R2 (api/_lib/r2.ts), after Vercel
    suspended the Blob store on the Hobby operations cap. The zips sit under
@@ -66,6 +75,9 @@ async function entitlement(sid: string) {
   const meta = (product.metadata || {}) as Record<string, string>;
   const email = s.customer_details?.email || null;
   if (s.status !== 'complete') return { kind: 'unpaid' as const, email };
+  if (meta.gf_course) {
+    return { kind: 'course' as const, email, paid: ['paid', 'no_payment_required'].includes(String(s.payment_status)), course: meta.gf_course };
+  }
   if (meta.gf_store_app) {
     return { kind: 'purchase' as const, email, paid: ['paid', 'no_payment_required'].includes(String(s.payment_status)), app: meta.gf_store_app };
   }
@@ -102,8 +114,9 @@ async function catalogApps(): Promise<App[]> {
    Apps a member picked stay theirs after they stop paying, like a purchase. */
 async function account(sid: string) {
   const e = await entitlement(sid);
-  if (e.kind === 'purchase') return { ...e, owned: e.paid ? [e.app] : [] };
-  if (e.kind !== 'plan') return { ...e, owned: [] as string[] };
+  if (e.kind === 'purchase') return { ...e, owned: e.paid ? [e.app] : [], course: false };
+  if (e.kind === 'course') return { ...e, owned: [] as string[], course: e.paid };
+  if (e.kind !== 'plan') return { ...e, owned: [] as string[], course: false };
   const claims = await readClaims(e.sub);
   const used = claims.filter((c) => c.period === e.period).length;
   const all = e.plan === 'builder' && e.active ? (await catalogApps()).filter((a) => a.ready && !a.free).map((a) => a.id) : [];
@@ -111,7 +124,45 @@ async function account(sid: string) {
     kind: e.kind, email: e.email, plan: e.plan, status: e.status, active: e.active, cancelling: e.cancelling, period_end: e.period_end,
     picks_left: e.plan === 'store' && e.active ? Math.max(0, PICKS - used) : 0,
     owned: [...new Set([...claims.map((c) => c.app), ...all])],
+    course: e.plan === 'builder' && e.active,
   };
+}
+
+/* /launch. The two links are gf_settings checkout:course and checkout:builder
+   in the operator; change them there and here together. */
+const COURSE_BUY = 'https://buy.stripe.com/7sY8wR2r43rh8NW0Np1kA0H';
+const BUILDER_JOIN = 'https://buy.stripe.com/14A6oJghU5zpfckfIj1kA0n';
+const COOKIE = 'gf_launch';
+const page = (name: string) => readFileSync(join(process.cwd(), 'private', 'launch', name), 'utf8');
+const esc = (t: string) => t.replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch] as string);
+
+async function launch(req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Cache-Control', 'private, no-store');
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  const fromUrl = String(req.query.s || '');
+  const fromCookie = (String(req.headers.cookie || '').match(new RegExp(`(?:^|;\\s*)${COOKIE}=([^;]+)`)) || [])[1] || '';
+  const sid = SESSION.test(fromUrl) ? fromUrl : SESSION.test(fromCookie) ? fromCookie : '';
+  let note = fromUrl && !sid ? 'That link is not complete. Use the whole link from your receipt email.' : '';
+  if (sid) {
+    try {
+      const a = await account(sid);
+      if (a.course) {
+        res.setHeader('Set-Cookie', `${COOKIE}=${sid}; Path=/; Max-Age=31536000; HttpOnly; Secure; SameSite=Lax`);
+        /* The key stays in the cookie, not in an address someone might copy and share. */
+        return res.status(200).send(page('index.html').replace('</head>', '<script>if(location.search)history.replaceState(null,"",location.pathname+location.hash)</script>\n</head>'));
+      }
+      if (a.kind === 'unpaid' || (a.kind === 'course' && !a.paid)) note = 'Your payment is not finished yet. If you just paid, wait a minute and refresh this page.';
+      else if (a.kind === 'plan' && a.plan === 'store') note = 'The Store membership does not include this course. Builder does, or you can get the course on its own below.';
+      else if (a.kind === 'plan') note = 'Your Builder membership is not active right now, so the course is locked. Rejoin below, or get the course on its own.';
+      else if (fromUrl) note = 'That checkout was not for this course.';
+      /* A cookie that no longer opens anything is dropped, so the page stops asking Stripe about it. */
+      if (!fromUrl) res.setHeader('Set-Cookie', `${COOKIE}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax`);
+    } catch (e) {
+      const status = (e as { status?: number })?.status;
+      note = status === 404 || status === 400 ? 'That checkout was not found. Use the whole link from your receipt email.' : 'We could not check your payment just now. Please refresh in a minute.';
+    }
+  }
+  return res.status(200).send(page('locked.html').replace('{{BUY}}', COURSE_BUY).replace('{{BUILDER}}', BUILDER_JOIN).replace('{{NOTE}}', esc(note)));
 }
 
 /* What is on an app's shelf: one record per uploaded zip, newest last. */
@@ -142,6 +193,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const status = (e as { status?: number })?.status || 500;
     return res.status(status).json({ error: status === 404 ? 'That checkout was not found. Use the whole link from your email.' : e instanceof Error ? e.message : 'Something went wrong.' });
   };
+
+  if (req.method === 'GET' && action === 'launch') return launch(req, res);
 
   if (req.method === 'GET' && action === 'account') {
     res.setHeader('Cache-Control', 'no-store');
