@@ -71,7 +71,8 @@ ol.do li{margin:10px 0}
 textarea.prompt{width:100%;height:230px;background:#000;border:1px solid #44403c;border-radius:12px;color:#e7e5e4;padding:14px;font:14px/1.5 ui-monospace,Menlo,monospace;margin:8px 0}
 .note{border-left:4px solid var(--g);background:rgba(16,185,129,.07);padding:12px 14px;border-radius:0 12px 12px 0;margin:12px 0;font-size:16.5px}
 .note.warn{border-color:var(--warn);background:rgba(245,158,11,.08)}
-.pname{color:#fff;font-weight:800}
+.pname{color:#fff;font-weight:800;overflow-wrap:anywhere}
+main{overflow-wrap:break-word}
 [data-os]{display:none}
 body.os-mac [data-os=mac],body.os-win [data-os=win]{display:block}
 body.os-mac li[data-os=mac],body.os-win li[data-os=win]{display:list-item}
@@ -144,6 +145,16 @@ details.stuck[open]{padding-bottom:12px}
 .t-g{color:#34d399}.t-y{color:#fbbf24}.t-m{color:#a1a1aa}.t-o{color:#fb923c}
 .caret{display:inline-block;width:8px;height:15px;background:#e5e7eb;vertical-align:-2px;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
+.who{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:99px;padding:3px 10px;margin:0 6px 6px 0;vertical-align:2px}
+.who.you{background:rgba(245,158,11,.16);color:#fcd34d}.who.you::before{content:"\1F464  "}
+.who.ai{background:rgba(16,185,129,.16);color:#6ee7b7}.who.ai::before{content:"\2728  "}
+.pick.site{grid-template-columns:repeat(4,1fr)}.pick.site button{min-height:60px;font-size:16px}
+@media (max-width:560px){.pick.site{grid-template-columns:1fr 1fr}}
+.m-claude{position:absolute;right:10px;top:10px;bottom:10px;width:42%;background:#fff7ed;border:1px solid #fdba74;border-radius:10px;padding:10px;font-size:12px}
+.m-claude b{color:#c2410c}
+.m-site{width:52%}
+.m-site .hero{height:70px;border-radius:8px;background:linear-gradient(135deg,#fde68a,#fca5a5);margin-bottom:8px}
+.m-site .ln{height:9px;border-radius:5px;background:#e7e5e4;margin:6px 0}
 .foot{margin-top:30px;text-align:center;color:#78716c;font-size:14px}
 @media (max-width:560px){h1{font-size:28px}h2{font-size:24px}body{font-size:17px}.screen{font-size:12px}.m-plans{gap:6px}.cap{font-size:13px}}
 @media (prefers-reduced-motion:reduce){.cursor{transition:none}.step{animation:none}}
@@ -181,7 +192,7 @@ details.stuck[open]{padding-bottom:12px}
   <span class="time">5 minutes &middot; $20 a month</span> <button class="read" data-read>&#128264; Read it to me</button>
   <p class="lead">Claude is the AI that will build and run your assistant. The $20 Pro plan is the starting point. It includes Claude Code, the part that builds things on your computer.</p>
   <div class="movie" data-demo="claude"></div>
-  <div class="card"><h3>Do it</h3>
+  <div class="card"><h3><span class="who you">Only you can do this part</span> Do it</h3>
     <ol class="do">
       <li>Tap the button below. Sign up with your email or Google. Use the email your business runs on.</li>
       <li>Choose <b>Pro</b> and pay with your card.</li>
@@ -206,7 +217,7 @@ details.stuck[open]{padding-bottom:12px}
   <span class="time">10 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
   <p class="lead">This folder is your AI's brain. Everything it knows about your business comes from what you put in here. Messy is fine. More is better than tidy.</p>
   <div class="movie" data-demo="folder"></div>
-  <div class="card"><h3>Do it</h3>
+  <div class="card"><h3><span class="who you">Only you can do this part</span> Do it</h3>
     <ol class="do">
       <li data-os="mac">Go to your <b>Desktop</b>. Right click (or two-finger click) an empty spot and choose <b>New Folder</b>.</li>
       <li data-os="win">Go to your <b>Desktop</b>. Right click an empty spot, choose <b>New</b>, then <b>Folder</b>.</li>
@@ -254,7 +265,7 @@ details.stuck[open]{padding-bottom:12px}
   <p class="lead" data-os="mac">Warp is a friendly window where you talk to your computer. It is where your AI assistant will live. You never need to learn commands, every one is on this page with a Copy button.</p>
   <p class="lead" data-os="win">On a Windows PC, your AI assistant lives inside the Claude desktop app, in its <b>Code</b> tab. Two quick installs.</p>
   <div class="movie" data-demo="app"></div>
-  <div class="card"><h3>Do it</h3>
+  <div class="card"><h3><span class="who you">Only you can do this part</span> Do it</h3>
     <ol class="do" data-os="mac">
       <li>Tap <b>Download Warp</b>.</li>
       <li>Open the file that downloads and drag <b>Warp</b> into <b>Applications</b>.</li>
@@ -279,7 +290,7 @@ details.stuck[open]{padding-bottom:12px}
   <span class="time">5 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
   <p class="lead">This is the step that used to take three tries. The line below does the install and the fix together, so it works the first time on almost every computer.</p>
   <div class="movie" data-demo="code"></div>
-  <div class="card"><h3>Do it</h3>
+  <div class="card"><h3><span class="who you">Only you can do this part</span> Do it</h3>
     <div data-os="mac">
       <ol class="do">
         <li>Tap <b>Copy</b>, click inside Warp, paste (<b>Command + V</b>), and press <b>Enter</b>.</li>
@@ -410,9 +421,67 @@ details.stuck[open]{padding-bottom:12px}
   <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>All allowed &rarr;</button></div>
 </section>
 
-<!-- 9. Build -->
+<!-- 9. GitHub backup -->
+<section class="step" data-id="github">
+  <div class="tag">Step 9</div>
+  <h2>Back everything up to GitHub</h2>
+  <span class="time">10 minutes &middot; free</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">GitHub keeps a private copy of your folder and every version of your app, so nothing is ever lost, even if your computer dies. You make the account, Claude does the rest.</p>
+  <div class="movie" data-demo="github"></div>
+  <div class="card"><h3><span class="who you">Only you can do this part</span> Make your free account</h3>
+    <ol class="do">
+      <li>Tap <b>Open GitHub sign up</b>. Enter your email, make a password, pick a username (your business name works).</li>
+      <li>Solve the little puzzle and type the code GitHub emails you. Choose <b>Free</b> if it asks.</li>
+      <li>Keep your password somewhere safe. Never paste it into Claude or send it to anyone.</li>
+    </ol>
+    <div class="row"><a class="btn" href="https://github.com/signup" target="_blank" rel="noopener">Open GitHub sign up &#8599;</a></div>
+  </div>
+  <div class="card"><h3><span class="who ai">Claude does this for you</span> Connect it and turn on daily backups</h3>
+    <ol class="do">
+      <li>Copy this, paste it into Claude, press Enter.</li>
+      <li>When Claude shows you a short code, your browser opens on GitHub. Type the code there and click <b>Authorize</b>.</li>
+      <li data-os="mac">If your Mac pops up a box asking to install <b>developer tools</b>, click <b>Install</b> and wait. That is normal and only happens once.</li>
+    </ol>
+    <textarea class="prompt" id="githubPrompt" readonly style="height:200px"></textarea>
+    <button class="btn wide" data-copy="githubPrompt" data-label="Copy the GitHub prompt">Copy the GitHub prompt</button>
+  </div>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>Backed up &rarr;</button></div>
+</section>
+
+<!-- 10. Website -->
+<section class="step" data-id="website">
+  <div class="tag">Step 10</div>
+  <h2>Connect your website</h2>
+  <span class="time">5 minutes for you &middot; Claude does the rest</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">Your assistant can read your site, fix it, keep it fresh and show it on your dashboard. Pick what your website is built on. No website yet? Claude can build you one.</p>
+  <div class="pick site" id="sitepick">
+    <button type="button" data-site="Wix" aria-pressed="false">Wix</button>
+    <button type="button" data-site="Squarespace" aria-pressed="false">Squarespace</button>
+    <button type="button" data-site="WordPress" aria-pressed="false">WordPress</button>
+    <button type="button" data-site="Shopify" aria-pressed="false">Shopify</button>
+    <button type="button" data-site="GoDaddy" aria-pressed="false">GoDaddy</button>
+    <button type="button" data-site="Webflow" aria-pressed="false">Webflow</button>
+    <button type="button" data-site="other" aria-pressed="false">Something else / not sure</button>
+    <button type="button" data-site="none" aria-pressed="false">No website yet</button>
+  </div>
+  <div class="card" id="siteurlcard"><h3>Your website address</h3>
+    <div class="say"><input id="siteurl" type="text" inputmode="url" placeholder="yourbusiness.com"></div>
+  </div>
+  <div class="movie" data-demo="website"></div>
+  <div class="card"><h3><span class="who ai">Claude does this for you</span> Paste this into Claude</h3>
+    <ol class="do">
+      <li>Copy this and paste it into Claude. It opens your site in Chrome by itself.</li>
+      <li id="siteLogin">When Claude asks, log in to your website in that Chrome window yourself. Then tell Claude "done". It never needs your password.</li>
+    </ol>
+    <textarea class="prompt" id="sitePrompt" readonly style="height:220px"></textarea>
+    <button class="btn wide" data-copy="sitePrompt" data-label="Copy the website prompt">Copy the website prompt</button>
+  </div>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>Done, or skip &rarr;</button></div>
+</section>
+
+<!-- 11. Build -->
 <section class="step" data-id="build">
-  <div class="tag">Step 9 &middot; the big one</div>
+  <div class="tag">Step 11 &middot; the big one</div>
   <h2>Tell Claude to build your Command Center</h2>
   <span class="time">Claude works for 30 to 90 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
   <p class="lead">Paste this one prompt. Claude reads everything in your folder, asks you a few questions, shows you a plan, and after your yes it builds your own AI dashboard and agents, right on your computer.</p>
@@ -488,6 +557,39 @@ Mark anything you are unsure of with (guess). Never include passwords, bank deta
 
 Give it to me as one downloadable Word document or PDF if you can make files, otherwise one block of text I can copy. Title it: {{P}} Business Brief</template>
 
+<template id="githubT">Set up GitHub backups for this folder, "{{P}}". I am not technical, so do every step yourself and only ask me for things only I can do.
+
+1. Make sure git works. If my computer asks to install developer tools, tell me to click Install and wait for me.
+2. Install the GitHub command line tool (gh) for {{OS}}. If you can, install it without needing my computer password.
+3. Run the GitHub login using the web browser method. Show me the one-time code in big plain text, open the page for me, and wait while I type it and click Authorize.
+4. Create a PRIVATE GitHub repository called {{SLUG}} and connect this folder to it.
+5. Before the first save, add a .gitignore that keeps out passwords, keys, .env files, anything with "secret" or "token" in its name, system junk files, and any single file over 50 MB (those big videos stay on this computer only).
+6. Save everything and upload it.
+7. Set up an automatic backup that saves and uploads any changes every day at 9pm, using the normal scheduler for {{OS}}. Make it skip quietly when nothing changed and keep a short log.
+8. Test it: change a tiny test file, run the backup, check it reached GitHub, then remove the test file.
+9. Tell me in two plain sentences where to see my backup online and how to get my files back if something ever goes wrong.</template>
+
+<template id="siteT">Connect my website to this folder and my AI Command Center.
+
+My website: {{URL}}
+It is built on: {{SITE}}
+
+1. Use the Claude in Chrome extension. Open {{LOGIN}} in Chrome. If I need to log in, tell me and wait. I will log in myself in that window and say "done". Never ask me to type a password into this chat.
+2. Read every page of my site. Save the words, the page list, and copies of the images into "_ai/website" in this folder.
+3. Write "_ai/website/review.md": what is working, what is out of date compared with my folder, what is broken, and the 10 changes that would bring in the most customers or sales (search, speed, phones, clear buttons, booking or buying), ranked.
+4. Find the safest way for my dashboard to update my site from now on ({{HOW}}). Explain it to me in plain words, and only with my yes, set it up. Keep any key it needs in this computer's secure keychain, never in a file or on screen.
+5. Add a Website page to my dashboard (or plan one, if the dashboard is not built yet) that shows my site, the review, and a list of suggested changes I can approve one by one.
+6. Never publish, delete or change anything on the live site without showing me exactly what will change and getting my yes.</template>
+
+<template id="siteNoneT">I do not have a website yet. Build me one from everything in this folder, "{{P}}".
+
+1. Read my Business Brief and look at my photos, logo and brand files. Plan a simple, beautiful, fast website: home, what I offer with prices, about, reviews or photos, and a clear way to contact, book or buy. Show me the plan in plain words and wait for my yes.
+2. Build it in "_ai/website" in this folder, in my brand colours, great on phones, written in my voice, with real content from my folder (no placeholder text).
+3. Open it in Chrome with the Claude in Chrome extension and click through every page and button yourself. Fix anything that looks wrong.
+4. Show it to me. When I say go, publish it for free (GitHub Pages, Vercel or Netlify, whichever is simplest from here). If I need to create an account or log in, open the page for me, tell me exactly what to click, and wait.
+5. If I own a domain name, walk me through connecting it step by step. If I do not, tell me what one would cost and where, and do not buy anything.
+6. Add a Website page to my dashboard so I can see it and ask for changes.</template>
+
 <template id="buildT">You are my AI build partner. This folder, "{{P}}", holds everything about my business. Your job is to understand it completely, then build me a private AI Command Center that runs on this computer and saves me as much time and makes me as much money as possible.
 
 Talk to me in plain, friendly words. I am not technical. Never ask me to edit code or type commands myself; you do all of that.
@@ -513,7 +615,8 @@ PHASE 3. BUILD IT
 - Build the agents, skills, scripts and scheduled automations from the plan, starting with the biggest win.
 - Put a double-click launcher on my Desktop called "{{P}} Command Center" that starts everything and opens the dashboard.
 - Keep any passwords or keys in the computer's secure keychain or a private settings file, never inside the code, and never show them on screen.
-- Save your progress with git after each working piece, so nothing is ever lost.
+- Save your progress with git after each working piece, and upload it to my private GitHub backup if one is connected, so nothing is ever lost.
+- If my website is connected (look in "_ai/website"), include a Website page and use what you learned there.
 
 PHASE 4. PROVE IT WORKS
 - Start the app, open it in the browser (use the Claude in Chrome extension), and click every button and page yourself.
@@ -540,7 +643,19 @@ RULES, ALWAYS
   function save() { try { localStorage.setItem(KEY, JSON.stringify(st)) } catch (e) {} }
 
   /* ---------- Name and computer ---------- */
-  function clean(s) { return String(s || '').replace(/[\\\/:*?"<>|'`$]/g, '').replace(/\s+/g, ' ').trim() }
+  /* Folder names: keep what Mac and Windows both allow, and drop the few
+     characters that would break the pasted shell line (" ` $ ! and backslash). */
+  function clean(s) { return String(s || '').replace(/[\\\/:*?"<>|`$!]/g, '').replace(/\s+/g, ' ').trim() }
+  function slug(s) { return clean(s).toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'my-business' }
+  var SITES = {
+    Wix: ['https://manage.wix.com', 'Wix has an official API with API keys; use the safest official route'],
+    Squarespace: ['https://account.squarespace.com', 'Squarespace has few automatic options, so plan to make approved changes through its editor in Chrome'],
+    WordPress: ['{{URL}}/wp-admin', 'WordPress application passwords and its REST API'],
+    Shopify: ['https://admin.shopify.com', 'a Shopify custom app with only the permissions it needs'],
+    GoDaddy: ['https://sso.godaddy.com', 'whatever the GoDaddy builder allows, most likely approved changes through its editor in Chrome'],
+    Webflow: ['https://webflow.com/dashboard', 'the Webflow API with a site token'],
+    other: ['my website, and first find out what it is built on', 'find out what it is built on, then use its official route']
+  }
   function biz() { return clean($('biz').value) }
   var os = st.os || (/Win/i.test(navigator.platform || navigator.userAgent) ? 'win' : 'mac')
   function setOs(v) {
@@ -554,8 +669,21 @@ RULES, ALWAYS
     all('.pname').forEach(function (e) { e.textContent = shown })
     $('briefPrompt').value = $('briefT').content.textContent.split('{{P}}').join(p || 'my business')
     $('buildPrompt').value = $('buildT').content.textContent.split('{{P}}').join(shown)
-    $('aliasCmd').textContent = 'echo "alias ai=\'cd \\"$HOME/Desktop/' + shown + '\\" && claude --dangerously-skip-permissions --model opus --chrome\'" >> ~/.zshrc; source ~/.zshrc; echo Ready. Now type: ai'
+    /* An apostrophe sits inside the alias's single quotes, so it is written as '\'' */
+    $('aliasCmd').textContent = 'echo "alias ai=\'cd \\"$HOME/Desktop/' + shown.split("'").join("'\\''") + '\\" && claude --dangerously-skip-permissions --model opus --chrome\'" >> ~/.zshrc; source ~/.zshrc; echo Ready. Now type: ai'
+    $('githubPrompt').value = fill($('githubT'), { P: shown, OS: os === 'win' ? 'Windows' : 'Mac (macOS)', SLUG: slug(shown) })
+    var site = st.site || 'other', url = clean2($('siteurl').value) || '(ask me for it)'
+    var none = site === 'none', info = SITES[site] || SITES.other
+    $('siteurlcard').hidden = none; $('siteLogin').hidden = none
+    all('#sitepick button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-site') === st.site)) })
+    $('sitePrompt').value = none ? fill($('siteNoneT'), { P: shown })
+      : fill($('siteT'), { URL: url, SITE: site === 'other' ? 'not sure, please find out' : site, LOGIN: info[0].split('{{URL}}').join(/^https?:/.test(url) ? url.replace(/\/+$/, '') : 'https://' + url.replace(/\/+$/, '')), HOW: info[1] })
   }
+  function clean2(s) { return String(s || '').trim().replace(/\s+/g, '') }
+  function fill(t, v) { var x = t.content.textContent; Object.keys(v).forEach(function (k) { x = x.split('{{' + k + '}}').join(v[k]) }); return x }
+  $('siteurl').value = st.siteurl || ''
+  $('siteurl').addEventListener('input', function () { st.siteurl = $('siteurl').value; save(); paint() })
+  all('#sitepick button').forEach(function (b) { b.addEventListener('click', function () { st.site = b.getAttribute('data-site'); save(); paint(); play(steps[at]) }) })
   $('biz').value = st.biz || ''
   $('biz').addEventListener('input', function () { st.biz = $('biz').value; save(); paint() })
 
@@ -665,6 +793,26 @@ RULES, ALWAYS
         act: [['cap', 'Add the extension'], ['move', 'x-add'], ['tap', 'x-add'], ['set', 'x-add', 'Added \u2713'], ['wait', 600]] },
       { kind: 'browser', url: os === 'mac' ? 'System Settings \u00b7 Privacy & Security' : 'Settings', html: '<div class="m-h">' + (os === 'mac' ? 'Accessibility' : 'Permissions') + '</div><div class="m-toggle">' + (os === 'mac' ? 'Warp' : 'Claude') + '<span class="m-sw" id="x-sw1"></span></div><div class="m-toggle">Google Chrome<span class="m-sw" id="x-sw2"></span></div>',
         act: [['cap', 'Switch on every permission it asks for'], ['move', 'x-sw1'], ['tap', 'x-sw1'], ['on', 'x-sw1'], ['move', 'x-sw2'], ['tap', 'x-sw2'], ['on', 'x-sw2'], ['wait', 1400]] } ],
+    github: [
+      { kind: 'browser', url: 'github.com/signup', html: '<div class="m-h">Create your free account</div><div class="m-in" id="x-em"></div><div class="m-in" id="x-pw"></div><div style="text-align:center"><span class="m-btn gr" id="x-go">Create account</span></div>',
+        act: [['cap', 'You make the account'], ['move', 'x-em'], ['tap', 'x-em'], ['type', 'x-em', 'hello@' + slug(p).replace(/-/g, '') + '.com'], ['move', 'x-pw'], ['tap', 'x-pw'], ['type', 'x-pw', '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'], ['move', 'x-go'], ['tap', 'x-go'], ['wait', 500]] },
+      { kind: 'term', title: 'Warp', html: '<span class="t-o">\u273b Claude</span> <span class="t-m">Opus \u00b7 ' + esc(p) + '</span>\n\n<span class="t-g">&gt;</span> <span id="x-t"></span><span class="caret"></span>\n\n<span id="x-out"></span>',
+        act: [['cap', 'Claude does the rest'], ['type', 'Set up GitHub backups for this folder...'], ['out', '<span class="t-y">\u25cf Installing GitHub tools...</span>\n<span class="t-o">Your one-time code: 8F3A-21C9</span>\n<span class="t-m">Opening github.com/login/device for you</span>'], ['wait', 1500]] },
+      { kind: 'browser', url: 'github.com/login/device', html: '<div class="m-h">Enter the code</div><div class="m-in" id="x-code" style="text-align:center;font-weight:800;letter-spacing:.2em"></div><div style="text-align:center"><span class="m-btn gr" id="x-auth">Authorize</span></div>',
+        act: [['cap', 'Type the code Claude shows you'], ['move', 'x-code'], ['tap', 'x-code'], ['type', 'x-code', '8F3A-21C9'], ['move', 'x-auth'], ['tap', 'x-auth'], ['wait', 400]] },
+      { kind: 'term', title: 'Warp', html: '<span class="t-o">\u273b Claude</span>\n\n<span id="x-out"></span>',
+        act: [['out', '<span class="t-g">\u2714 Private repository ' + esc(slug(p)) + ' created</span>\n<span class="t-g">\u2714 Passwords, keys and huge videos kept out</span>\n<span class="t-g">\u2714 Daily backup at 9pm</span>\n<span class="t-g">\u2714 Test backup reached GitHub</span>'], ['cap', 'Backed up, every day, automatically'], ['wait', 2200]] } ],
+    website: st.site === 'none' ? [
+      { kind: 'term', title: 'Warp', html: '<span class="t-o">\u273b Claude</span>\n\n<span id="x-out"></span>',
+        act: [['cap', 'Claude builds a site from your folder'], ['out', '<span class="t-y">\u25cf Reading your brief, photos and logo...</span>\n<span class="t-g">\u2714 Plan ready: 5 pages. Say go?</span>'], ['wait', 1600]] },
+      { kind: 'browser', url: slug(p) + '.vercel.app', html: '<div class="m-site" style="width:100%"><div class="hero"></div><div class="m-h" style="text-align:left;margin:0 0 6px">' + esc(p) + '</div><div class="ln"></div><div class="ln" style="width:70%"></div><span class="m-btn gr" id="x-book">Book now</span></div>',
+        act: [['cap', 'It checks every button, then asks before going live'], ['move', 'x-book'], ['tap', 'x-book'], ['wait', 1600]] } ] : [
+      { kind: 'browser', url: clean2($('siteurl').value) || (slug(p) + '.com'), html: '<div class="m-site"><div class="hero"></div><div class="ln"></div><div class="ln" style="width:80%"></div><div class="ln" style="width:60%"></div></div><div class="m-claude" id="x-cl"><b>Claude</b><br><span id="x-say"></span></div>',
+        act: [['cap', 'Claude opens your site in Chrome'], ['type', 'x-say', 'Reading your 12 pages...'], ['wait', 600]] },
+      { kind: 'browser', url: (SITES[st.site] || SITES.Wix)[0].replace(/^https:\/\//, '').replace('{{URL}}', clean2($('siteurl').value) || 'yoursite.com'), html: '<div class="m-h">Log in</div><div class="m-in" id="x-em"></div><div class="m-in" id="x-pw"></div><div style="text-align:center"><span class="m-btn" id="x-li">Log in</span></div>',
+        act: [['cap', 'You log in yourself. Claude never sees your password'], ['move', 'x-em'], ['tap', 'x-em'], ['type', 'x-em', 'you@' + slug(p).replace(/-/g, '') + '.com'], ['move', 'x-pw'], ['tap', 'x-pw'], ['type', 'x-pw', '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'], ['move', 'x-li'], ['tap', 'x-li'], ['wait', 400]] },
+      { kind: 'browser', url: clean2($('siteurl').value) || (slug(p) + '.com'), html: '<div class="m-site"><div class="hero"></div><div class="ln"></div><div class="ln" style="width:80%"></div></div><div class="m-claude"><b>Claude</b><br><span id="x-say"></span><br><br><span class="m-btn gr" id="x-ok">Approve</span></div>',
+        act: [['cap', 'It suggests fixes. You approve each one'], ['type', 'x-say', 'Found 10 ways to get more bookings. #1: add a Book now button on the home page.'], ['move', 'x-ok'], ['tap', 'x-ok'], ['wait', 1400]] } ],
     build: [
       term('<span class="t-o">\u273b Claude</span> <span class="t-m">Opus \u00b7 ' + esc(p) + '</span>\n\n<span class="t-g">&gt;</span> <span id="x-t"></span><span class="caret"></span>\n\n<span id="x-out"></span>') ],
     done: [
@@ -694,7 +842,9 @@ RULES, ALWAYS
       cur.style.left = (b.left - a.left + b.width * (fx == null ? .5 : fx)) + 'px'; cur.style.top = (b.top - a.top + b.height * (fy == null ? .55 : fy)) + 'px' }
     var get = function (x) { return body.querySelector('#' + x) }
     async function act(a) {
-      var k = a[0], el = a[1] && typeof a[1] === 'string' ? get(a[1]) : null
+      var k = a[0], target = /^(move|tap|type|set|on|count|menu)$/.test(k) && typeof a[1] === 'string'
+      var el = target ? get(a[1]) : null
+      if (target && !el) console.error('launch movie ' + id + ': nothing called #' + a[1] + ' on screen')
       if (k === 'wait') return sleep(a[1])
       if (k === 'cap') { cap.textContent = a[1]; cap.style.opacity = 1; return sleep(250) }
       if (k === 'move' && el) { at(el, a[2], a[3]); return sleep(850) }
@@ -733,6 +883,8 @@ RULES, ALWAYS
     requestAnimationFrame(function () { loop() })
   }
 
+  /* For scripts/launch/test-launch.mjs: lets the test check every movie's targets. */
+  window.__launch = { D: D, TERM: TERM, clean: clean, slug: slug, state: function () { return st }, steps: steps.length }
   setOs(os); paint(); show(at)
 })()
 </script>
