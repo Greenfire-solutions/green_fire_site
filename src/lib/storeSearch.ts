@@ -17,7 +17,7 @@
    meet "book", and a short list of everyday synonyms widens the query. */
 
 export type Tags = { who?: string[]; does?: string[]; words?: string[] };
-export type Searchable = { id: string; title: string; line: string; bio: string; genre: string; tags?: Tags | null };
+export type Searchable = { id: string; title: string; line: string; bio: string; genre: string; tags?: Tags | null; mature?: boolean };
 export type Hit<T> = { app: T; score: number; why: string[] };
 
 /* Words that carry no meaning in a search like "I need an app to help me ...". */
@@ -43,6 +43,7 @@ const SYN: Record<string, string[]> = {
   post: ['posting', 'social'],
   posts: ['posting', 'social'],
   social: ['posting', 'instagram'],
+  track: ['song', 'music'],
   song: ['music', 'track'],
   songs: ['music', 'track'],
   beat: ['music', 'beat sync'],
@@ -75,11 +76,25 @@ const SYN: Record<string, string[]> = {
   schedule: ['scheduling', 'calendar'],
   calendar: ['scheduling'],
   website: ['site', 'page'],
+  candle: ['product', 'product seller', 'shop'],
+  candles: ['product', 'product seller', 'shop'],
+  soap: ['product', 'product seller', 'shop'],
+  jewelry: ['product', 'product seller', 'shop'],
+  jewellery: ['product', 'product seller', 'shop'],
+  etsy: ['product', 'product seller', 'shop'],
+  shop: ['product', 'small business'],
+  store: ['product', 'small business'],
+  handmade: ['product', 'product seller'],
+  sell: ['selling', 'product'],
 };
+
+/* British and American spellings meet: visualiser/visualizer, colour/color. */
+const SPELL: Record<string, string> = { colour: 'color', colours: 'colors', licence: 'license', licences: 'licenses', centre: 'center', organise: 'organize', favourite: 'favorite', programme: 'program', catalogue: 'catalog', theatre: 'theater', jewellery: 'jewelry' };
+const american = (w: string) => SPELL[w] || w.replace(/(?<=[a-z]{3})is(e|er|ers|es|ed|ing|ation|ations)$/, 'iz$1');
 
 /* A rough stem: enough to make plural, -ing and -ed forms meet. */
 export function stem(w: string): string {
-  let s = w.toLowerCase();
+  let s = american(w.toLowerCase());
   if (s.length > 5 && s.endsWith('ings')) s = s.slice(0, -4);
   else if (s.length > 4 && s.endsWith('ing')) s = s.slice(0, -3);
   else if (s.length > 4 && s.endsWith('ies')) s = s.slice(0, -3) + 'y';
@@ -135,6 +150,25 @@ function index(a: Searchable, genreLabel: string): Field[] {
 
 const cache = new WeakMap<object, Field[]>();
 
+/* How telling a word is: one that shows up in every app ("track", "manage")
+   says little; one only two apps carry ("visualiser") says a lot. The
+   classic inverse document frequency, kept between 0.4 and 1.6. */
+const rarityCache = new WeakMap<object, Map<string, number>>();
+function rarity(apps: Searchable[], fieldsOf: (a: Searchable) => Field[]) {
+  let r = rarityCache.get(apps);
+  if (r) return r;
+  const df = new Map<string, number>();
+  for (const a of apps) {
+    const seen = new Set<string>();
+    for (const f of fieldsOf(a)) for (const s of f.bag) seen.add(s);
+    for (const s of seen) df.set(s, (df.get(s) || 0) + 1);
+  }
+  const n = apps.length;
+  r = new Map([...df].map(([s, d]) => [s, Math.min(1.6, Math.max(0.4, (1.6 * Math.log((n + 1) / (d + 0.5))) / Math.log(n + 1)))]));
+  rarityCache.set(apps, r);
+  return r;
+}
+
 export function search<T extends Searchable>(apps: T[], query: string, genreLabel: (g: string) => string = () => ''): Hit<T>[] {
   const all = stems(query);
   if (!all.length) return [];
@@ -153,10 +187,15 @@ export function search<T extends Searchable>(apps: T[], query: string, genreLabe
   const uniq = terms.filter((t) => (seen.has(t.s) ? false : (seen.add(t.s), true)));
   const wanted = core.length;
 
+  const fieldsOf = (a: Searchable) => {
+    let f = cache.get(a);
+    if (!f) cache.set(a, (f = index(a, genreLabel(a.genre))));
+    return f;
+  };
+  const rare = rarity(apps, fieldsOf);
   const hits: Hit<T>[] = [];
   for (const a of apps) {
-    let fields = cache.get(a);
-    if (!fields) cache.set(a, (fields = index(a, genreLabel(a.genre))));
+    const fields = fieldsOf(a);
     let score = 0;
     const why: { text: string; w: number }[] = [];
 
@@ -192,12 +231,20 @@ export function search<T extends Searchable>(apps: T[], query: string, genreLabe
         }
       }
       if (best) {
+        best *= rare.get(t.s) ?? 1.2;
         score += best * t.weight;
         if (t.weight === 1) matched++;
         if (bestWhy) why.push({ text: bestWhy, w: best * t.weight });
       }
     }
     if (!score) continue;
+    /* An adult app only comes up when the visitor names it: its title or a
+       whole who/does tag in the query. "professional" alone, or a word in
+       its bio, never shows it to someone looking for something else. */
+    if (a.mature) {
+      const named = fields.slice(0, 3).some((f, i) => f.phrases.some((p) => p.stems.length && (i === 0 ? p.stems.every((s) => qs.includes(` ${s} `)) : qs.includes(` ${p.stems.join(' ')} `))));
+      if (!named) continue;
+    }
     /* An app that answers every part of the query beats one that answers one
        part loudly. */
     if (wanted > 1) score *= 0.5 + (0.5 * matched) / wanted;
@@ -207,7 +254,7 @@ export function search<T extends Searchable>(apps: T[], query: string, genreLabe
   hits.sort((x, y) => y.score - x.score);
   if (!hits.length) return hits;
   /* Drop the long tail: anything far below the best match is noise. */
-  const floor = Math.max(2, hits[0].score * 0.18);
+  const floor = Math.max(1.2, hits[0].score * 0.18);
   return hits.filter((h) => h.score >= floor);
 }
 

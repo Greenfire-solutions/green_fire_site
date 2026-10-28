@@ -20,6 +20,10 @@ export type StoreApp = {
   buy_url?: string | null;
   /* Search tags from the operator's store-tags.mjs: who it is for, what it does, plain words. */
   tags?: { who?: string[]; does?: string[]; words?: string[] } | null;
+  /* Shown in search only when asked for by name (store.mature in the operator's policy). */
+  mature?: boolean;
+  /* Other islands it also belongs to, for the "Find yours" chips (store.also_genres). */
+  also?: string[];
 };
 export type Genre = { label: string; sector?: string };
 

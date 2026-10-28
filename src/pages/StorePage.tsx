@@ -191,8 +191,9 @@ export function StorePage() {
   const hov = hover ? byId.get(hover) || null : null;
   const ready = apps.filter((a) => a.ready && !a.free).length;
   const soon = apps.filter((a) => !a.ready).length;
-  const shown = (a: StoreApp) => (!genre || a.genre === genre) && (!readyOnly || a.ready);
-  const shelf = apps.filter((a) => a.ready && !a.free && (!genre || a.genre === genre)).sort(byRank);
+  const inGenre = (a: StoreApp, g: string) => a.genre === g || !!a.also?.includes(g);
+  const shown = (a: StoreApp) => (!genre || inGenre(a, genre)) && (!readyOnly || a.ready);
+  const shelf = apps.filter((a) => a.ready && !a.free && (!genre || inGenre(a, genre))).sort(byRank);
   const memberTop = Math.max(0, ...apps.filter((a) => a.ready && !a.free && a.access === 'member').map((a) => a.price_usd));
   const is3d = view === '3d';
   const plans = cat?.plans || {};
@@ -290,7 +291,7 @@ export function StorePage() {
                   className="rounded-full px-3 py-1 text-xs font-semibold"
                   style={genre === g ? { background: GENRE_COLOR[g], color: '#0a0a0a' } : { background: `${GENRE_COLOR[g]}1a`, color: GENRE_COLOR[g] }}
                 >
-                  {WHO[g] || info.label} <span className="opacity-70">{apps.filter((a) => a.genre === g).length}</span>
+                  {WHO[g] || info.label} <span className="opacity-70">{apps.filter((a) => inGenre(a, g)).length}</span>
                 </button>
               ))}
               {!is3d && (
@@ -349,7 +350,7 @@ export function StorePage() {
           <div className="px-4 pb-16 pt-6 md:px-8">
             <div className="mx-auto max-w-7xl space-y-10">
               {genres
-                .filter(([g]) => apps.some((a) => a.genre === g && shown(a)))
+                .filter(([g]) => apps.some((a) => inGenre(a, g) && shown(a)))
                 .map(([g, info]) => (
                   <div key={g}>
                     <h2 className="mb-3 text-sm font-bold uppercase tracking-widest" style={{ color: GENRE_COLOR[g] }}>
@@ -357,7 +358,7 @@ export function StorePage() {
                     </h2>
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {apps
-                        .filter((a) => a.genre === g && shown(a))
+                        .filter((a) => inGenre(a, g) && shown(a))
                         .sort(byRank)
                         .map((a) => (
                           <button key={a.id} onClick={() => open(a.id)} className={`group overflow-hidden rounded-2xl border bg-white/[0.03] text-left transition hover:border-white/25 ${a.ready ? 'border-white/10' : 'border-white/5 opacity-80'}`}>
@@ -538,7 +539,7 @@ function StoreSearch({ apps, genreLabel, onOpen, onAsk }: { apps: StoreApp[]; ge
     if (e.key === 'ArrowDown') { e.preventDefault(); setActive((i) => Math.min(i + 1, hits.length - 1)); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((i) => Math.max(i - 1, 0)); }
     else if (e.key === 'Enter' && hits[active]) { e.preventDefault(); pick(hits[active].app.id); }
-    else if (e.key === 'Escape') { e.stopPropagation(); if (q) setQ(''); else { setFocus(false); inputRef.current?.blur(); } }
+    else if (e.key === 'Escape') { e.stopPropagation(); setQ(''); setFocus(false); inputRef.current?.blur(); }
   };
   const open = focus && (typed || starts.length > 0);
 
