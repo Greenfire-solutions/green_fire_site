@@ -45,6 +45,10 @@ input[type=email]{flex:1;min-width:0;font:18px Inter,sans-serif;color:#fff;backg
 button{font:800 17px Inter,sans-serif;border:0;border-radius:12px;padding:12px 18px;background:var(--g);color:#052e1f;cursor:pointer}
 .hp{position:absolute;left:-9999px}
 #sent{margin:10px 0 0;color:var(--g2)}
+.faq{margin:0 0 32px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 16px;margin:0 0 10px}
+.faq summary{cursor:pointer;font-weight:700;padding:12px 0}
+.faq p{margin:0 0 12px;color:var(--mute)}
 </style>
 </head>
 <body>
@@ -57,7 +61,7 @@ button{font:800 17px Inter,sans-serif;border:0;border-radius:12px;padding:12px 1
     <div class="card main">
       <h2>The course</h2>
       <div class="price">$100 <small>one time, yours to keep</small></div>
-      <p class="mute">Go at your own pace. Your progress saves on your computer.</p>
+      <p class="mute">Go at your own pace. Stuck on a step? Press Ask Jordan and he emails you back. Not working for you? Full refund within 14 days.</p>
       <a class="btn" href="{{BUY}}">Get the course</a>
     </div>
     <div class="card">
@@ -76,6 +80,22 @@ button{font:800 17px Inter,sans-serif;border:0;border-radius:12px;padding:12px 1
     <li>Automatic daily backups to a private GitHub, and your website plugged in, whatever it is built on.</li>
     <li>A weekly tune-up prompt and a setup checkup prompt, so it keeps getting better without you needing help.</li>
   </ol>
+  <h2>What you need</h2>
+  <ol>
+    <li>A Mac or a Windows PC (not a phone, tablet or Chromebook).</li>
+    <li>A Claude Pro plan, $20 a month, paid to Anthropic. Claude is the AI that does the building. The course walks you through signing up.</li>
+    <li>The files about your business: plans, price lists, photos, exports, notes. Messy is fine.</li>
+    <li>About an hour for setup, then Claude builds while you do other things. On the $20 plan it may ask you to wait a few hours partway through; you come back and type "keep going".</li>
+  </ol>
+  <h2>Questions</h2>
+  <div class="faq">
+    <details><summary>I am not technical. Can I really do this?</summary><p>Yes. Every step has a short animated demo, a read-aloud button and buttons that copy exactly what to paste. Claude does the technical parts. It was written for people who have never opened a terminal.</p></details>
+    <details><summary>What if I get stuck?</summary><p>Every step has a Still stuck? box with fixes to try in order, and an Ask Jordan button that sends him your message and the step you are on. He emails you back, usually the same day.</p></details>
+    <details><summary>What does Claude actually build?</summary><p>An app that runs on your own computer, made for your business from your own files: a morning briefing of what needs you, one inbox, drafted replies and posts, money owed, and helpers that run on a schedule. What it builds depends on what is in your folder.</p></details>
+    <details><summary>Is my business information private?</summary><p>Your files stay on your computer and in your own private GitHub backup. Claude reads them to do the work, under your own Claude account. Greenfire never sees your files, only which step of the course you are on.</p></details>
+    <details><summary>What is the refund policy?</summary><p>If you go through the steps and it does not work for you, reply to your receipt email within 14 days and you get all $100 back. The Claude plan is paid to Anthropic and is separate.</p></details>
+    <details><summary>Would I rather have Jordan do it with me?</summary><p>See the one to one options on <a href="/start">greenfire.earth/start</a>.</p></details>
+  </div>
   <div class="box">
     <h2>Already paid?</h2>
     <p class="mute">Open the link in your receipt email. Builder members: open your member page and press the course button. Lost it? Type the email you paid with and we will send your link again.</p>

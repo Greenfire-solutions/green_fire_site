@@ -37,9 +37,12 @@ const SITES = ['Wix', 'Squarespace', 'WordPress', 'Shopify', 'GoDaddy', 'Webflow
 const cleanName = (s) => s.replace(/[\\/:*?"<>|`$!]/g, '').replace(/\s+/g, ' ').trim()
 
 /* ---------------- static server: private/ with the /launch rewrite ---------------- */
+const apiCalls = []
 const TYPES = { '.html': 'text/html; charset=utf-8', '.svg': 'image/svg+xml', '.js': 'text/javascript', '.css': 'text/css' }
 const server = createServer((req, res) => {
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname)
+  /* The course reports its step and sends help to /api/store; here that just records the call. */
+  if (p === '/api/store') { let body = ''; req.on('data', (c) => { body += c }); req.on('end', () => { apiCalls.push({ action: new URL(req.url, 'http://x').searchParams.get('action'), body }); res.writeHead(200, { 'content-type': 'application/json' }); res.end('{"ok":true}') }); return }
   if (p === '/launch' || p === '/launch/') p = '/launch/index.html'
   const f = join(ROOT, p)
   if (!f.startsWith(ROOT) || !existsSync(f)) { res.writeHead(404); return res.end() }
@@ -71,6 +74,8 @@ rd.on('data', (chunk) => {
 })
 const send = (method, params = {}, sessionId) => new Promise((resolve, reject) => {
   const id = ++nextId; pending.set(id, { resolve, reject })
+  /* Chrome that stops answering fails the run instead of hanging it forever. */
+  setTimeout(() => { if (pending.delete(id)) reject(new Error(`Chrome did not answer ${method} in 60s`)) }, 60000).unref()
   wr.write(JSON.stringify({ id, method, params, ...(sessionId ? { sessionId } : {}) }) + '\0')
 })
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -219,6 +224,24 @@ await evaluate(`(async()=>{const b=document.getElementById('biz');b.value='Retur
 await load(BASE)
 const back = await evaluate(`({id:document.querySelector('.step.on').dataset.id,name:document.getElementById('biz').value,win:document.body.classList.contains('os-win')})`)
 ok(back.id === 'code' && back.name === 'Return Test' && back.win, 'reload keeps step, name and computer: ' + JSON.stringify(back))
+// what reaches Greenfire: the step and computer, never the business name
+ok(apiCalls.some((c) => c.action === 'progress' && /"step":"code"/.test(c.body) && /"os":"win"/.test(c.body)), 'progress reports the step and computer')
+const leaked = apiCalls.filter((c) => c.action === 'progress' && [...NAMES, 'Return Test'].some((n) => cleanName(n) && c.body.includes(cleanName(n))))
+ok(!leaked.length, 'the business name never leaves the page: ' + JSON.stringify(leaked.slice(0, 1)))
+const help = await evaluate(`(async()=>{const steps=[...document.querySelectorAll('.step')];const boxes=steps.filter(s=>s.querySelector('details.askj')).length;
+  const d=document.querySelector('.step.on details.askj');d.open=true;const b=d.querySelector('button');b.click();await new Promise(r=>setTimeout(r,50));const emptyBlocked=d.querySelector('.sent').hidden;
+  d.querySelector('textarea').value='I see a red error';b.click();await new Promise(r=>setTimeout(r,300));
+  return {boxes,steps:steps.length,emptyBlocked,sent:d.querySelector('.sent').textContent,cleared:d.querySelector('textarea').value===''}})()`)
+ok(help.boxes === help.steps - 1, `an Ask Jordan box on every step but the last (${help.boxes}/${help.steps - 1})`)
+ok(help.emptyBlocked, 'an empty help message is not sent')
+ok(/Sent/.test(help.sent) && help.cleared && apiCalls.some((c) => c.action === 'help' && /"step":"code"/.test(c.body) && /red error/.test(c.body)), 'help reaches Jordan with the step: ' + help.sent)
+const fb = await evaluate(`(async()=>{const s=[...document.querySelectorAll('.step')];document.querySelectorAll('.step').forEach(x=>x.classList.remove('on'));s[s.length-1].classList.add('on');
+  document.getElementById('fbSend').click();const need=document.getElementById('fbSent').textContent;
+  document.querySelector('[data-fb=partly]').click();document.getElementById('fbText').value='It built a dashboard';document.getElementById('fbSend').click();await new Promise(r=>setTimeout(r,300));
+  return {need,done:document.getElementById('fbSent').textContent,noActivate:!document.querySelector('.step[data-id=done] a[href="/activate"]')}})()`)
+ok(/Pick one/.test(fb.need), 'feedback asks for an answer first')
+ok(/Thank you/.test(fb.done) && apiCalls.some((c) => c.action === 'feedback' && /"result":"partly"/.test(c.body)), 'feedback reaches Jordan')
+ok(fb.noActivate, 'the last step no longer sends a $100 buyer to the $500 questionnaire')
 // storage blocked (private window): the page must still work
 await send('Page.addScriptToEvaluateOnNewDocument', { source: "Object.defineProperty(window,'localStorage',{get(){throw new Error('blocked')}})" }, S)
 errors.length = 0; await load(BASE + '?private')

@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { r2GetText, r2Put, r2PublicUrl, r2PresignPut, r2Configured, secretName } from './_lib/r2.js';
+import { r2GetText, r2Put, r2PublicUrl, r2PresignPut, r2Configured, r2List, secretName } from './_lib/r2.js';
 import { requireAdmin } from './_lib/auth.js';
 import { writeLead } from './_lib/storage.js';
 
@@ -13,6 +13,8 @@ import { writeLead } from './_lib/storage.js';
      GET  ?action=account&s=     what a checkout bought: one app, or a plan
      GET  ?action=download&s=&app=   the download, after the payment is checked
      GET  ?action=launch[&s=]    /launch: the setup course for a paid key, else its sales page
+     POST ?action=progress|help|feedback   a course student's step, "ask Jordan", "did it work" (course key only)
+     GET  ?action=students       every course student's record, for the operator (admin only)
      POST ?action=claim          a Store member takes one of this month's 2 picks
      POST ?action=reserve        a visitor asks for a setup, or to be told
      POST ?action=resend         "I lost my link": the operator emails it
@@ -136,12 +138,69 @@ const COOKIE = 'gf_launch';
 const page = (name: string) => readFileSync(join(process.cwd(), 'private', 'launch', name), 'utf8');
 const esc = (t: string) => t.replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch] as string);
 
+/* A course student's record (2026-10-28, so Jordan can see who is stuck and
+   help). Kept at a secret name per checkout, like the claims. Only the step
+   they are on, their computer, and what they choose to send: the business
+   name and their files never leave their computer. */
+type Student = {
+  email: string | null; kind: string; os: string; step: string; n: number; total: number; max_n: number;
+  first_at: string; last_at: string; trail: { step: string; at: string }[];
+  help: { at: string; step: string; message: string }[]; feedback: { at: string; result: string; text: string } | null;
+};
+const studentKey = (sid: string) => `launch/students/${secretName('student', sid)}.json`;
+const cookieKey = (req: VercelRequest) => {
+  const v = (String(req.headers.cookie || '').match(new RegExp(`(?:^|;\\s*)${COOKIE}=([^;]+)`)) || [])[1] || '';
+  return SESSION.test(v) ? v : '';
+};
+async function student(req: VercelRequest) {
+  const sid = cookieKey(req);
+  if (!sid) return null;
+  const a = await account(sid);
+  if (!a.course) return null;
+  let rec: Student | null = null;
+  try { rec = JSON.parse((await r2GetText(studentKey(sid))) || 'null'); } catch { rec = null; }
+  const at = new Date().toISOString();
+  return {
+    sid,
+    rec: rec || { email: a.email || null, kind: a.kind === 'plan' ? 'builder' : 'course', os: '', step: 'welcome', n: 0, total: 0, max_n: 0, first_at: at, last_at: at, trail: [], help: [], feedback: null },
+    save: (r: Student) => r2Put(studentKey(sid), JSON.stringify({ ...r, last_at: new Date().toISOString() }), 'application/json'),
+  };
+}
+
+async function courseAction(action: string, req: VercelRequest, res: VercelResponse) {
+  res.setHeader('Cache-Control', 'no-store');
+  const b = (typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {}) as Record<string, unknown>;
+  try {
+    const st = await student(req);
+    if (!st) return res.status(403).json({ error: 'Open the course from the link in your receipt email first.' });
+    const r = st.rec;
+    const at = new Date().toISOString();
+    const step = field(b.step, 40).replace(/[^a-z-]/g, '') || r.step;
+    if (action === 'progress') {
+      const n = Math.max(0, Math.min(50, Number(b.n) || 0));
+      if (step !== r.step) r.trail = [...r.trail, { step, at }].slice(-60);
+      Object.assign(r, { step, n, total: Math.max(0, Math.min(50, Number(b.total) || r.total)), max_n: Math.max(r.max_n, n), os: /^(mac|win)$/.test(String(b.os)) ? String(b.os) : r.os });
+    } else if (action === 'help') {
+      const message = String(b.message ?? '').trim().slice(0, 2000);
+      if (!message) return res.status(400).json({ error: 'Tell Jordan what you see, in a few words.' });
+      r.help = [...r.help, { at, step, message }].slice(-30);
+    } else {
+      const result = /^(yes|partly|no)$/.test(String(b.result)) ? String(b.result) : '';
+      if (!result) return res.status(400).json({ error: 'Pick one answer.' });
+      r.feedback = { at, result, text: String(b.text ?? '').trim().slice(0, 2000) };
+    }
+    await st.save(r);
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    return res.status(502).json({ error: e instanceof Error && /Stripe|R2/.test(e.message) ? 'Could not save that just now. Please try again in a minute.' : 'Something went wrong.' });
+  }
+}
+
 async function launch(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'private, no-store');
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   const fromUrl = String(req.query.s || '');
-  const fromCookie = (String(req.headers.cookie || '').match(new RegExp(`(?:^|;\\s*)${COOKIE}=([^;]+)`)) || [])[1] || '';
-  const sid = SESSION.test(fromUrl) ? fromUrl : SESSION.test(fromCookie) ? fromCookie : '';
+  const sid = SESSION.test(fromUrl) ? fromUrl : cookieKey(req);
   let note = fromUrl && !sid ? 'That link is not complete. Use the whole link from your receipt email.' : '';
   if (sid) {
     try {
@@ -195,6 +254,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   };
 
   if (req.method === 'GET' && action === 'launch') return launch(req, res);
+  if (req.method === 'POST' && ['progress', 'help', 'feedback'].includes(action)) return courseAction(action, req, res);
+  if (req.method === 'GET' && action === 'students') {
+    if (!requireAdmin(req, res)) return;
+    res.setHeader('Cache-Control', 'no-store');
+    try {
+      const keys = (await r2List('launch/students/')).filter((k) => k.key.endsWith('.json'));
+      const recs = await Promise.all(keys.map(async (k) => ({ id: k.key.split('/').pop()!.replace(/\.json$/, ''), ...JSON.parse((await r2GetText(k.key)) || '{}') })));
+      return res.status(200).json({ students: recs.sort((x, y) => String(y.last_at).localeCompare(String(x.last_at))) });
+    } catch (e) {
+      return fail(e);
+    }
+  }
 
   if (req.method === 'GET' && action === 'account') {
     res.setHeader('Cache-Control', 'no-store');

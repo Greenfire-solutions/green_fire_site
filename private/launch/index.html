@@ -81,6 +81,14 @@ details.stuck{border:1px solid #57534e;border-radius:14px;padding:4px 16px;margi
 details.stuck summary{cursor:pointer;font-weight:800;padding:12px 0;color:#fde68a;list-style:none}
 details.stuck summary::before{content:"\1F6DF  "}
 details.stuck[open]{padding-bottom:12px}
+details.askj{border:1px dashed #44403c;border-radius:14px;padding:2px 16px;margin:14px 0}
+details.askj summary{cursor:pointer;font-weight:700;padding:10px 0;color:var(--g2);list-style:none}
+details.askj[open]{padding-bottom:12px}
+textarea.ask{width:100%;min-height:96px;background:var(--bg);border:2px solid #44403c;border-radius:12px;color:#fff;padding:12px;font:17px/1.5 Inter,sans-serif;margin:8px 0}
+.fbpick{grid-template-columns:repeat(3,1fr)}
+.fbpick button{min-height:64px;font-size:16px}
+@media (max-width:520px){.fbpick{grid-template-columns:1fr}}
+.sent{color:var(--g2);margin:8px 0 0}
 .read{background:transparent;border:1px solid #44403c;color:var(--ink);border-radius:99px;padding:6px 14px;font:600 15px Inter,sans-serif;cursor:pointer;margin-left:6px;vertical-align:middle}
 .read.live{border-color:var(--g);color:var(--g2)}
 .check{display:flex;gap:10px;align-items:center;font-weight:700;margin:12px 0;cursor:pointer}
@@ -184,7 +192,7 @@ body.os-win .screen .chrome i{display:none}
       <button type="button" data-pick="win" aria-pressed="false"><span>&#8862;</span>Windows PC</button>
     </div>
   </div>
-  <div class="note">Set aside about an hour. You will need your email, a card for the $20 Claude plan, and the files about your business (they can be messy, that is fine). Your progress saves on this device, so you can stop and come back anytime.</div>
+  <div class="note">Set aside about an hour. You will need your email, a card for the $20 Claude plan, and the files about your business (they can be messy, that is fine). Your progress saves on this device, so you can stop and come back anytime. On build day the $20 plan may ask you to wait a few hours partway through. That is normal: come back and type <b>keep going</b>.</div>
   <div class="nav"><button class="btn wide" data-next>Let's go &rarr;</button></div>
 </section>
 
@@ -554,14 +562,25 @@ body.os-win .screen .chrome i{display:none}
     <textarea class="prompt" id="fixPrompt" readonly style="height:120px">Something is not working. Here is what I see: [describe it or paste the error]. Find out why, fix it yourself, test that the fix worked, and then tell me in one plain sentence what was wrong.</textarea>
     <button class="btn small" data-copy="fixPrompt" data-label="Copy">Copy</button>
   </div>
-  <div class="card"><h3>Dial it in with Jordan</h3>
-    <p style="margin:0 0 6px">The biggest jump comes from one session tuning your agents to how you really work.</p>
-    <div class="row"><a class="btn" href="/start">Book your session</a><a class="btn ghost" href="/activate">Tell Jordan how it went</a></div>
+  <div class="card" id="fb"><h3>Did it work?</h3>
+    <p style="margin:0 0 8px">Tell Jordan how it went. He reads every answer.</p>
+    <div class="pick fbpick">
+      <button type="button" data-fb="yes" aria-pressed="false">Yes, my dashboard runs</button>
+      <button type="button" data-fb="partly" aria-pressed="false">Partly</button>
+      <button type="button" data-fb="no" aria-pressed="false">Not yet</button>
+    </div>
+    <textarea class="ask" id="fbText" placeholder="What did it build? Anything that confused you?"></textarea>
+    <button class="btn small" id="fbSend" type="button">Send to Jordan</button>
+    <p class="sent" id="fbSent" hidden></p>
+  </div>
+  <div class="card"><h3>Want it dialed in faster?</h3>
+    <p style="margin:0 0 6px">One session with Jordan tuning your agents to how you really work, or keep building with the Builder membership: every Greenfire app, a weekly clinic and a monthly review.</p>
+    <div class="row"><a class="btn" href="/start">Book a session</a><a class="btn ghost" href="/start#membership">See Builder</a></div>
   </div>
   <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn ghost" data-restart>Start over</button></div>
 </section>
 
-<p class="foot">Greenfire &middot; greenfire.earth &middot; Nothing you type here leaves your device.</p>
+<p class="foot">Greenfire &middot; greenfire.earth &middot; Your business name and files never leave your computer. Greenfire only sees which step you are on and anything you send to Jordan, so he can help if you get stuck.</p>
 </main>
 
 <template id="briefT">I am about to have an AI build a custom business dashboard and a team of AI agents for my business, {{P}}. It will work from a folder on my computer called "{{P}}", and the document you write now is the first thing it will read. It needs to hold everything about this business.
@@ -777,7 +796,7 @@ RULES, ALWAYS
     $('bar').style.width = (at / (steps.length - 1) * 100) + '%'
     $('count').textContent = at === 0 ? 'Start' : at === steps.length - 1 ? 'Done' : 'Step ' + at + ' of ' + (steps.length - 2)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    paint(); play(steps[at])
+    paint(); play(steps[at]); report()
   }
   all('[data-next]').forEach(function (b) { b.addEventListener('click', function () {
     if (at === 0 && !biz()) { $('biz').focus(); $('biz').placeholder = 'Type your business name first'; return }
@@ -932,6 +951,50 @@ RULES, ALWAYS
 
   /* For scripts/launch/test-launch.mjs: lets the test check every movie's targets. */
   window.__launch = { D: D, TERM: TERM, clean: clean, slug: slug, state: function () { return st }, steps: steps.length }
+  /* ---------- Jordan can see who is stuck (2026-10-28) ----------
+     Only the step and the computer go to the server, plus what the student
+     chooses to send. The business name and their files never do. */
+  function post(action, body) {
+    return fetch('/api/store?action=' + action, { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {} }).then(function (j) { if (!r.ok) throw new Error(j.error || 'Could not send that. Please try again.'); return j }) })
+  }
+  var lastSent = ''
+  function report() {
+    var id = steps[at].getAttribute('data-id'), sig = id + os
+    if (sig === lastSent) return
+    lastSent = sig
+    post('progress', { step: id, n: at, total: steps.length - 1, os: os }).catch(function () { lastSent = '' })
+  }
+  steps.forEach(function (sec) {
+    if (sec.getAttribute('data-id') === 'done') return
+    var d = document.createElement('details')
+    d.className = 'askj'
+    d.innerHTML = '<summary>Still stuck? Ask Jordan</summary><p style="margin:0;color:var(--mute);font-size:16px">Say what you see on your screen, or paste the error. Jordan gets it with the step you are on and emails you back.</p><textarea class="ask" placeholder="I clicked ... and now I see ..."></textarea><button class="btn small" type="button">Send to Jordan</button><p class="sent" hidden></p>'
+    var nav = sec.querySelector('.nav')
+    sec.insertBefore(d, nav)
+    var ta = d.querySelector('textarea'), b = d.querySelector('button'), out = d.querySelector('.sent')
+    b.addEventListener('click', function () {
+      if (!ta.value.trim()) { ta.focus(); return }
+      b.disabled = true
+      post('help', { step: sec.getAttribute('data-id'), message: ta.value }).then(function () {
+        ta.value = ''; out.textContent = 'Sent. Jordan will email you back, usually the same day.'; out.hidden = false
+      }).catch(function (e) { out.textContent = e.message; out.hidden = false }).then(function () { b.disabled = false })
+    })
+  })
+  var fbPick = ''
+  all('[data-fb]').forEach(function (b) { b.addEventListener('click', function () {
+    fbPick = b.getAttribute('data-fb')
+    all('[data-fb]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)) })
+  }) })
+  $('fbSend').addEventListener('click', function () {
+    var out = $('fbSent')
+    if (!fbPick) { out.textContent = 'Pick one of the three answers first.'; out.hidden = false; return }
+    $('fbSend').disabled = true
+    post('feedback', { step: 'done', result: fbPick, text: $('fbText').value }).then(function () {
+      out.textContent = 'Thank you. Jordan reads every one.'; out.hidden = false
+    }).catch(function (e) { out.textContent = e.message; out.hidden = false; $('fbSend').disabled = false })
+  })
+
   setOs(os); paint(); show(at)
 })()
 </script>
