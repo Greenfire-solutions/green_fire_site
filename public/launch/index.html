@@ -539,6 +539,16 @@ body.os-win .screen .chrome i{display:none}
       <li>Ask for anything in plain words. "Write this week's posts." "Who owes me money?" "Make a flyer for Saturday."</li>
     </ol>
   </div>
+  <div class="card"><h3><span class="who ai">Once a week, 10 minutes</span> Tune it up</h3>
+    <p style="margin:0">This is the session you would have with a coach. Claude interviews you about your week and improves your helpers to fit how you really work.</p>
+    <textarea class="prompt" id="tunePrompt" readonly style="height:170px">Weekly tune-up. Read CLAUDE.md, the logs and what my helpers did this week. Then interview me with five short questions, one at a time: what saved me time, what I ignored or redid by hand, what annoyed me, what new thing is coming up, and what I wish it did. After my answers, improve the agents, wording, schedules and dashboard to fit how I really work, test every change, update CLAUDE.md with what you learned about me, and finish with one plain sentence on what changed and how many hours it should save next week.</textarea>
+    <button class="btn small" data-copy="tunePrompt" data-label="Copy">Copy</button>
+  </div>
+  <div class="card"><h3><span class="who ai">Anytime</span> Check my whole setup</h3>
+    <p style="margin:0">Paste this if anything feels off, after a computer update, or once a month.</p>
+    <textarea class="prompt" id="doctorPrompt" readonly style="height:150px">Run a full checkup of my AI setup and fix what you can: Claude Code is up to date, you are on Opus, the Claude in Chrome extension is connected, the permissions you need are on, my GitHub backup ran in the last two days, every scheduled helper ran when it should have, the dashboard starts from my Desktop launcher, and every page and button works. Give me a short report: what was fine, what you fixed, and anything only I can do (with exactly what to click).</textarea>
+    <button class="btn small" data-copy="doctorPrompt" data-label="Copy">Copy</button>
+  </div>
   <div class="card"><h3>Something not working?</h3>
     <p style="margin:0">Paste this into Claude and describe what you see:</p>
     <textarea class="prompt" id="fixPrompt" readonly style="height:120px">Something is not working. Here is what I see: [describe it or paste the error]. Find out why, fix it yourself, test that the fix worked, and then tell me in one plain sentence what was wrong.</textarea>
@@ -636,6 +646,7 @@ In plain words, show me:
 Then stop and wait for me to say "go" or tell you what to change.
 
 PHASE 3. BUILD IT
+- First check what this computer already has. If Node.js is missing, install the current LTS version from nodejs.org's official download into my user folder (no admin password needed) and use that. Do the same for any other building block: pick a route that needs no admin password, and never ask me to install developer tools by hand.
 - Build the app inside "_ai/command-center" in this folder. It runs only on this computer and opens in my web browser. Make it beautiful, calm and simple, in my brand colours, readable by someone who has never used software like it.
 - Every button must do something real. No placeholders, no fake data. Where a section has nothing yet, say what will fill it and when.
 - Build the agents, skills, scripts and scheduled automations from the plan, starting with the biggest win.
