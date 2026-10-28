@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Launch Your AI Command Center | Greenfire</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="One step at a time, with a little movie for each one. Set up your own AI business assistant on your own computer.">
+<meta property="og:title" content="Launch your AI Command Center">
+<meta property="og:description" content="One step at a time, with a little movie for each one. No tech skills needed.">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+<!--
+  /launch : the self-serve setup for a Greenfire AI student. One step on screen
+  at a time, each with a looping mock-screen demo, big buttons, a "read it to me"
+  voice, and a "stuck?" box. The business name typed on the welcome screen flows
+  into every command and prompt. Progress saves on their device only.
+  No em dashes anywhere: Jordan reads them as machine written.
+-->
+<style>
+:root{color-scheme:dark;--g:#10b981;--g2:#34d399;--ink:#f5f5f4;--mute:#a8a29e;--card:#1c1917;--line:#292524;--bg:#0c0a09;--warn:#f59e0b}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.6 Inter,system-ui,sans-serif;
+ background-image:radial-gradient(900px 520px at 15% -10%,rgba(16,185,129,.14),transparent 60%)}
+a{color:var(--g2)}
+.top{position:sticky;top:0;z-index:5;background:rgba(12,10,9,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 16px}
+.top-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.brand{font-weight:800;color:var(--g);letter-spacing:.08em;font-size:13px;text-transform:uppercase;white-space:nowrap}
+.bar{flex:1;height:10px;background:#292524;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g),var(--g2));border-radius:99px;transition:width .5s ease}
+.count{font-size:14px;color:var(--mute);white-space:nowrap}
+main{max-width:760px;margin:0 auto;padding:22px 16px 80px}
+.step{display:none;animation:rise .35s ease}
+.step.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tag{color:var(--g);font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+h1{font-size:34px;line-height:1.15;margin:6px 0 10px;color:#fff}
+h2{font-size:28px;line-height:1.2;margin:4px 0 6px;color:#fff}
+.time{display:inline-block;font-size:14px;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:3px 12px;margin-bottom:12px}
+.lead{color:#e7e5e4;margin:0 0 14px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:18px;margin:14px 0}
+.card h3{margin:0 0 6px;font-size:18px;color:#fff}
+ol.do{margin:6px 0 0;padding-left:26px}
+ol.do li{margin:10px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:56px;padding:14px 22px;border-radius:14px;border:0;
+ background:var(--g);color:#04281b;font:800 18px Inter,sans-serif;text-decoration:none;cursor:pointer;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--g2);border:2px solid var(--g)}
+.btn.small{min-height:44px;padding:8px 16px;font-size:16px}
+.btn.wide{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 4px}
+.nav{display:flex;gap:10px;margin-top:22px}
+.nav .btn{flex:1}
+.nav .back{flex:0 0 auto}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.pick button{min-height:96px;border-radius:16px;border:2px solid #44403c;background:var(--bg);color:var(--ink);font:700 20px Inter,sans-serif;cursor:pointer}
+.pick button span{display:block;font-size:34px;line-height:1.2}
+.pick button[aria-pressed=true]{border-color:var(--g);background:rgba(16,185,129,.14);color:#fff}
+.say{position:relative}
+.say input{width:100%;font:20px Inter,sans-serif;color:#fff;background:var(--bg);border:2px solid #44403c;border-radius:14px;padding:16px 60px 16px 16px}
+.say input:focus{outline:none;border-color:var(--g)}
+.mic{display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:99px;border:1px solid #44403c;background:var(--card);color:var(--g);cursor:pointer;align-items:center;justify-content:center}
+.can-speak .mic{display:flex}
+.mic.live{background:#dc2626;color:#fff;border-color:#dc2626;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.6)}70%{box-shadow:0 0 0 12px rgba(220,38,38,0)}100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}}
+.cmd{display:flex;gap:8px;margin:10px 0}
+.cmd code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;background:#000;border:1px solid #44403c;border-radius:12px;padding:14px;color:#a7f3d0;font:15px ui-monospace,Menlo,Consolas,monospace}
+.copy{flex:none;min-width:84px;border-radius:12px;border:2px solid var(--g);background:transparent;color:var(--g2);font:800 16px Inter,sans-serif;cursor:pointer}
+.copy.done,.btn.done{background:var(--g);color:#04281b}
+textarea.prompt{width:100%;height:230px;background:#000;border:1px solid #44403c;border-radius:12px;color:#e7e5e4;padding:14px;font:14px/1.5 ui-monospace,Menlo,monospace;margin:8px 0}
+.note{border-left:4px solid var(--g);background:rgba(16,185,129,.07);padding:12px 14px;border-radius:0 12px 12px 0;margin:12px 0;font-size:16.5px}
+.note.warn{border-color:var(--warn);background:rgba(245,158,11,.08)}
+.pname{color:#fff;font-weight:800}
+[data-os]{display:none}
+body.os-mac [data-os=mac],body.os-win [data-os=win]{display:block}
+body.os-mac li[data-os=mac],body.os-win li[data-os=win]{display:list-item}
+body.os-mac span[data-os=mac],body.os-win span[data-os=win]{display:inline}
+details.stuck{border:1px solid #57534e;border-radius:14px;padding:4px 16px;margin:14px 0;background:#141110}
+details.stuck summary{cursor:pointer;font-weight:800;padding:12px 0;color:#fde68a;list-style:none}
+details.stuck summary::before{content:"\1F6DF  "}
+details.stuck[open]{padding-bottom:12px}
+.read{background:transparent;border:1px solid #44403c;color:var(--ink);border-radius:99px;padding:6px 14px;font:600 15px Inter,sans-serif;cursor:pointer;margin-left:6px;vertical-align:middle}
+.read.live{border-color:var(--g);color:var(--g2)}
+.check{display:flex;gap:10px;align-items:center;font-weight:700;margin:12px 0;cursor:pointer}
+.check input{width:26px;height:26px;accent-color:var(--g)}
+.list li{margin:6px 0}
+/* ---- The little movie: a mock screen with a moving cursor ---- */
+.screen{position:relative;border-radius:14px;overflow:hidden;border:1px solid #44403c;background:#fafaf9;color:#1c1917;margin:12px 0 6px;
+ box-shadow:0 18px 50px rgba(0,0,0,.45);aspect-ratio:16/10;font:14px/1.4 Inter,sans-serif;user-select:none}
+.screen .chrome{height:34px;display:flex;align-items:center;gap:6px;padding:0 10px;background:#e7e5e4;border-bottom:1px solid #d6d3d1}
+.screen .chrome i{width:11px;height:11px;border-radius:99px;background:#f87171;display:inline-block}
+.screen .chrome i:nth-child(2){background:#fbbf24}.screen .chrome i:nth-child(3){background:#34d399}
+.screen .url{flex:1;margin-left:10px;background:#fff;border-radius:7px;padding:3px 10px;font-size:12.5px;color:#44403c;white-space:nowrap;overflow:hidden}
+.screen .body{position:absolute;inset:34px 0 0 0;padding:16px;overflow:hidden}
+.screen.term{background:#0b0b0d;color:#e5e7eb}
+.screen.term .chrome{background:#1f1f23;border-color:#2a2a2e}
+.screen.term .url{background:transparent;color:#a1a1aa;text-align:center}
+.screen.term .body{font:13.5px/1.55 ui-monospace,Menlo,monospace;white-space:pre-wrap}
+.screen.desk{background:linear-gradient(135deg,#1e3a5f,#4c1d95)}
+.screen.desk .chrome{display:none}
+.screen.desk .body{inset:0}
+.cap{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:rgba(0,0,0,.82);color:#fff;font:700 15px Inter,sans-serif;padding:7px 14px;border-radius:99px;white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis;transition:opacity .3s}
+.cursor{position:absolute;left:60%;top:60%;width:22px;height:22px;pointer-events:none;transition:left .8s cubic-bezier(.45,.05,.3,1),top .8s cubic-bezier(.45,.05,.3,1);z-index:4;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+.cursor::after{content:"";position:absolute;left:-10px;top:-10px;width:22px;height:22px;border-radius:99px;background:rgba(16,185,129,.55);transform:scale(0);opacity:0}
+.cursor.tap::after{animation:tap .45s ease}
+@keyframes tap{0%{transform:scale(.2);opacity:1}100%{transform:scale(1.8);opacity:0}}
+.hl{outline:3px solid #10b981;outline-offset:2px;transition:outline .2s}
+.movie-head{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--mute)}
+.movie-head button{background:none;border:0;color:var(--g2);font:700 14px Inter,sans-serif;cursor:pointer}
+/* mock pieces */
+.m-h{font:800 20px Inter,sans-serif;text-align:center;margin:6px 0 14px}
+.m-plans{display:flex;gap:10px;justify-content:center}
+.m-card{flex:1;max-width:150px;border:1px solid #d6d3d1;border-radius:12px;padding:14px 10px;text-align:center;background:#fff}
+.m-card b{display:block;font-size:20px;margin:6px 0}
+.m-card.best{border:2px solid #d97757}
+.m-btn{display:inline-block;background:#1c1917;color:#fff;border-radius:8px;padding:7px 14px;font-weight:700;margin-top:6px}
+.m-btn.or{background:#d97757}
+.m-btn.gr{background:#10b981;color:#04281b}
+.m-in{border:1px solid #a8a29e;border-radius:8px;padding:9px 12px;background:#fff;min-height:38px;margin:8px auto;max-width:320px}
+.m-icons{display:flex;flex-wrap:wrap;gap:22px;padding:20px}
+.m-ic{width:84px;text-align:center;color:#fff;font-size:12.5px;font-weight:600;text-shadow:0 1px 3px #000}
+.m-ic .f{width:64px;height:50px;margin:0 auto 4px;border-radius:6px;background:linear-gradient(#7dd3fc,#38bdf8);position:relative}
+.m-ic .f::before{content:"";position:absolute;left:0;top:-7px;width:26px;height:9px;border-radius:4px 4px 0 0;background:#7dd3fc}
+.m-ic .d{width:44px;height:56px;margin:0 auto 4px;border-radius:4px;background:#fff;color:#1c1917;font:800 11px/56px Inter,sans-serif}
+.m-ic.pop{animation:pop .4s ease}
+@keyframes pop{0%{transform:scale(.3);opacity:0}100%{transform:none;opacity:1}}
+.m-menu{position:absolute;background:#f5f5f4;border:1px solid #a8a29e;border-radius:8px;padding:5px;min-width:150px;box-shadow:0 6px 20px rgba(0,0,0,.35);color:#1c1917}
+.m-menu div{padding:5px 10px;border-radius:5px}
+.m-chat{max-width:440px;margin:0 auto}
+.m-bub{background:#f5f5f4;border-radius:14px;padding:10px 12px;margin:8px 0;font-size:13px}
+.m-bub.me{background:#e0f2fe;margin-left:60px}
+.m-doc{display:inline-flex;align-items:center;gap:8px;border:1px solid #d6d3d1;border-radius:10px;padding:8px 12px;background:#fff;font-weight:700}
+.m-dash{display:grid;grid-template-columns:110px 1fr;gap:10px;height:100%}
+.m-side{background:#052e1f;color:#a7f3d0;border-radius:10px;padding:10px;font-size:12px;font-weight:700}
+.m-side div{padding:5px 0}
+.m-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-tile{background:#fff;border:1px solid #d6d3d1;border-radius:10px;padding:10px;font-size:12px}
+.m-tile b{display:block;font-size:20px;color:#047857}
+.m-toggle{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #d6d3d1;border-radius:10px;padding:10px 12px;margin:8px auto;max-width:360px}
+.m-sw{width:40px;height:22px;border-radius:99px;background:#d6d3d1;position:relative;transition:background .3s}
+.m-sw::after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:99px;background:#fff;transition:left .3s}
+.m-sw.on{background:#10b981}.m-sw.on::after{left:21px}
+.t-g{color:#34d399}.t-y{color:#fbbf24}.t-m{color:#a1a1aa}.t-o{color:#fb923c}
+.caret{display:inline-block;width:8px;height:15px;background:#e5e7eb;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.foot{margin-top:30px;text-align:center;color:#78716c;font-size:14px}
+@media (max-width:560px){h1{font-size:28px}h2{font-size:24px}body{font-size:17px}.screen{font-size:12px}.m-plans{gap:6px}.cap{font-size:13px}}
+@media (prefers-reduced-motion:reduce){.cursor{transition:none}.step{animation:none}}
+</style>
+</head>
+<body class="os-mac">
+<div class="top"><div class="top-in"><span class="brand">Greenfire</span><div class="bar"><i id="bar"></i></div><span class="count" id="count"></span></div></div>
+<main id="main">
+
+<!-- 0. Welcome -->
+<section class="step" data-id="welcome">
+  <div class="tag">Your AI Command Center</div>
+  <h1>Let's set up your own AI business assistant.</h1>
+  <p class="lead">One step at a time. Each step has a little movie that shows you exactly where to click, and a big green button that takes you there. If you can send an email, you can do this. <button class="read" data-read>&#128264; Read it to me</button></p>
+  <div class="card">
+    <h3>1. What is your business called?</h3>
+    <p style="margin:0 0 8px;color:var(--mute);font-size:16px">This name becomes your folder and fills in every step for you.<span class="speakhint"> Tap the microphone to say it.</span></p>
+    <div class="say"><input id="biz" type="text" autocomplete="organization" placeholder="e.g. Sunrise Bakery"><button class="mic" type="button" aria-label="Say it"><svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 1 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 0-2 0 4 4 0 0 1-8 0 1 1 0 1 0-2 0 6 6 0 0 0 5 5.91V20H8.5a1 1 0 1 0 0 2h7a1 1 0 1 0 0-2H13v-2.59a6 6 0 0 0 5-5.91Z"/></svg></button></div>
+  </div>
+  <div class="card">
+    <h3>2. Which computer are you on?</h3>
+    <div class="pick" id="ospick">
+      <button type="button" data-pick="mac" aria-pressed="false"><span>&#63743;</span>Mac</button>
+      <button type="button" data-pick="win" aria-pressed="false"><span>&#8862;</span>Windows PC</button>
+    </div>
+  </div>
+  <div class="note">Set aside about an hour. You will need your email, a card for the $20 Claude plan, and the files about your business (they can be messy, that is fine). Your progress saves on this device, so you can stop and come back anytime.</div>
+  <div class="nav"><button class="btn wide" data-next>Let's go &rarr;</button></div>
+</section>
+
+<!-- 1. Claude account -->
+<section class="step" data-id="claude">
+  <div class="tag">Step 1</div>
+  <h2>Get your Claude account</h2>
+  <span class="time">5 minutes &middot; $20 a month</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">Claude is the AI that will build and run your assistant. The $20 Pro plan is the starting point. It includes Claude Code, the part that builds things on your computer.</p>
+  <div class="movie" data-demo="claude"></div>
+  <div class="card"><h3>Do it</h3>
+    <ol class="do">
+      <li>Tap the button below. Sign up with your email or Google. Use the email your business runs on.</li>
+      <li>Choose <b>Pro</b> and pay with your card.</li>
+      <li>You are done when you see the Claude chat page.</li>
+    </ol>
+    <div class="row"><a class="btn" href="https://claude.ai/upgrade" target="_blank" rel="noopener">Open Claude Pro &#8599;</a></div>
+  </div>
+  <details class="stuck"><summary>Stuck?</summary>
+    <ul class="list">
+      <li><b>It asks for a phone number:</b> that is normal. Type your mobile number and the code it texts you.</li>
+      <li><b>I already have Claude:</b> make sure it says <b>Pro</b> or <b>Max</b> under your name (bottom left). Free will not work for the next steps.</li>
+      <li><b>Heavy daily use later:</b> if Claude says you hit your limit a lot, the Max plan gives you much more room. Start with Pro.</li>
+    </ul>
+  </details>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>I did it &rarr;</button></div>
+</section>
+
+<!-- 2. Folder -->
+<section class="step" data-id="folder">
+  <div class="tag">Step 2</div>
+  <h2>Make your business folder</h2>
+  <span class="time">10 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">This folder is your AI's brain. Everything it knows about your business comes from what you put in here. Messy is fine. More is better than tidy.</p>
+  <div class="movie" data-demo="folder"></div>
+  <div class="card"><h3>Do it</h3>
+    <ol class="do">
+      <li data-os="mac">Go to your <b>Desktop</b>. Right click (or two-finger click) an empty spot and choose <b>New Folder</b>.</li>
+      <li data-os="win">Go to your <b>Desktop</b>. Right click an empty spot, choose <b>New</b>, then <b>Folder</b>.</li>
+      <li>Name it exactly: <span class="pname">Your Business</span> <button class="btn small ghost" data-copy-name>Copy name</button></li>
+      <li>Drag copies of everything about your business into it: plans, price lists, menus, flyers, spreadsheets, notes, logos, photos, videos, and old emails you saved. From Google Drive or Dropbox, download them first, then drag them in.</li>
+      <li>Do not sort anything. Your AI will organize it for you later.</li>
+    </ol>
+  </div>
+  <div class="note warn">Leave out passwords, bank statements and private customer records.</div>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>I did it &rarr;</button></div>
+</section>
+
+<!-- 3. Brief -->
+<section class="step" data-id="brief">
+  <div class="tag">Step 3</div>
+  <h2>Have ChatGPT write your business story</h2>
+  <span class="time">15 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">The AI you already talk to (ChatGPT, Gemini, or Claude) knows a lot about you. This prompt pulls all of it into one document for your folder.</p>
+  <div class="movie" data-demo="brief"></div>
+  <div class="card"><h3>Do it</h3>
+    <ol class="do">
+      <li>Tap <b>Copy the prompt</b>.</li>
+      <li>Open ChatGPT (or whichever AI knows you best), start a new chat, paste it, and send.</li>
+      <li>Answer its questions. Talk freely, the more detail the better.</li>
+      <li>Download the document it gives you and drop it into your <span class="pname">Your Business</span> folder.</li>
+    </ol>
+    <textarea class="prompt" id="briefPrompt" readonly></textarea>
+    <div class="row"><button class="btn" data-copy="briefPrompt" data-label="Copy the prompt">Copy the prompt</button><a class="btn ghost" href="https://chatgpt.com" target="_blank" rel="noopener">Open ChatGPT &#8599;</a></div>
+  </div>
+  <details class="stuck"><summary>Stuck?</summary>
+    <ul class="list">
+      <li><b>It only gave me text, no file:</b> say "Please give me this as a Word document I can download." If it still cannot, copy all the text into a new Google Doc or Word file, save it, and put that in the folder.</li>
+      <li><b>I do not use ChatGPT:</b> paste it into Claude instead. It works the same.</li>
+    </ul>
+  </details>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>I did it &rarr;</button></div>
+</section>
+
+<!-- 4. App -->
+<section class="step" data-id="app">
+  <div class="tag">Step 4</div>
+  <h2 data-os="mac">Install Warp, your command window</h2>
+  <h2 data-os="win">Install the Claude app</h2>
+  <span class="time">5 minutes &middot; free</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead" data-os="mac">Warp is a friendly window where you talk to your computer. It is where your AI assistant will live. You never need to learn commands, every one is on this page with a Copy button.</p>
+  <p class="lead" data-os="win">On a Windows PC, your AI assistant lives inside the Claude desktop app, in its <b>Code</b> tab. Two quick installs.</p>
+  <div class="movie" data-demo="app"></div>
+  <div class="card"><h3>Do it</h3>
+    <ol class="do" data-os="mac">
+      <li>Tap <b>Download Warp</b>.</li>
+      <li>Open the file that downloads and drag <b>Warp</b> into <b>Applications</b>.</li>
+      <li>Open Warp. If your Mac asks "Are you sure?", click <b>Open</b>. Sign in with Google or skip, either is fine.</li>
+    </ol>
+    <div class="row" data-os="mac"><a class="btn" href="https://www.warp.dev/download" target="_blank" rel="noopener">Download Warp &#8599;</a></div>
+    <ol class="do" data-os="win">
+      <li>Tap <b>Get the Claude app</b>, run the installer, and sign in with your Claude account from step 1.</li>
+      <li>Tap <b>Get Git</b> and click through its installer, choosing the normal options every time. Claude needs it to work on your files.</li>
+      <li>Restart your computer once both are installed.</li>
+    </ol>
+    <div class="row" data-os="win"><a class="btn" href="https://claude.ai/download" target="_blank" rel="noopener">Get the Claude app &#8599;</a><a class="btn ghost" href="https://git-scm.com/downloads/win" target="_blank" rel="noopener">Get Git &#8599;</a></div>
+  </div>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>I did it &rarr;</button></div>
+</section>
+
+<!-- 5. Claude Code -->
+<section class="step" data-id="code">
+  <div class="tag">Step 5</div>
+  <h2 data-os="mac">Install Claude Code with one paste</h2>
+  <h2 data-os="win">Turn on Claude Code</h2>
+  <span class="time">5 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">This is the step that used to take three tries. The line below does the install and the fix together, so it works the first time on almost every computer.</p>
+  <div class="movie" data-demo="code"></div>
+  <div class="card"><h3>Do it</h3>
+    <div data-os="mac">
+      <ol class="do">
+        <li>Tap <b>Copy</b>, click inside Warp, paste (<b>Command + V</b>), and press <b>Enter</b>.</li>
+      </ol>
+      <div class="cmd"><code id="installMac">curl -fsSL https://claude.ai/install.sh | bash; grep -qs '.local/bin' ~/.zshrc || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc; export PATH="$HOME/.local/bin:$PATH"; claude --version</code><button class="copy" data-copy="installMac" data-label="Copy">Copy</button></div>
+      <ol class="do" start="2">
+        <li>Wait a minute or two. You are done when the last line says something like <code>2.1.3 (Claude Code)</code>.</li>
+        <li>Type <code>claude</code> and press <b>Enter</b>. Pick <b>Claude account with subscription</b>. Your browser opens: click <b>Authorize</b>, then come back to Warp.</li>
+        <li>When Claude says hello, type <code>/exit</code> and press Enter. Done.</li>
+      </ol>
+    </div>
+    <div data-os="win">
+      <ol class="do">
+        <li>Open the <b>Claude</b> app and sign in.</li>
+        <li>At the top, click the <b>Code</b> tab.</li>
+        <li>If it asks to set up or download Claude Code, click yes and let it finish.</li>
+        <li>You are done when you see a box asking you to choose a folder.</li>
+      </ol>
+    </div>
+  </div>
+  <details class="stuck"><summary>Stuck? Try these in order</summary>
+    <div data-os="mac">
+      <p><b>1. It says "command not found: claude".</b> Close Warp completely (Command + Q), open it again, type <code>claude</code>.</p>
+      <p><b>2. Still not found.</b> Paste this, press Enter:</p>
+      <div class="cmd"><code id="fixPath">echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc; echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bash_profile; source ~/.zshrc; claude --version</code><button class="copy" data-copy="fixPath" data-label="Copy">Copy</button></div>
+      <p><b>3. The install itself failed (red error).</b> Install Node first from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> (the big LTS button, click through the installer), close and reopen Warp, then paste:</p>
+      <div class="cmd"><code id="fixNpm">mkdir -p ~/.npm-global && npm config set prefix ~/.npm-global && echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.zshrc && export PATH="$HOME/.npm-global/bin:$PATH" && npm install -g @anthropic-ai/claude-code && claude --version</code><button class="copy" data-copy="fixNpm" data-label="Copy">Copy</button></div>
+      <p><b>4. Still stuck.</b> Take a screenshot (Command + Shift + 4) and send it to Jordan. We fix it together in five minutes.</p>
+    </div>
+    <div data-os="win">
+      <p><b>No Code tab:</b> update the app (Claude menu, Check for updates) and make sure your plan says Pro.</p>
+      <p><b>It says Git is missing:</b> install Git from step 4, then restart the computer.</p>
+      <p><b>Still stuck:</b> press <b>Windows + Shift + S</b> to screenshot it and send it to Jordan.</p>
+    </div>
+  </details>
+  <div class="note">From here on, Claude can fix things for you. Whenever something goes wrong, you can just tell Claude what you see.</div>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>It worked &rarr;</button></div>
+</section>
+
+<!-- 6. Open folder, full power -->
+<section class="step" data-id="start">
+  <div class="tag">Step 6</div>
+  <h2>Open Claude inside your folder, on full power</h2>
+  <span class="time">3 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">This starts Claude inside <span class="pname">Your Business</span>, on the strongest model (Opus), in the mode where it works without stopping to ask permission for every little thing.</p>
+  <div class="movie" data-demo="start"></div>
+  <div class="card"><h3>Do it</h3>
+    <div data-os="mac">
+      <ol class="do">
+        <li>Copy this line, paste it into Warp, press <b>Enter</b>. It makes a shortcut so from now on you only ever type <code>ai</code>.</li>
+      </ol>
+      <div class="cmd"><code id="aliasCmd"></code><button class="copy" data-copy="aliasCmd" data-label="Copy">Copy</button></div>
+      <ol class="do" start="2">
+        <li>Type <code>ai</code> and press <b>Enter</b>.</li>
+        <li>It asks if you trust this folder: choose <b>Yes</b>. It asks about bypass permissions mode: choose <b>Yes, I accept</b>.</li>
+        <li>Type <code>/model</code> and press Enter. It should say <b>Opus</b>. If not, pick Opus from the list.</li>
+      </ol>
+    </div>
+    <div data-os="win">
+      <ol class="do">
+        <li>In the Claude app, open the <b>Code</b> tab and click <b>Select folder</b>. Choose <span class="pname">Your Business</span> on your Desktop.</li>
+        <li>Find the model menu near the message box and choose <b>Opus</b>.</li>
+        <li>Find the mode menu (it often says <b>Ask permissions</b>) and choose <b>Bypass permissions</b>. If it is not in the list, open Settings, find Claude Code, and turn on <b>Allow bypass permissions mode</b>, then pick it.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note warn">Full power means Claude acts on its own. That is what makes it fast. The build prompt in step 9 tells it the rules: never delete your originals, never spend money, never send or post anything without your yes.</div>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>Claude is open &rarr;</button></div>
+</section>
+
+<!-- 7. Voice -->
+<section class="step" data-id="voice">
+  <div class="tag">Step 7</div>
+  <h2>Talk instead of type</h2>
+  <span class="time">2 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">Your computer already has free voice typing built in. Turn it on once and you can talk to Claude like a person.</p>
+  <div class="movie" data-demo="voice"></div>
+  <div class="card"><h3>Do it</h3>
+    <ol class="do" data-os="mac">
+      <li>Tap <b>Open Dictation settings</b> (your Mac may ask to open System Settings, say yes). Turn <b>Dictation</b> on.</li>
+      <li>Now click into Claude in Warp, press the <b>fn</b> key (or the globe key) twice, and talk. Press it again to stop.</li>
+    </ol>
+    <div class="row" data-os="mac"><a class="btn" href="x-apple.systempreferences:com.apple.preference.keyboard?Dictation">Open Dictation settings</a></div>
+    <ol class="do" data-os="win">
+      <li>Click into the Claude message box.</li>
+      <li>Press <b>Windows key + H</b> and start talking. Press it again to stop.</li>
+    </ol>
+  </div>
+  <details class="stuck"><summary>Want better voice? Let Claude install Whisper</summary>
+    <p>Whisper is free, private speech to text that runs on your own computer. Paste this into Claude and it sets everything up itself:</p>
+    <textarea class="prompt" id="whisperPrompt" readonly style="height:150px">Set up the best free, private voice typing for this computer using Whisper (whisper.cpp or another local Whisper app that runs offline). Pick what works best for my exact computer and operating system, install everything it needs yourself, choose a model size my computer can run fast, and give me a simple push-to-talk key so I can speak anywhere, including in this window. Test it, fix anything that fails, and when it works, explain in two plain sentences how I use it.</textarea>
+    <button class="btn small" data-copy="whisperPrompt" data-label="Copy">Copy</button>
+  </details>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>Voice works &rarr;</button></div>
+</section>
+
+<!-- 8. Chrome + permissions -->
+<section class="step" data-id="chrome">
+  <div class="tag">Step 8</div>
+  <h2>Give Claude hands: the browser and your computer</h2>
+  <span class="time">5 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">The Claude in Chrome extension lets your assistant open websites, fill forms and check its own work. Then you allow a few permissions so it can see and use your computer.</p>
+  <div class="movie" data-demo="chrome"></div>
+  <div class="card"><h3>Do it</h3>
+    <ol class="do">
+      <li>Use <b>Google Chrome</b> (<a href="https://www.google.com/chrome/" target="_blank" rel="noopener">get it here</a> if you do not have it). Tap <b>Add the extension</b>, click <b>Add to Chrome</b>, and sign in with your Claude account.</li>
+      <li>Allow everything it asks for. Pin it: click the puzzle piece at the top right of Chrome, then the pin next to Claude.</li>
+      <li>Back in Claude, type <code>/chrome</code> and press Enter, and choose to turn it on.</li>
+    </ol>
+    <div class="row"><a class="btn" href="https://claude.ai/chrome" target="_blank" rel="noopener">Add the extension &#8599;</a></div>
+    <div data-os="mac">
+      <h3 style="margin-top:16px">Mac permissions</h3>
+      <p style="margin:0 0 8px">Tap each button, then find <b>Warp</b> in the list and switch it on. If Warp is not listed, click <b>+</b> and choose Warp from Applications.</p>
+      <div class="row">
+        <a class="btn small" href="x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility">Accessibility</a>
+        <a class="btn small" href="x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture">Screen Recording</a>
+        <a class="btn small" href="x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles">Full Disk Access</a>
+        <a class="btn small" href="x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone">Microphone</a>
+      </div>
+      <p style="font-size:16px;color:var(--mute)">After switching them on, quit Warp (Command + Q) and open it again, then type <code>ai</code>.</p>
+    </div>
+  </div>
+  <details class="stuck"><summary>Stuck? Let Claude do it</summary>
+    <p>Paste this into Claude:</p>
+    <textarea class="prompt" id="permPrompt" readonly style="height:130px">Check that you are fully connected and have every permission you need on this computer: the Claude in Chrome extension, accessibility, screen recording, files and folders, and microphone. For anything missing, open the exact settings page for me and tell me in one short sentence which switch to turn on. Then test each one and tell me plainly what works.</textarea>
+    <button class="btn small" data-copy="permPrompt" data-label="Copy">Copy</button>
+  </details>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>All allowed &rarr;</button></div>
+</section>
+
+<!-- 9. Build -->
+<section class="step" data-id="build">
+  <div class="tag">Step 9 &middot; the big one</div>
+  <h2>Tell Claude to build your Command Center</h2>
+  <span class="time">Claude works for 30 to 90 minutes</span> <button class="read" data-read>&#128264; Read it to me</button>
+  <p class="lead">Paste this one prompt. Claude reads everything in your folder, asks you a few questions, shows you a plan, and after your yes it builds your own AI dashboard and agents, right on your computer.</p>
+  <div class="movie" data-demo="build"></div>
+  <div class="card"><h3>Do it</h3>
+    <ol class="do">
+      <li>Tap <b>Copy the build prompt</b>.</li>
+      <li>Paste it into Claude and press Enter.</li>
+      <li>Answer its questions (talk with your voice). When it shows the plan, read it and say <b>go</b>, or tell it what to change.</li>
+      <li>Let it work. Leave the computer awake and plugged in. Check back now and then.</li>
+    </ol>
+    <textarea class="prompt" id="buildPrompt" readonly style="height:300px"></textarea>
+    <button class="btn wide" data-copy="buildPrompt" data-label="Copy the build prompt">Copy the build prompt</button>
+  </div>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn" data-next>It is building &rarr;</button></div>
+</section>
+
+<!-- 10. Done -->
+<section class="step" data-id="done">
+  <div class="tag">You did it</div>
+  <h1>Your AI Command Center is on its way.</h1>
+  <button class="read" data-read>&#128264; Read it to me</button>
+  <div class="movie" data-demo="done"></div>
+  <div class="card"><h3>Every day from now on</h3>
+    <ol class="do">
+      <li data-os="mac">Open Warp, type <code>ai</code>, press Enter.</li>
+      <li data-os="win">Open the Claude app, Code tab, your folder.</li>
+      <li>Say: <b>"Open my dashboard and tell me what needs me today."</b></li>
+      <li>Ask for anything in plain words. "Write this week's posts." "Who owes me money?" "Make a flyer for Saturday."</li>
+    </ol>
+  </div>
+  <div class="card"><h3>Something not working?</h3>
+    <p style="margin:0">Paste this into Claude and describe what you see:</p>
+    <textarea class="prompt" id="fixPrompt" readonly style="height:120px">Something is not working. Here is what I see: [describe it or paste the error]. Find out why, fix it yourself, test that the fix worked, and then tell me in one plain sentence what was wrong.</textarea>
+    <button class="btn small" data-copy="fixPrompt" data-label="Copy">Copy</button>
+  </div>
+  <div class="card"><h3>Dial it in with Jordan</h3>
+    <p style="margin:0 0 6px">The biggest jump comes from one session tuning your agents to how you really work.</p>
+    <div class="row"><a class="btn" href="/start">Book your session</a><a class="btn ghost" href="/activate">Tell Jordan how it went</a></div>
+  </div>
+  <div class="nav"><button class="btn ghost back" data-back>&larr;</button><button class="btn ghost" data-restart>Start over</button></div>
+</section>
+
+<p class="foot">Greenfire &middot; greenfire.earth &middot; Nothing you type here leaves your device.</p>
+</main>
+
+<template id="briefT">I am about to have an AI build a custom business dashboard and a team of AI agents for my business, {{P}}. It will work from a folder on my computer called "{{P}}", and the document you write now is the first thing it will read. It needs to hold everything about this business.
+
+Be my research partner and write the most complete business brief you can.
+
+1. Start with everything you already know about me and {{P}}: our past chats, your memory of me, files I have shared, and anything public you can find (website, social pages, listings, reviews, articles).
+2. If something important is missing, ask me up to ten short questions in one list and wait for my answers. Then write it.
+
+Sections, in plain words, as detailed as possible:
+1. Summary: what {{P}} is in one paragraph
+2. Mission, vision and values
+3. Everything it sells or offers, with prices
+4. Customers: who they are, where they come from, what they need
+5. A normal week: who does what, and every app or tool used
+6. Money: how it earns, what it costs, any real numbers
+7. Goals: next 90 days, one year, three to five years
+8. Plans: marketing, launches, partnerships coming up
+9. People: team, partners and key contacts, by role
+10. Brand: voice, colours, fonts, logo, words to use and avoid
+11. What already exists: documents, photos, videos, websites, accounts, links
+12. Time drains: the repeat tasks that eat my week, and what keeps slipping
+13. Jobs an AI assistant could take off my plate, ranked by hours saved and money made
+14. Rules: what the AI must never do, and what always needs my yes first
+15. Open questions and anything you guessed
+16. Glossary: names, places and words special to {{P}}
+
+Mark anything you are unsure of with (guess). Never include passwords, bank details or private customer records.
+
+Give it to me as one downloadable Word document or PDF if you can make files, otherwise one block of text I can copy. Title it: {{P}} Business Brief</template>
+
+<template id="buildT">You are my AI build partner. This folder, "{{P}}", holds everything about my business. Your job is to understand it completely, then build me a private AI Command Center that runs on this computer and saves me as much time and makes me as much money as possible.
+
+Talk to me in plain, friendly words. I am not technical. Never ask me to edit code or type commands myself; you do all of that.
+
+PHASE 1. UNDERSTAND EVERYTHING
+- Read every file in this folder and every folder inside it: documents, PDFs, spreadsheets, slides, notes, the Business Brief, and anything else.
+- Look at every photo and image and note what it shows (products, place, people's roles, brand style).
+- For every video: install whatever free tools you need (like ffmpeg and a local Whisper model), pull out what is said and a few frames, and note what it shows.
+- Make a folder called "_ai" and write "_ai/business-understanding.md": what the business is, who it serves, how it earns, goals, brand voice, the tools I use, and my biggest time drains.
+- Then ask me up to 10 short questions about anything important that is missing or unclear, all in one list. Wait for my answers.
+
+PHASE 2. SHOW ME THE PLAN, THEN WAIT
+In plain words, show me:
+- The 10 jobs you could take off my plate, ranked by hours saved per week and money gained, with a rough estimate of each.
+- The dashboard: the pages I will see (for example Today, Money, Customers, Marketing, Tasks, Agents, Files) and what each one does.
+- The agents: for each one, its name, its job, when it runs, and what it is never allowed to do without my yes.
+- What you will set up first so I get a win today.
+Then stop and wait for me to say "go" or tell you what to change.
+
+PHASE 3. BUILD IT
+- Build the app inside "_ai/command-center" in this folder. It runs only on this computer and opens in my web browser. Make it beautiful, calm and simple, in my brand colours, readable by someone who has never used software like it.
+- Every button must do something real. No placeholders, no fake data. Where a section has nothing yet, say what will fill it and when.
+- Build the agents, skills, scripts and scheduled automations from the plan, starting with the biggest win.
+- Put a double-click launcher on my Desktop called "{{P}} Command Center" that starts everything and opens the dashboard.
+- Keep any passwords or keys in the computer's secure keychain or a private settings file, never inside the code, and never show them on screen.
+- Save your progress with git after each working piece, so nothing is ever lost.
+
+PHASE 4. PROVE IT WORKS
+- Start the app, open it in the browser (use the Claude in Chrome extension), and click every button and page yourself.
+- Fix everything that breaks, then test again. Only tell me it works once you have seen it work.
+
+PHASE 5. TEACH ME
+- Write "_ai/HOW-TO-USE.md": one page, plain words, how I use it every day.
+- Write a CLAUDE.md in this folder so that every future session remembers my business, my rules and how the app is built.
+- Finish by telling me the three things I should do each day, and the first thing to try right now.
+
+RULES, ALWAYS
+- Never delete, move or change my original files. Work on copies.
+- Never spend money, sign up for paid services, send emails or messages, post online, or contact anyone without showing me first and getting my yes.
+- If something fails, fix it yourself and keep going. Only stop for something only I can do, like logging into an account, and then tell me exactly what to click.
+- Keep my private and customer information on this computer.</template>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id) }
+  var all = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)) }
+  var steps = all('.step')
+  var KEY = 'gf-launch'
+  var st = {}; try { st = JSON.parse(localStorage.getItem(KEY) || '{}') } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(st)) } catch (e) {} }
+
+  /* ---------- Name and computer ---------- */
+  function clean(s) { return String(s || '').replace(/[\\\/:*?"<>|'`$]/g, '').replace(/\s+/g, ' ').trim() }
+  function biz() { return clean($('biz').value) }
+  var os = st.os || (/Win/i.test(navigator.platform || navigator.userAgent) ? 'win' : 'mac')
+  function setOs(v) {
+    os = v; st.os = v; save()
+    document.body.classList.remove('os-mac', 'os-win'); document.body.classList.add('os-' + v)
+    all('#ospick button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-pick') === v)) })
+  }
+  all('#ospick button').forEach(function (b) { b.addEventListener('click', function () { setOs(b.getAttribute('data-pick')); paint() }) })
+  function paint() {
+    var p = biz(), shown = p || 'Your Business'
+    all('.pname').forEach(function (e) { e.textContent = shown })
+    $('briefPrompt').value = $('briefT').content.textContent.split('{{P}}').join(p || 'my business')
+    $('buildPrompt').value = $('buildT').content.textContent.split('{{P}}').join(shown)
+    $('aliasCmd').textContent = 'echo "alias ai=\'cd \\"$HOME/Desktop/' + shown + '\\" && claude --dangerously-skip-permissions --model opus --chrome\'" >> ~/.zshrc; source ~/.zshrc; echo Ready. Now type: ai'
+  }
+  $('biz').value = st.biz || ''
+  $('biz').addEventListener('input', function () { st.biz = $('biz').value; save(); paint() })
+
+  /* ---------- Copy buttons ---------- */
+  function copy(text, btn) {
+    var label = btn.getAttribute('data-label') || btn.textContent
+    var ok = function () { btn.textContent = 'Copied \u2713'; btn.classList.add('done'); setTimeout(function () { btn.textContent = label; btn.classList.remove('done') }, 1800) }
+    var fb = function () { var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); ok() } catch (e) {} t.remove() }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fb); else fb()
+  }
+  all('[data-copy]').forEach(function (b) { b.addEventListener('click', function () { paint(); var el = $(b.getAttribute('data-copy')); copy(el.value != null && el.tagName === 'TEXTAREA' ? el.value : el.textContent, b) }) })
+  all('[data-copy-name]').forEach(function (b) { b.setAttribute('data-label', 'Copy name'); b.addEventListener('click', function () { copy(biz() || 'Your Business', b) }) })
+
+  /* ---------- Microphone on the name box ---------- */
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition
+  if (SR) document.body.classList.add('can-speak'); else all('.speakhint').forEach(function (e) { e.hidden = true })
+  all('.mic').forEach(function (m) {
+    m.addEventListener('click', function () {
+      var el = m.parentNode.querySelector('input'), rec = new SR()
+      rec.lang = navigator.language || 'en-US'; rec.interimResults = true
+      rec.onresult = function (e) { var s = ''; for (var i = 0; i < e.results.length; i++) s += e.results[i][0].transcript
+        el.value = s.replace(/\b\w/g, function (c) { return c.toUpperCase() }).replace(/[.]$/, ''); el.dispatchEvent(new Event('input')) }
+      rec.onend = function () { m.classList.remove('live') }
+      try { rec.start(); m.classList.add('live') } catch (e) {}
+    })
+  })
+
+  /* ---------- Read it to me ---------- */
+  var voice = window.speechSynthesis
+  all('[data-read]').forEach(function (b) {
+    if (!voice) { b.hidden = true; return }
+    b.addEventListener('click', function () {
+      if (voice.speaking) { voice.cancel(); all('[data-read]').forEach(function (x) { x.classList.remove('live') }); if (b.classList.contains('live')) return }
+      var s = b.closest('.step'), parts = []
+      all('h1,h2,.lead,.time,.card h3,.do li', s).forEach(function (e) { if (e.offsetParent !== null) parts.push(e.textContent) })
+      var u = new SpeechSynthesisUtterance(parts.join('. ').replace(/\s+/g, ' ').replace(/\.\s*\./g, '.'))
+      u.rate = 0.95; u.onend = function () { b.classList.remove('live') }
+      b.classList.add('live'); voice.speak(u)
+    })
+  })
+
+  /* ---------- Step navigation ---------- */
+  var at = Math.min(st.at || 0, steps.length - 1)
+  function show(i) {
+    if (voice) voice.cancel()
+    at = Math.max(0, Math.min(i, steps.length - 1)); st.at = at; save()
+    steps.forEach(function (s, k) { s.classList.toggle('on', k === at) })
+    $('bar').style.width = (at / (steps.length - 1) * 100) + '%'
+    $('count').textContent = at === 0 ? 'Start' : at === steps.length - 1 ? 'Done' : 'Step ' + at + ' of ' + (steps.length - 2)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    paint(); play(steps[at])
+  }
+  all('[data-next]').forEach(function (b) { b.addEventListener('click', function () {
+    if (at === 0 && !biz()) { $('biz').focus(); $('biz').placeholder = 'Type your business name first'; return }
+    show(at + 1) }) })
+  all('[data-back]').forEach(function (b) { b.addEventListener('click', function () { show(at - 1) }) })
+  all('[data-restart]').forEach(function (b) { b.addEventListener('click', function () { show(0) }) })
+
+  /* ---------- The little movies ----------
+     Each demo is a list of scenes. A scene sets the mock screen, then plays
+     actions in order: move the cursor to an element, tap it, type into it,
+     show a caption, wait. The whole thing loops. */
+  var term = function (h) { return { kind: 'term', title: 'Warp', html: h } }
+  function D() { var p = biz() || 'Your Business'; return {
+    claude: [
+      { kind: 'browser', url: 'claude.ai/upgrade', html: '<div class="m-h">Choose your plan</div><div class="m-plans"><div class="m-card">Free<b>$0</b></div><div class="m-card best" id="x-pro">Pro<b>$20</b><span class="m-btn or" id="x-get">Get Pro</span></div><div class="m-card">Max<b>$100+</b></div></div>',
+        act: [['cap', 'Pick the Pro plan'], ['move', 'x-pro'], ['wait', 700], ['move', 'x-get'], ['tap', 'x-get'], ['wait', 600]] },
+      { kind: 'browser', url: 'claude.ai/upgrade', html: '<div class="m-h">Pay for Pro</div><div class="m-in" id="x-card"></div><div style="text-align:center"><span class="m-btn or" id="x-sub">Subscribe</span></div>',
+        act: [['cap', 'Add your card'], ['move', 'x-card'], ['tap', 'x-card'], ['type', 'x-card', '4242 4242 4242 4242'], ['move', 'x-sub'], ['tap', 'x-sub'], ['wait', 500]] },
+      { kind: 'browser', url: 'claude.ai/new', html: '<div class="m-h">Good evening</div><div class="m-in" style="max-width:380px">How can I help you today?</div><div style="text-align:center;margin-top:10px"><span class="m-btn gr">Pro plan \u2713</span></div>',
+        act: [['cap', 'You are in. That is step 1 done'], ['wait', 2200]] } ],
+    folder: [
+      { kind: 'desk', html: '<div class="m-icons" id="x-desk" style="height:100%"></div>',
+        act: [['cap', 'Right click an empty spot on your Desktop'], ['move', 'x-desk', .55, .5], ['tap', 'x-desk'], ['menu', 'x-desk'], ['wait', 300], ['move', 'x-new'], ['tap', 'x-new'], ['addfolder', p], ['cap', 'Name it: ' + p], ['wait', 900]] },
+      { kind: 'desk', html: '<div class="m-icons"><div class="m-ic" id="x-fold"><div class="f"></div>' + esc(p) + '</div></div>',
+        act: [['cap', 'Drag in everything about your business'], ['drop', 'PDF', 'Business plan'], ['drop', 'XLS', 'Prices'], ['drop', 'JPG', 'Logo'], ['drop', 'MP4', 'Promo video'], ['drop', 'DOC', 'Notes'], ['cap', 'Messy is fine. Claude sorts it later'], ['wait', 1600]] } ],
+    brief: [
+      { kind: 'browser', url: 'chatgpt.com', html: '<div class="m-chat"><div class="m-in" id="x-ask" style="max-width:none"></div><div style="text-align:right"><span class="m-btn" id="x-send">Send</span></div></div>',
+        act: [['cap', 'Paste the prompt into a new chat'], ['move', 'x-ask'], ['tap', 'x-ask'], ['type', 'x-ask', 'I am about to have an AI build a custom business dashboard for ' + p + '...'], ['move', 'x-send'], ['tap', 'x-send']] },
+      { kind: 'browser', url: 'chatgpt.com', html: '<div class="m-chat"><div class="m-bub">Before I write it, ten quick questions: 1. What are your best sellers? 2. ...</div><div class="m-bub me" id="x-me"></div></div>',
+        act: [['cap', 'Answer its questions. Talking is fine'], ['type', 'x-me', 'Our best seller is...'], ['wait', 600]] },
+      { kind: 'browser', url: 'chatgpt.com', html: '<div class="m-chat"><div class="m-bub">Here is your brief:</div><div class="m-doc" id="x-doc">&#128196; ' + esc(p) + ' Business Brief.docx</div></div>',
+        act: [['cap', 'Download it into your folder'], ['move', 'x-doc'], ['tap', 'x-doc'], ['wait', 1500]] } ],
+    app: os === 'mac' ? [
+      { kind: 'browser', url: 'warp.dev/download', html: '<div class="m-h">Warp, the terminal you will love</div><div style="text-align:center"><span class="m-btn" id="x-dl">Download for Mac</span></div>',
+        act: [['cap', 'Download Warp'], ['move', 'x-dl'], ['tap', 'x-dl'], ['wait', 500]] },
+      { kind: 'desk', html: '<div class="m-icons"><div class="m-ic" id="x-warp"><div class="d" style="background:#111;color:#fff">W</div>Warp</div><div class="m-ic" style="margin-left:80px" id="x-apps"><div class="f"></div>Applications</div></div>',
+        act: [['cap', 'Drag Warp into Applications'], ['move', 'x-warp'], ['tap', 'x-warp'], ['move', 'x-apps'], ['tap', 'x-apps'], ['wait', 600]] },
+      term('<span class="t-m">Warp is ready.</span>\n<span class="t-g">~</span> <span class="caret"></span>') ] : [
+      { kind: 'browser', url: 'claude.ai/download', html: '<div class="m-h">Claude for Windows</div><div style="text-align:center"><span class="m-btn or" id="x-dl">Download for Windows</span></div>',
+        act: [['cap', 'Get the Claude app'], ['move', 'x-dl'], ['tap', 'x-dl'], ['wait', 500]] },
+      { kind: 'browser', url: 'git-scm.com/downloads/win', html: '<div class="m-h">Git for Windows</div><div style="text-align:center"><span class="m-btn" id="x-git">Click here to download</span></div>',
+        act: [['cap', 'Then install Git, normal options'], ['move', 'x-git'], ['tap', 'x-git'], ['wait', 900]] } ],
+    code: os === 'mac' ? [
+      term('<span class="t-g">~</span> <span id="x-t"></span><span class="caret"></span>\n<span id="x-out"></span>') ] : [
+      { kind: 'browser', url: 'Claude', html: '<div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px"><span class="m-btn" style="background:#e7e5e4;color:#1c1917">Chat</span><span class="m-btn" style="background:#e7e5e4;color:#1c1917" id="x-tab">Code</span></div><div class="m-h">Choose a folder to work in</div><div style="text-align:center"><span class="m-btn or">Select folder</span></div>',
+        act: [['cap', 'Open the Code tab'], ['move', 'x-tab'], ['tap', 'x-tab'], ['wait', 1600]] } ],
+    start: os === 'mac' ? [
+      term('<span class="t-g">~</span> <span id="x-t"></span><span class="caret"></span>\n<span id="x-out"></span>') ] : [
+      { kind: 'browser', url: 'Claude \u00b7 Code', html: '<div class="m-h">' + esc(p) + '</div><div class="m-in" style="max-width:420px">Ask Claude to do anything</div><div style="display:flex;gap:8px;justify-content:center"><span class="m-btn" id="x-mod" style="background:#e7e5e4;color:#1c1917">Sonnet</span><span class="m-btn" id="x-perm" style="background:#e7e5e4;color:#1c1917">Ask permissions</span></div>',
+        act: [['cap', 'Pick Opus'], ['move', 'x-mod'], ['tap', 'x-mod'], ['set', 'x-mod', 'Opus'], ['cap', 'Pick Bypass permissions'], ['move', 'x-perm'], ['tap', 'x-perm'], ['set', 'x-perm', 'Bypass permissions'], ['wait', 1400]] } ],
+    voice: [
+      term('<span class="t-o">\u273b Claude</span> <span class="t-m">Opus</span>\n\n<span class="t-g">&gt;</span> <span id="x-t"></span><span class="caret"></span>\n\n<span id="x-out" class="t-y"></span>'),
+      ],
+    chrome: [
+      { kind: 'browser', url: 'chromewebstore.google.com \u00b7 Claude', html: '<div class="m-h">Claude in Chrome</div><div style="text-align:center"><span class="m-btn" id="x-add" style="background:#2563eb">Add to Chrome</span></div>',
+        act: [['cap', 'Add the extension'], ['move', 'x-add'], ['tap', 'x-add'], ['set', 'x-add', 'Added \u2713'], ['wait', 600]] },
+      { kind: 'browser', url: os === 'mac' ? 'System Settings \u00b7 Privacy & Security' : 'Settings', html: '<div class="m-h">' + (os === 'mac' ? 'Accessibility' : 'Permissions') + '</div><div class="m-toggle">' + (os === 'mac' ? 'Warp' : 'Claude') + '<span class="m-sw" id="x-sw1"></span></div><div class="m-toggle">Google Chrome<span class="m-sw" id="x-sw2"></span></div>',
+        act: [['cap', 'Switch on every permission it asks for'], ['move', 'x-sw1'], ['tap', 'x-sw1'], ['on', 'x-sw1'], ['move', 'x-sw2'], ['tap', 'x-sw2'], ['on', 'x-sw2'], ['wait', 1400]] } ],
+    build: [
+      term('<span class="t-o">\u273b Claude</span> <span class="t-m">Opus \u00b7 ' + esc(p) + '</span>\n\n<span class="t-g">&gt;</span> <span id="x-t"></span><span class="caret"></span>\n\n<span id="x-out"></span>') ],
+    done: [
+      { kind: 'browser', url: 'localhost \u00b7 ' + p + ' Command Center', html: '<div class="m-dash"><div class="m-side"><div>\u2600 Today</div><div>$ Money</div><div>\u263a Customers</div><div>\u270e Marketing</div><div>\u2713 Tasks</div><div>\u2726 Agents</div></div><div class="m-tiles"><div class="m-tile">This week<b id="x-n1">$0</b></div><div class="m-tile">Hours saved<b id="x-n2">0</b></div><div class="m-tile">Posts ready<b>5</b></div><div class="m-tile">Waiting for your yes<b>3</b></div></div></div>',
+        act: [['cap', 'Your own AI dashboard, on your computer'], ['count', 'x-n1', 2480, '$'], ['count', 'x-n2', 11, ''], ['wait', 2200]] } ]
+  } }
+
+  /* Typed terminal scripts for the Warp demos. */
+  function TERM(id) { var p = biz() || 'Your Business'; return {
+    code: [['type', 'curl -fsSL https://claude.ai/install.sh | bash ...'], ['out', '<span class="t-m">Downloading Claude Code...</span>\n<span class="t-g">\u2714 Claude Code installed</span>\n2.1.3 (Claude Code)'], ['cap', 'One paste installs it'], ['wait', 900], ['clear'], ['type', 'claude'], ['out', '<span class="t-o">Select login method:</span>\n<span class="t-g">\u276f 1. Claude account with subscription</span>\n  2. Anthropic Console account'], ['cap', 'Log in with your Claude account'], ['wait', 1600]],
+    start: [['type', 'ai'], ['out', '<span class="t-o">Do you trust the files in this folder?</span>\n<span class="t-g">\u276f Yes, proceed</span>'], ['cap', 'Type ai. Say yes to trust the folder'], ['wait', 1300], ['out', '<span class="t-o">\u273b Welcome to Claude Code</span>\n<span class="t-m">~/Desktop/' + esc(p) + ' \u00b7 Opus \u00b7 bypass permissions on</span>'], ['cap', 'Opus, full power, inside your folder'], ['wait', 1800]],
+    voice: [['cap', os === 'mac' ? 'Press fn twice and talk' : 'Press Windows + H and talk'], ['wait', 500], ['type', 'what are the three things I should do first this week'], ['out', 'Based on your folder, here are your three...'], ['wait', 1800]],
+    build: [['type', 'You are my AI build partner. This folder holds everything...'], ['out', '<span class="t-y">\u25cf Reading 148 files, 62 photos, 9 videos...</span>'], ['cap', 'Claude reads everything first'], ['wait', 1100], ['out', '<span class="t-y">\u25cf Reading 148 files, 62 photos, 9 videos...</span>\n<span class="t-g">\u2714 Wrote _ai/business-understanding.md</span>\n<span class="t-o">Ten quick questions for you:</span>'], ['cap', 'Then asks you a few questions'], ['wait', 1300], ['out', '<span class="t-g">\u2714 Plan approved</span>\n<span class="t-y">\u25cf Building dashboard, 6 agents, 4 automations...</span>\n<span class="t-g">\u2714 Tested every button</span>\n<span class="t-g">\u2714 Launcher on your Desktop</span>'], ['cap', 'Then builds and tests it for you'], ['wait', 2000]]
+  }[id] }
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] }) }
+  var run = 0
+  function play(step) {
+    var my = ++run, box = step.querySelector('.movie'); if (!box) return
+    var id = box.getAttribute('data-demo'), scenes = D()[id]
+    box.innerHTML = '<div class="movie-head"><span>&#9654; Watch how</span><button type="button">Replay</button></div><div class="screen"><div class="chrome"><i></i><i></i><i></i><div class="url"></div></div><div class="body"></div><div class="cursor"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 2l16 10-7 1.5L9 21z" fill="#fff" stroke="#111" stroke-width="1.5"/></svg></div><div class="cap"></div></div>'
+    box.querySelector('button').onclick = function () { play(step) }
+    var scr = box.querySelector('.screen'), body = scr.querySelector('.body'), cur = scr.querySelector('.cursor'), cap = scr.querySelector('.cap')
+    var alive = function () { return my === run && step.classList.contains('on') }
+    var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms) }) }
+    function at(el, fx, fy) { var a = scr.getBoundingClientRect(), b = el.getBoundingClientRect()
+      cur.style.left = (b.left - a.left + b.width * (fx == null ? .5 : fx)) + 'px'; cur.style.top = (b.top - a.top + b.height * (fy == null ? .55 : fy)) + 'px' }
+    var get = function (x) { return body.querySelector('#' + x) }
+    async function act(a) {
+      var k = a[0], el = a[1] && typeof a[1] === 'string' ? get(a[1]) : null
+      if (k === 'wait') return sleep(a[1])
+      if (k === 'cap') { cap.textContent = a[1]; cap.style.opacity = 1; return sleep(250) }
+      if (k === 'move' && el) { at(el, a[2], a[3]); return sleep(850) }
+      if (k === 'tap') { cur.classList.remove('tap'); void cur.offsetWidth; cur.classList.add('tap'); if (el) el.classList.add('hl'); await sleep(450); if (el) el.classList.remove('hl'); return }
+      if (k === 'type' && el) { el.textContent = ''; for (var i = 0; i < a[2].length && alive(); i++) { el.textContent += a[2][i]; await sleep(28) } return sleep(300) }
+      if (k === 'set' && el) { el.textContent = a[2]; return sleep(400) }
+      if (k === 'on' && el) { el.classList.add('on'); return sleep(400) }
+      if (k === 'count' && el) { for (var n = 0; n <= 30 && alive(); n++) { el.textContent = a[3] + Math.round(a[2] * n / 30).toLocaleString(); await sleep(35) } return }
+      if (k === 'menu' && el) { var m = document.createElement('div'); m.className = 'm-menu'; m.style.left = '52%'; m.style.top = '45%'
+        m.innerHTML = '<div id="x-new" style="background:#10b981;color:#04281b;font-weight:700">New Folder</div><div>Get Info</div><div>Change Wallpaper</div>'; body.appendChild(m); return sleep(300) }
+      if (k === 'addfolder') { var mm = body.querySelector('.m-menu'); if (mm) mm.remove()
+        var d = document.createElement('div'); d.className = 'm-ic pop'; d.innerHTML = '<div class="f"></div>' + esc(a[1]); body.querySelector('#x-desk').appendChild(d); at(d); return sleep(500) }
+      if (k === 'drop') { var f = get('x-fold'), ic = document.createElement('div'); ic.className = 'm-ic pop'; ic.innerHTML = '<div class="d">' + a[1] + '</div>' + a[2]
+        f.parentNode.appendChild(ic); at(ic); await sleep(500); at(f); await sleep(700); ic.style.transition = 'all .4s'; ic.style.opacity = 0; ic.style.transform = 'scale(.3)'; return sleep(400) }
+    }
+    async function loop() {
+      while (alive()) {
+        for (var s = 0; s < scenes.length && alive(); s++) {
+          var sc = scenes[s]
+          scr.className = 'screen' + (sc.kind === 'term' ? ' term' : sc.kind === 'desk' ? ' desk' : '')
+          scr.querySelector('.url').textContent = sc.kind === 'term' ? (sc.title || 'Warp') : (sc.url || '')
+          body.innerHTML = sc.html; cap.style.opacity = 0
+          cur.style.display = sc.kind === 'term' ? 'none' : 'block'
+          var acts = sc.act || TERM(id) || [['wait', 2500]]
+          for (var j = 0; j < acts.length && alive(); j++) {
+            var a = acts[j]
+            if (sc.kind === 'term' && a[0] === 'type') { var t = get('x-t'); t.textContent = ''; for (var i = 0; i < a[1].length && alive(); i++) { t.textContent += a[1][i]; await sleep(35) } await sleep(350) }
+            else if (a[0] === 'out') { get('x-out').innerHTML = a[1]; await sleep(500) }
+            else if (a[0] === 'clear') { get('x-t').textContent = ''; get('x-out').innerHTML = '' }
+            else await act(a)
+          }
+        }
+        await sleep(900)
+      }
+    }
+    requestAnimationFrame(function () { loop() })
+  }
+
+  setOs(os); paint(); show(at)
+})()
+</script>
+</body>
+</html>

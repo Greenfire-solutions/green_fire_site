@@ -13,6 +13,10 @@
       "destination": "/api/onboard?form=activation"
     },
     {
+      "source": "/launch",
+      "destination": "/launch/index.html"
+    },
+    {
       "source": "/blog",
       "destination": "/blog/index.html"
     },
