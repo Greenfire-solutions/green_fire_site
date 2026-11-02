@@ -1,8 +1,8 @@
 ---
 title: Interactive 3D Maps for Land Projects, and Why They Raise Support
 description: How an interactive 3D map helps a land project, eco village or new build show people what is coming, what goes on one, and how to keep it fast on a phone.
-date: 2026-10-20
-status: draft
+date: 2026-11-02
+status: published
 image: /blog/photos/interactive-3d-maps-for-land-projects.jpg
 image_alt: "A lit three dimensional relief model of a canyon landscape sits in a lookout room with panoramic windows and information panels at dusk."
 cluster: interactive-3d
