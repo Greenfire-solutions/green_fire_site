@@ -61,8 +61,8 @@
       ],
       "after": "After you pay: a short intake form, then Jordan emails you the place in Boulder before the day.",
       "button": "Take a Boulder seat",
-      "checkout_url": null,
-      "checkout_link_id": null,
+      "checkout_url": "https://buy.stripe.com/9B68wR5Dg1j9d4c9jV1kA12",
+      "checkout_link_id": "plink_1UXslwPj7NJJ79xW552EGuIx",
       "step": "Learn it in person"
     },
     {
