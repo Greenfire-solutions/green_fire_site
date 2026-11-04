@@ -18,7 +18,7 @@
       "price_usd": 500,
       "price_label": "$500",
       "unit": "4 hours live, small group of five, online",
-      "when": "Saturday, November 7, 4pm Central",
+      "when": "Saturday, November 21, 4pm Central",
       "for": "You want to build your own dashboards and apps with AI, and learn it hands on, on your own computer.",
       "includes": [
         "AI set up on your own computer, running locally, so what you build is yours",
@@ -37,7 +37,33 @@
         "offer": "onboarding"
       },
       "video_len": "0:50",
-      "_video_note": "Films from _TOOLS/intro-videos/v2 (render.py + mux.sh): his footage, the Business Kit dashboard filmed in a sandbox, an ElevenLabs voice and 9 Lives. video_len is set from the finished film."
+      "_video_note": "Films from _TOOLS/intro-videos/v2 (render.py + mux.sh): his footage, the Business Kit dashboard filmed in a sandbox, an ElevenLabs voice and 9 Lives. video_len is set from the finished film.",
+      "legacy_link_ids": [
+        "plink_1UVDsWPj7NJJ79xWkQTPtEO8"
+      ],
+      "_early_note": "plink_1UVDsWPj7NJJ79xWkQTPtEO8 is a private $300 link (capped at 3) for the three people quoted $300 on Oct 21 (Connor, Cirque Vida, Fungi Flows). Jordan, 2026-10-27: nobody else gets it."
+    },
+    {
+      "id": "workshop-boulder",
+      "video": "/videos/start-learn.mp4",
+      "poster": "/videos/start-learn.jpg",
+      "title": "Learn to Build with AI, in person in Boulder",
+      "price_usd": 500,
+      "price_label": "$500",
+      "unit": "4 hours live, in person in Boulder, Colorado, five seats",
+      "when": "Saturday, January 9, 3pm to 7pm Mountain",
+      "for": "You want to build your own dashboards and apps with AI, hands on, in the room with Jordan, on your own laptop.",
+      "includes": [
+        "AI set up on your own computer, running locally, so what you build is yours",
+        "Build your first working dashboard live, step by step",
+        "How to ask AI to build, fix and change things for you in plain words",
+        "The starter dashboard kit to keep and keep building on"
+      ],
+      "after": "After you pay: a short intake form, then Jordan emails you the place in Boulder before the day.",
+      "button": "Take a Boulder seat",
+      "checkout_url": null,
+      "checkout_link_id": null,
+      "step": "Learn it in person"
     },
     {
       "id": "build",
@@ -136,6 +162,10 @@
       "unit": "one time build, built for your business",
       "for": "You want your AI system and your website built for you, in one job.",
       "care": "Then $200 a month for care and help after handover (see care_plan). Optional, cancel any time.",
+      "deposit_usd": 750,
+      "terms": "Half to start ($750), half at handover. Optional care after handover is $200 a month.",
+      "checkout_url": "https://buy.stripe.com/dRmbJ3c1EaTJc081Rt1kA0G",
+      "checkout_link_id": "plink_1UVYdHPj7NJJ79xWPgGQ9up0",
       "_note": "Jordan's decision 2026-10-23: one time build at $2,000, on sale for $1,500, with $200 a month after care and assistance. Not shown on /start on purpose. No checkout link yet: paid by invoice or a link made for the job, so mark it paid on the Clients tab."
     }
   ],
