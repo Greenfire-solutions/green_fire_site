@@ -1,0 +1,188 @@
+{
+  "_comment": "THE ONE HOME for the kids' Game Creator Lab: the /games page renders from this file, and Pip and the Clients tab read the same facts through startOffers.json private_offers (id game_lab). Change a date, the price or the seats HERE and in that private offer. Plans, curriculum and safety rules: _PLANS/08_Academy/Game_Creator_Lab. No em dashes anywhere.",
+  "id": "game_lab",
+  "title": "Game Creator Lab",
+  "kicker": "Greenfire Academy, live online",
+  "headline": "Your kid makes their own 3D video game. For real.",
+  "intro": "Six weeks, live online, for kids 11 to 15. They design a world, a hero and a story, build the characters in Blender, and make it all playable in Unity, with AI as a helper, not a shortcut. They learn what makes a game good, and they finish one.",
+  "price_usd": 500,
+  "price_label": "$500",
+  "price_note": "for all 12 live sessions. Can be paid in two parts.",
+  "ages": "Ages 11 to 15",
+  "ages_note": "A keen 10 year old is welcome with a parent beside them.",
+  "seats": 8,
+  "cohort": {
+    "label": "Winter cohort",
+    "starts": "Tuesday, January 19, 2027",
+    "ends": "Thursday, February 25, 2027",
+    "when": "Tuesdays and Thursdays, 4:30 to 6:00 pm Central",
+    "where": "Live online on Zoom",
+    "sessions": "12 sessions of 90 minutes"
+  },
+  "button": "Apply for a seat",
+  "apply_note": "Applying is free. I reply within a day, check the computer can run Unity, and then send the payment link.",
+  "gift": "Giving a seat as a holiday present? Say so in the form and I will send a printable gift card.",
+  "makes": [
+    {
+      "icon": "gamepad",
+      "title": "A finished 3D game",
+      "text": "Playable on Mac or Windows, with a title screen, a level, a goal and a win. Theirs to share."
+    },
+    {
+      "icon": "book",
+      "title": "Their own Game Bible",
+      "text": "The design book real studios keep: pitch, world, characters, story, mechanics, levels, playtests, credits."
+    },
+    {
+      "icon": "box",
+      "title": "Their own 3D models",
+      "text": "Their hero and props from their world, built from scratch in Blender."
+    },
+    {
+      "icon": "brain",
+      "title": "How to think like a designer",
+      "text": "Core loops, feedback, level design, difficulty, playtesting. Words and ideas they keep forever."
+    },
+    {
+      "icon": "sparkles",
+      "title": "AI used well",
+      "text": "How to ask AI for ideas and code help, how to check what it says, and why their own ideas come first."
+    }
+  ],
+  "weeks": [
+    {
+      "n": 1,
+      "title": "What makes a game fun",
+      "text": "Invent a paper game, change one rule, feel the difference. Then the world: its place, its magic rule, its history, and a map."
+    },
+    {
+      "n": 2,
+      "title": "Characters and first 3D",
+      "text": "A hero with a want, a fear and an ability. Then sculpt that hero in Blender from simple shapes."
+    },
+    {
+      "n": 3,
+      "title": "The world, into Unity",
+      "text": "Props that tell a story without words. Then the moment: walking their own hero around their own world."
+    },
+    {
+      "n": 4,
+      "title": "Mechanics and levels",
+      "text": "Collecting, scoring and feedback, a first look at real code, and a level that guides the player without arrows."
+    },
+    {
+      "n": 5,
+      "title": "Challenge, story and feel",
+      "text": "Hazards, checkpoints, winning and losing fairly, a title screen, their own recorded sounds, music and effects."
+    },
+    {
+      "n": 6,
+      "title": "Playtest and launch",
+      "text": "Real players, a fix list, a finished build, and the Family Arcade, where every kid plays their game for the families."
+    }
+  ],
+  "depth": [
+    "Most kids' coding classes teach a tool. This one teaches game design, and the tools serve it.",
+    "Every session starts from a question real designers ask: what is fun, what does the player want, why does this level feel unfair. Every session ends with a page of their Game Bible.",
+    "The tools are the real ones. Unity, the engine behind a huge share of the games on phones and consoles, and Blender, the free 3D software film and game studios use. Both free, forever."
+  ],
+  "ai_rule": {
+    "title": "AI is a helper, not the artist",
+    "points": [
+      "Kids design first, on paper and in their own words. Then we ask AI for twists, code help and error fixes.",
+      "In class, AI runs on my screen. Kids ask through the chat, and we read and check every answer together. No child needs an AI account.",
+      "Kids never put their name, school, face or any personal detail into an AI tool.",
+      "Anything AI helped with goes in the game's credits. Honesty about tools is part of being a creator."
+    ]
+  },
+  "teacher": {
+    "name": "Jordan Larsen",
+    "text": "I build games and teach people to build with AI. ROOTSIGNAL is my own 3D game in Unity. Civil X is a game with AR and VR I designed with a team, and The Stellar Alchemist is my comic series turned animated show. I also make music and run Greenfire, a creative technology and land project. I would love to help your kid make the game they keep describing at dinner.",
+    "video": "/game-lab/rootsignal.mp4",
+    "poster": "/game-lab/rootsignal.jpg",
+    "caption": "ROOTSIGNAL, Jordan's game in Unity"
+  },
+  "computer": {
+    "title": "Check the computer first",
+    "points": [
+      "A Mac (macOS 12 or newer) or a Windows 10 or 11 computer, with 8 GB of memory or more (16 GB is better).",
+      "About 25 GB of free space.",
+      "A mouse with a scroll wheel. Blender is very hard with a trackpad alone.",
+      "Not a Chromebook, iPad or phone. Unity cannot run on them."
+    ],
+    "note": "Not sure? Tell me the make and model in the form and I will check for you."
+  },
+  "safety": {
+    "title": "Safe, small and private",
+    "points": [
+      "Eight kids, one teacher, and parents are welcome to sit in on any session.",
+      "First names only in class. Cameras are optional.",
+      "I never message a kid privately. Everything goes to the parent's email.",
+      "Sessions are not recorded unless every family agrees, and no kid's work, face or name is ever posted without the parent's written yes.",
+      "We collect your details, not your kid's: only their age, never their name, school or email."
+    ]
+  },
+  "faq": [
+    {
+      "q": "Does my kid need to know how to code?",
+      "a": "No. We read and change real code together a little at a time, and the starter project does the hard parts. Kids who already code will find stretch goals every week."
+    },
+    {
+      "q": "What does it cost beyond the $500?",
+      "a": "Nothing. Unity Personal, Blender and the course assets are free. You will need a Mac or Windows computer and a mouse."
+    },
+    {
+      "q": "How much homework is there?",
+      "a": "Optional side quests of 20 to 40 minutes a week: drawing, building one more thing, or watching a family member play their game."
+    },
+    {
+      "q": "What if my kid misses a session?",
+      "a": "Every week has a catch up version of the project, so they load it and keep going with their own models and ideas."
+    },
+    {
+      "q": "What kind of game will they make?",
+      "a": "A 3D adventure: their hero explores their world, collects things, avoids dangers and reaches a goal. It holds every big idea in game design and it is finishable in six weeks. The world, the hero, the story and the twist are all theirs."
+    },
+    {
+      "q": "Refunds?",
+      "a": "A full refund up to 7 days before the first session. After that, a seat in the next cohort. If a class is cancelled, a full refund."
+    }
+  ],
+  "bible": {
+    "title": "Free: print the Game Bible",
+    "text": "The kids' design workbook from the course: pitch, world map, hero, level design, playtest log and credits. Free to print tonight, whether or not they join.",
+    "url": "/game-lab/game-bible.html",
+    "button": "Open the Game Bible"
+  },
+  "proof": {
+    "title": "I really make this stuff",
+    "intro": "Kids can tell when a teacher has never shipped anything. Here is some of what I have built: games, worlds, characters and stories.",
+    "items": [
+      {
+        "title": "ROOTSIGNAL",
+        "text": "My 3D action game, built in Unity, the same engine your kid will use.",
+        "video": "/game-lab/rootsignal.mp4",
+        "poster": "/game-lab/rootsignal.jpg",
+        "tall": true
+      },
+      {
+        "title": "Civil X",
+        "text": "A game and app I designed with a team: an avatar builder, guilds, real world quests, plus AR and VR.",
+        "video": "/game-lab/civilx.mp4",
+        "poster": "/game-lab/civilx.jpg"
+      },
+      {
+        "title": "The Stellar Alchemist",
+        "text": "My comic book series, now becoming an animated show. Worldbuilding and characters, the same skills the course teaches.",
+        "video": "/game-lab/stellar.mp4",
+        "poster": "/game-lab/stellar.jpg"
+      },
+      {
+        "title": "From a drawing to a game",
+        "text": "A young maker painted her own characters on paper, and we turned them into a game she could play. That moment is what this course is for.",
+        "video": "/game-lab/young-maker.mp4",
+        "poster": "/game-lab/young-maker.jpg"
+      }
+    ]
+  }
+}

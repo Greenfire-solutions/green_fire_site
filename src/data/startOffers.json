@@ -167,6 +167,27 @@
       "checkout_url": "https://buy.stripe.com/dRmbJ3c1EaTJc081Rt1kA0G",
       "checkout_link_id": "plink_1UVYdHPj7NJJ79xWPgGQ9up0",
       "_note": "Jordan's decision 2026-10-23: one time build at $2,000, on sale for $1,500, with $200 a month after care and assistance. Not shown on /start on purpose. No checkout link yet: paid by invoice or a link made for the job, so mark it paid on the Clients tab."
+    },
+    {
+      "id": "game_lab",
+      "title": "Game Creator Lab (kids 11 to 15)",
+      "price_usd": 500,
+      "price_label": "$500",
+      "unit": "6 weeks live online, 12 sessions of 90 minutes, 8 kids, Tue and Thu 4:30 to 6:00 pm Central, starts Jan 19 2027",
+      "for": "A parent whose kid (11 to 15) wants to make their own video game: game design, characters, worldbuilding, a Game Bible, Blender, Unity and AI as a helper.",
+      "includes": [
+        "A finished, playable 3D game",
+        "Their own Game Bible",
+        "Their own 3D models made in Blender",
+        "Design skills: core loop, level design, playtesting",
+        "AI used well, on the teacher's screen, no child accounts"
+      ],
+      "after": "After you pay: the Parent Guide with the computer check and installs, then the Zoom link before the first session.",
+      "button": "Apply for a seat",
+      "page_url": "https://greenfire.earth/games",
+      "checkout_url": null,
+      "checkout_link_id": null,
+      "_note": "Added 2026-11-03. The page /games reads src/data/gameLab.json; keep the two in step. Parents APPLY first (computer check), then get the checkout. No link yet: make one with offers.mjs once Jordan says yes to the price and dates. Letters to parents are about a KIDS class: never send them the AI business offers, never write to or about a child, only the parent. Plans: _PLANS/08_Academy/Game_Creator_Lab."
     }
   ],
   "care_plan": {

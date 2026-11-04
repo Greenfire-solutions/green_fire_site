@@ -3,8 +3,10 @@ import { writeLead } from './_lib/storage.js';
 
 /* A person asking for something on /start. Kept on the site (encrypted) and
    pulled into the Greenfire operator, where Pip follows it through. */
-const OFFERS = new Set(['workshop', 'onboarding', 'build', 'team', 'unsure']);
-const WHO = new Set(['artist', 'small_business', 'company', 'individual']);
+const OFFERS = new Set(['workshop', 'onboarding', 'build', 'team', 'game_lab', 'unsure']);
+/* 'parent': the kids' Game Creator Lab on /games. The parent is the lead; of the
+   kid only an age is kept (never a name), inside the message. */
+const WHO = new Set(['artist', 'small_business', 'company', 'individual', 'parent']);
 const WHERE = new Set(['online', 'in_person', 'either']);
 const EMAIL = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/;
 const field = (v: unknown, n: number) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);

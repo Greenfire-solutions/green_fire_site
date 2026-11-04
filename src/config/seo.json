@@ -145,6 +145,15 @@
       "title": "Contact | Green Fire",
       "description": "Book Green Fire for AI help, interactive 3D, eco village and land project software, media, studio or workshops, or ask a question.",
       "h1": "Contact"
+    },
+    "/games": {
+      "title": "Game Design Class for Kids Online: Unity, Blender and AI | Green Fire",
+      "description": "A six week live online class where kids 11 to 15 design and build their own 3D video game in Unity and Blender, with a Game Bible and AI as a helper.",
+      "h1": "Your kid makes their own 3D video game",
+      "about": [
+        "The Greenfire Game Creator Lab is a small live online class for kids 11 to 15. Over six weeks and twelve sessions they learn game design, characters, worldbuilding and level design, keep their own Game Bible, model their hero and props in Blender, and build a finished, playable 3D game in Unity.",
+        "AI is taught as a helper, not a shortcut: kids design first, then learn to ask AI for ideas and code help on the teacher's screen and check every answer. Eight kids per cohort, taught by Jordan Larsen. A free printable Game Bible is at greenfire.earth/game-lab/game-bible.html."
+      ]
     }
   },
   "noindex": [

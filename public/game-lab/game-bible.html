@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Game Bible | Greenfire Game Creator Lab</title>
+<meta name="description" content="The free printable Game Bible from the Greenfire Game Creator Lab: the design document real game studios keep, made for kids. Pitch, world, characters, mechanics, levels, playtests and credits.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1b2a22; --soft:#4b5d52; --line:#b9cbbf; --green:#17a35c; --orange:#f07a28; --paper:#fbfaf5; --tint:#eef7f0; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#e9efe9; color:var(--ink); font:16px/1.5 Nunito, system-ui, sans-serif; }
+  .bar { position:sticky; top:0; z-index:5; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; padding:12px 16px; background:#0f1a14; color:#fff; }
+  .bar a, .bar button { font:700 14px Nunito, sans-serif; color:#0f1a14; background:#46e08f; border:0; border-radius:10px; padding:10px 14px; text-decoration:none; cursor:pointer; }
+  .bar span { font-size:14px; opacity:.85; }
+  main { max-width:820px; margin:0 auto; padding:24px 16px 64px; }
+  .page { background:var(--paper); border-radius:14px; padding:36px 40px; margin:0 0 24px; box-shadow:0 8px 30px rgba(0,0,0,.08); page-break-after:always; break-after:page; min-height:900px; display:flex; flex-direction:column; }
+  .num { font:800 13px 'Baloo 2', sans-serif; letter-spacing:.14em; color:var(--green); text-transform:uppercase; }
+  h1, h2 { font-family:'Baloo 2', sans-serif; margin:.1em 0 .3em; line-height:1.1; }
+  h1 { font-size:56px; }
+  h2 { font-size:34px; }
+  .tip { background:var(--tint); border-left:5px solid var(--green); border-radius:8px; padding:10px 14px; color:var(--soft); font-size:15px; margin:6px 0 18px; }
+  .q { font-weight:700; margin:16px 0 6px; }
+  .lines { border-bottom:2px dotted var(--line); height:34px; }
+  .box { border:2px dashed var(--line); border-radius:12px; flex:1; min-height:180px; display:flex; align-items:flex-start; justify-content:flex-start; padding:10px 12px; color:#9aac9f; font-size:14px; margin-top:8px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0; }
+  .chips b { font-weight:700; font-size:13px; padding:4px 10px; border-radius:99px; background:#fff; border:1.5px solid var(--line); color:var(--soft); }
+  table { width:100%; border-collapse:collapse; margin-top:8px; }
+  td, th { border:1.5px solid var(--line); padding:8px 10px; height:44px; text-align:left; font-size:14px; vertical-align:top; }
+  th { background:var(--tint); }
+  .cover { justify-content:center; text-align:center; background:radial-gradient(circle at 50% 30%, #dff6e7, var(--paper) 60%); }
+  .cover .fill { margin:28px auto 0; width:80%; text-align:left; }
+  .loop { width:100%; max-width:360px; margin:10px auto; display:block; }
+  .foot { margin-top:auto; padding-top:18px; font-size:12px; color:#8a9a8f; }
+  @media (max-width:600px) { .page { padding:24px 18px; min-height:auto; } h1 { font-size:40px; } h2 { font-size:28px; } .grid2 { grid-template-columns:1fr; } }
+  @media print {
+    body { background:#fff; }
+    .bar { display:none; }
+    main { padding:0; max-width:none; }
+    .page { box-shadow:none; border-radius:0; margin:0; min-height:auto; height:100vh; padding:28px 34px; }
+  }
+</style>
+</head>
+<body>
+<div class="bar">
+  <span>The Game Bible, free from the Greenfire Game Creator Lab. Print it, or fill it in on paper as you go.</span>
+  <div style="display:flex;gap:8px"><button onclick="window.print()">Print or save as PDF</button><a href="/games">About the course</a></div>
+</div>
+<main>
+
+<section class="page cover">
+  <div class="num">Greenfire Game Creator Lab</div>
+  <h1>My Game Bible</h1>
+  <p style="max-width:520px;margin:0 auto;color:var(--soft)">Every real game studio keeps a "bible": the book of everything about their game. This one is yours. Fill one page at a time. Ideas change, and that is good. Cross things out, draw, stick pictures in.</p>
+  <div class="fill">
+    <p class="q">My game is called</p><div class="lines"></div>
+    <p class="q">Made by (first name or a game maker name)</p><div class="lines"></div>
+    <p class="q">I started it on</p><div class="lines"></div>
+  </div>
+  <div class="foot">greenfire.earth/games</div>
+</section>
+
+<section class="page">
+  <div class="num">Page 1 · Session 1</div>
+  <h2>The Spark</h2>
+  <div class="tip">Designers start from what they love. Think about the games you play the most.</div>
+  <table>
+    <tr><th style="width:34%">A game I love</th><th>The one moment in it that feels amazing, and why</th></tr>
+    <tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>
+  </table>
+  <p class="q">My paper game's rules (the game we invented in session 1)</p>
+  <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+  <p class="q">The ONE rule I changed, and what happened</p>
+  <div class="lines"></div><div class="lines"></div>
+</section>
+
+<section class="page">
+  <div class="num">Page 2 · Session 1</div>
+  <h2>My Game's Feeling</h2>
+  <div class="tip">How should a player FEEL while they play? Pick three words. Every choice you make later (colors, music, danger) should help those feelings.</div>
+  <div class="chips"><b>brave</b><b>curious</b><b>cozy</b><b>fast</b><b>sneaky</b><b>spooky</b><b>silly</b><b>powerful</b><b>calm</b><b>clever</b><b>excited</b><b>amazed</b></div>
+  <div class="grid2" style="margin-top:16px">
+    <div><p class="q">Feeling 1</p><div class="lines"></div></div>
+    <div><p class="q">Feeling 2</p><div class="lines"></div></div>
+    <div><p class="q">Feeling 3</p><div class="lines"></div></div>
+    <div><p class="q">A game that gives me this feeling</p><div class="lines"></div></div>
+  </div>
+  <div class="box">Draw or stick in a picture that feels like your game</div>
+</section>
+
+<section class="page">
+  <div class="num">Page 3 · Session 2</div>
+  <h2>The Pitch</h2>
+  <div class="tip">A pitch is your whole game in one sentence. Try: "A [hero] must [goal] in [world], but [problem]."</div>
+  <p class="q">My one line pitch</p>
+  <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+  <p class="q">The dream version (if I had a whole studio and five years)</p>
+  <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+  <p class="q">The smallest fun version (what I will finish in six weeks)</p>
+  <div class="lines"></div><div class="lines"></div>
+  <div class="tip" style="margin-top:22px">Scope rule: one world, one hero, one goal. Make one level great before you make a second. Finished beats huge.</div>
+</section>
+
+<section class="page">
+  <div class="num">Page 4 · Session 2</div>
+  <h2>The World</h2>
+  <div class="tip">A world has a place, a special rule, a history and a mood.</div>
+  <div class="grid2">
+    <div><p class="q">The place</p><div class="lines"></div></div>
+    <div><p class="q">Its special rule (the magic)</p><div class="lines"></div></div>
+  </div>
+  <p class="q">Its history in three sentences (the lore)</p>
+  <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+  <p class="q">The map, from above. Mark: START, GOAL, three special places, one DANGER zone, one SECRET.</p>
+  <div class="box">Map</div>
+</section>
+
+<section class="page">
+  <div class="num">Page 5 · Session 3</div>
+  <h2>The Hero</h2>
+  <div class="tip">A strong character has a want, a fear or flaw, a special ability, and a shape you could recognize from far away.</div>
+  <div class="grid2">
+    <div><p class="q">Name</p><div class="lines"></div></div>
+    <div><p class="q">What they want</p><div class="lines"></div></div>
+    <div><p class="q">What they fear, or their flaw</p><div class="lines"></div></div>
+    <div><p class="q">Their special ability</p><div class="lines"></div></div>
+  </div>
+  <p class="q">Colors</p><div class="lines"></div>
+  <div class="grid2" style="flex:1">
+    <div class="box">Front view (big simple shapes: balls, boxes, cylinders, cones)</div>
+    <div class="box">Side view, and the black silhouette</div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="num">Page 6 · Session 3</div>
+  <h2>The Others</h2>
+  <div class="tip">Who or what stands in the hero's way? Who helps? Even a game with no talking has these.</div>
+  <p class="q">The rival, enemy or obstacle, and what it wants</p>
+  <div class="lines"></div><div class="lines"></div>
+  <p class="q">The helper, and how they help</p>
+  <div class="lines"></div><div class="lines"></div>
+  <div class="grid2" style="flex:1">
+    <div class="box">Draw the rival or obstacle</div>
+    <div class="box">Draw the helper</div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="num">Page 7 · Session 4</div>
+  <h2>Art Style</h2>
+  <div class="tip">Low poly means few shapes and bold colors. It looks great and runs fast. Pick a style and keep everything in it.</div>
+  <p class="q">Three style words (chunky, glowing, cute, rusty, dreamy...)</p><div class="lines"></div>
+  <p class="q">My color palette: color in 3 to 5 squares</p>
+  <table><tr><td></td><td></td><td></td><td></td><td></td></tr></table>
+  <div class="box">Screenshot of my hero in Blender</div>
+</section>
+
+<section class="page">
+  <div class="num">Page 8 · Session 5</div>
+  <h2>Things in the World</h2>
+  <div class="tip">Every prop should answer "why is this here?" A broken bridge tells a story without words.</div>
+  <table>
+    <tr><th>Prop</th><th>What it is</th><th>Why it is here (the story it tells)</th></tr>
+    <tr><td>The collectible</td><td></td><td></td></tr>
+    <tr><td>The landmark</td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <div class="num">Page 9 · Session 6</div>
+  <h2>Controls</h2>
+  <div class="tip">A player should learn the controls in ten seconds. Fewer buttons is usually better.</div>
+  <table>
+    <tr><th style="width:30%">Key or button</th><th>What it does</th></tr>
+    <tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>
+  </table>
+  <p class="q">The first time I walked around my world, it felt</p>
+  <div class="lines"></div><div class="lines"></div>
+</section>
+
+<section class="page">
+  <div class="num">Pages 11 and 12 · Session 7</div>
+  <h2>The Core Loop and Mechanics</h2>
+  <div class="tip">The core loop is what the player does again and again. Mechanics are the verbs: walk, jump, collect, dash. Every action needs feedback: a sound, a pop, a number going up.</div>
+  <svg class="loop" viewBox="0 0 300 300" aria-label="Draw your core loop: four steps around a circle">
+    <circle cx="150" cy="150" r="105" fill="none" stroke="#b9cbbf" stroke-width="3" stroke-dasharray="8 8"/>
+    <polygon points="150,38 162,52 138,52" fill="#17a35c" transform="rotate(45 150 150)"/>
+    <polygon points="150,38 162,52 138,52" fill="#17a35c" transform="rotate(135 150 150)"/>
+    <polygon points="150,38 162,52 138,52" fill="#17a35c" transform="rotate(225 150 150)"/>
+    <polygon points="150,38 162,52 138,52" fill="#17a35c" transform="rotate(315 150 150)"/>
+    <text x="150" y="40" text-anchor="middle" font-size="13" fill="#4b5d52">1. ____________</text>
+    <text x="268" y="154" text-anchor="middle" font-size="13" fill="#4b5d52">2. ________</text>
+    <text x="150" y="272" text-anchor="middle" font-size="13" fill="#4b5d52">3. ____________</text>
+    <text x="34" y="154" text-anchor="middle" font-size="13" fill="#4b5d52">4. ________</text>
+  </svg>
+  <table>
+    <tr><th style="width:30%">Mechanic (a verb)</th><th>The feedback (what you see and hear)</th></tr>
+    <tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <div class="num">Page 13 · Session 8</div>
+  <h2>Level Map</h2>
+  <div class="tip">Players follow light, landmarks and paths. Let them see the goal early. Start easy, teach one thing, test it, then surprise them.</div>
+  <div class="box">Top down sketch: START, the path, collectibles (breadcrumbs), the landmark, where it gets harder, GOAL</div>
+  <p class="q">Draw your difficulty curve (how hard it gets, from start to end)</p>
+  <div class="box" style="min-height:140px;flex:0">easy at the start ................................................ hardest near the end</div>
+</section>
+
+<section class="page">
+  <div class="num">Pages 14 and 15 · Session 9</div>
+  <h2>Challenge and Story</h2>
+  <div class="tip">Losing should be quick and fair, so players say "one more try". Put the best reward next to the danger.</div>
+  <div class="grid2">
+    <div><p class="q">What is dangerous</p><div class="lines"></div><div class="lines"></div></div>
+    <div><p class="q">Where the checkpoints are</p><div class="lines"></div><div class="lines"></div></div>
+    <div><p class="q">How you win</p><div class="lines"></div></div>
+    <div><p class="q">How you lose</p><div class="lines"></div></div>
+  </div>
+  <p class="q">The story: beginning, middle, end (and where the player sees each one)</p>
+  <table>
+    <tr><th style="width:22%"></th><th>What happens</th><th style="width:30%">Where the player sees it</th></tr>
+    <tr><td>Beginning</td><td></td><td></td></tr><tr><td>Middle</td><td></td><td></td></tr><tr><td>End</td><td></td><td></td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <div class="num">Page 16 · Session 10</div>
+  <h2>Sound and Feel</h2>
+  <div class="tip">Juice is all the extra feedback that makes actions feel good. Sound is half the feeling of a game. Record your own!</div>
+  <table>
+    <tr><th>Sound</th><th>How I made it or where it is from</th><th>When it plays</th></tr>
+    <tr><td>Collect</td><td></td><td></td></tr><tr><td>Danger</td><td></td><td></td></tr><tr><td>Win</td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+  </table>
+  <p class="q">My music's mood (does it match my three feeling words?)</p><div class="lines"></div>
+  <p class="q">Juice I added (particles, glow, bounce, camera shake...)</p><div class="lines"></div><div class="lines"></div>
+</section>
+
+<section class="page">
+  <div class="num">Page 17 · Sessions 6 to 11</div>
+  <h2>Playtest Log</h2>
+  <div class="tip">You are not your player. Watch someone play without helping. Feedback is a gift: say thank you, write it down, then decide.</div>
+  <table>
+    <tr><th style="width:20%">Who played</th><th>Where they got stuck, bored or excited</th><th style="width:30%">What I changed</th></tr>
+    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+  </table>
+  <p class="q">My fix list (only the three most important)</p>
+  <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+</section>
+
+<section class="page">
+  <div class="num">Pages 18 and 19 · Session 12</div>
+  <h2>Credits and What's Next</h2>
+  <div class="tip">Real games thank everyone who helped. Being honest about help, from people or from AI, is part of being a real creator.</div>
+  <table>
+    <tr><th style="width:36%">Who or what helped</th><th>How they helped</th></tr>
+    <tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td>AI (ideas or code)</td><td></td></tr><tr><td>Music and sounds</td><td></td></tr>
+  </table>
+  <p class="q">The thing I am proudest of</p><div class="lines"></div>
+  <p class="q">The hardest part, and how I got past it</p><div class="lines"></div>
+  <p class="q">What I would add next</p><div class="lines"></div><div class="lines"></div>
+  <div class="foot">Made in the Greenfire Game Creator Lab · greenfire.earth/games</div>
+</section>
+
+</main>
+</body>
+</html>
