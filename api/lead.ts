@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { writeLead } from './_lib/storage.js';
+import { playtest } from './_lib/playtest.js';
 
 /* A person asking for something on /start. Kept on the site (encrypted) and
    pulled into the Greenfire operator, where Pip follows it through. */
@@ -12,6 +13,8 @@ const EMAIL = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/;
 const field = (v: unknown, n: number) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  /* /api/playtest (ROOTSIGNAL) arrives here by rewrite; see _lib/playtest.ts. */
+  if (req.query.game === 'rootsignal') return playtest(req, res);
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const b = (typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {}) as Record<string, unknown>;
 

@@ -1,17 +1,28 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { writePlaytester, writeFeedback, countPlaytesters } from './_lib/storage.js';
+import { writePlaytester, writeFeedback, countPlaytesters, readPlaytesters, readFeedback } from './storage.js';
+import { requireAdmin } from './auth.js';
 
 /* /rootsignal: a playtest sign-up (kind "signup") or a tester's notes after
    playing (kind "feedback"). Kept apart from /api/lead so nobody who signs up
-   to play a game is ever treated as a sales lead. GET returns only a count. */
+   to play a game is ever treated as a sales lead. GET returns only a count;
+   GET ?all=1 behind the admin password returns every sign-up and note. (Not its own
+   function: the Hobby plan allows 12 and the site already uses all 12, so
+   vercel.json rewrites /api/playtest to /api/lead?game=rootsignal and lead.ts
+   hands the request here. The storage stays separate from leads.) */
 const PLATFORMS = new Set(['Mac', 'Windows', 'Linux', 'Steam Deck', 'Not sure']);
 const INPUTS = new Set(['Mouse and keyboard', 'Controller', 'Laptop keyboard only', 'Not sure']);
 const EMAIL = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/;
 const field = (v: unknown, n: number) => String(v ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 const text = (v: unknown, n: number) => String(v ?? '').trim().slice(0, n);
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export async function playtest(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
+    if (req.query.all) {
+      if (!requireAdmin(req, res)) return;
+      res.setHeader('Cache-Control', 'no-store');
+      const [playtesters, feedback] = await Promise.all([readPlaytesters(), readFeedback()]);
+      return res.status(200).json({ playtesters, feedback });
+    }
     res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
     try { return res.status(200).json({ count: await countPlaytesters() }); }
     catch { return res.status(200).json({ count: 0 }); }

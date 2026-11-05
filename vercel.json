@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/playtest",
+      "destination": "/api/lead?game=rootsignal"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
