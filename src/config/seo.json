@@ -146,6 +146,16 @@
       "description": "Book Green Fire for AI help, interactive 3D, eco village and land project software, media, studio or workshops, or ask a question.",
       "h1": "Contact"
     },
+    "/rootsignal": {
+      "title": "ROOTSIGNAL: a solarpunk action RPG | Greenfire",
+      "description": "Heal the land, break the machines. ROOTSIGNAL is a solarpunk action RPG in development by Greenfire. Read the story and sign up for the first playtest.",
+      "h1": "ROOTSIGNAL: heal the land, break the machines",
+      "image": "/rootsignal/key-title.jpg",
+      "about": [
+        "ROOTSIGNAL is a solarpunk action RPG. Five generations after the Hard Seasons, the eco villages of the Alder Watershed are being seized by the Bastion Directorate to build a chain of army data centers. You play Rook, wearing living Bio-Weave technology that grows stronger as the land heals: swing on vines, glide on solar wings, and tear the machines of occupation apart.",
+        "The game is in early development by Greenfire, made in Unity. The first playtests are open now: sign up at greenfire.earth/rootsignal to get the build by email."
+      ]
+    },
     "/games": {
       "title": "Game Design Class for Kids Online: Unity, Blender and AI | Green Fire",
       "description": "A six week live online class where kids 11 to 15 design and build their own 3D video game in Unity and Blender, with a Game Bible and AI as a helper.",

@@ -1,0 +1,160 @@
+{
+  "_comment": "Every word on /rootsignal. Lore comes from Root_Signal/docs (CANON.md and R-01) and only uses approved canon. Kept OFF this page on purpose: the Veil and its substances, and anything about the Land Council (a co-development decision), plus Act Three and Four spoilers. Platform links: put a url in and set live to true and the tile lights up; a tile with no url says Coming soon. No em dashes.",
+  "title": "ROOTSIGNAL",
+  "tagline": "Heal the land. Break the machines.",
+  "pitch": "A solarpunk action RPG. Wear living technology that grows stronger as the land heals, move through a fight like a wave, and tear the machines of occupation apart.",
+  "status": "In development by Greenfire. Early build, first playtests now.",
+  "story": {
+    "kicker": "The story",
+    "title": "Five generations after the Hard Seasons",
+    "paragraphs": [
+      "The Alder Watershed came back. Where there were dust and ration lines there are now eco villages: living architecture, repair workshops, seed libraries, shared kitchens and music at the long tables after sunset.",
+      "Then the Bastion Directorate arrived. Born from emergency logistics, it never stood down. Now it leases and seizes farmland to build the Continuity Corridor, a chain of army data centers that run drones, surveillance and predictive control.",
+      "On an old farm at the edge of Alder Fields, Elias Vale's machines keep failing in the same strip of ground, and lights hang in the air over the broken soil. The land remembers, and it has interests of its own.",
+      "You are Rook. You grew up here, trained as a field systems specialist, and came home after an assignment went wrong. You are about to become the bridge between a farmer, a resistance, a community and something far older than all of them."
+    ]
+  },
+  "meanings": {
+    "kicker": "What is the Root Signal?",
+    "title": "One name, four answers",
+    "items": [
+      { "icon": "radio", "title": "A transmission", "text": "The resistance's call across the watershed, passed hand to hand when the networks are watched." },
+      { "icon": "waves", "title": "An anomaly", "text": "Readings no instrument should take, rising from the same strip of farmland where the machines keep dying." },
+      { "icon": "ear", "title": "A way of listening", "text": "Elias's own word for what happens when he stops talking and lets the land answer." },
+      { "icon": "question", "title": "A question", "text": "Asked of you, the player. What do you owe a place that remembers you?" }
+    ]
+  },
+  "spirits": {
+    "kicker": "The lights over the soil",
+    "title": "The Chorus",
+    "text": "The spirits are real, and there are many of them. Outsiders call them the Chorus. They appear as drifting orbs, they speak in fragments through Elias, and they talk about places and relationships, never tactics. They are not a power source, and they are not yours to use. The Bastion Directorate has noticed them, and it wants them to behave."
+  },
+  "world": {
+    "kicker": "The map",
+    "title": "The Alder Watershed",
+    "intro": "Compact and connected. Every district has a safe settlement, a contested site, and a way you leave it better than you found it.",
+    "districts": [
+      { "name": "Alder Fields", "text": "Farms, orchards, terraces and Elias's homestead, around the village of Greenhaven Commons. Where it all begins.", "change": "Restored irrigation and open field routes" },
+      { "name": "Canopy Commons", "text": "Dense living architecture grown around an old transport interchange. Rooftop chases and vertical fights.", "change": "The tram network reopens" },
+      { "name": "Reedwater", "text": "Wetlands, canals, floating platforms and floodworks. Routes that follow the water.", "change": "Channels reconnected, floods held back" },
+      { "name": "Glass Ridge", "text": "Exposed slopes, energy collectors and military service roads. Ride the wind, stop the convoys.", "change": "Community relays and safe crossings" },
+      { "name": "The Cut", "text": "Excavated farmland and the growing data center campus. The heaviest machines live here.", "change": "Decided by the people who live there" }
+    ],
+    "hidden": { "name": "Something beneath", "text": "An old boundary marker on Elias's farm points down. Nobody who has followed it has said where." }
+  },
+  "cast": {
+    "kicker": "The people",
+    "title": "Who you fight beside, and against",
+    "people": [
+      { "name": "Rook", "role": "You", "text": "Field systems specialist. Home after a failed assignment. Carries everything alone, and will have to learn not to.", "img": "/rootsignal/key-rook.jpg", "pos": "35% 30%" },
+      { "name": "Nadi Sol", "role": "Courier, musician, route maker", "text": "Knows every shortcut and every patrol's timing. Will race you across the rooftops and win.", "img": "/rootsignal/concept-nadi.jpg", "pos": "88% 20%" },
+      { "name": "Elias Vale", "role": "The farmer", "text": "Dry humor, meticulous records, lonely. He once allowed a survey of his land, and he has regretted it every day since." },
+      { "name": "Imani Reed", "role": "Living materials engineer", "text": "Built the first Bio-Weave interface for healing land. Watched it become armor." },
+      { "name": "Tomas Keene", "role": "Deserter", "text": "Former Bastion maintenance specialist. Knows exactly where their machines are weak." },
+      { "name": "Director Mara Voss", "role": "Bastion Directorate", "text": "Your old supervisor. Believes the watershed cannot survive the next crisis without her. Capable of care, and of cruelty.", "foe": true }
+    ]
+  },
+  "factions": {
+    "kicker": "The sides",
+    "commons": [
+      { "name": "Watershed Network", "text": "The resistance. Wants the seizures to end and the villages reconnected." },
+      { "name": "Commons Assembly", "text": "Keeps the settlements fed, fixed and accountable." },
+      { "name": "Corridor Workers Union", "text": "Wants safety and a living. A strike can stop the line, but it cannot stop the guns." }
+    ],
+    "corridor": [
+      { "name": "Bastion Directorate", "text": "Wants permanent control of the region. Builds the Continuity Corridor." },
+      { "name": "Helix Provisioning", "text": "Sells proprietary biology and wants communities to need it forever." }
+    ]
+  },
+  "arsenal": {
+    "kicker": "Bio-Weave",
+    "title": "Living technology. It grows as the land heals.",
+    "intro": "Everything runs on Vital Flux, drawn from living soil. Heal a place and you have more to spend. Only machines come apart in ROOTSIGNAL. People and the land are protected.",
+    "items": [
+      { "icon": "tendril", "name": "Tendril Line", "kind": "Grapple", "text": "Vines fire from Rook's arms. Wrap a drone and yank it in, or catch a pillar and swing with a bungee snap." },
+      { "icon": "staff", "name": "Living Staff", "kind": "Melee", "text": "Fast, flowing combos on the ground and in the air. Hit at speed and it hits harder." },
+      { "icon": "fist", "name": "Mantis Strike", "kind": "Finisher", "text": "Pull a machine close and punch it apart. Dive out of a swing and the strike lands with everything you carried." },
+      { "icon": "hammer", "name": "Kinetic Hammer", "kind": "Launcher", "text": "Spend Flux to launch a robot through the air, into its friends." },
+      { "icon": "shield", "name": "Layer Shield", "kind": "Defense", "text": "Tap to parry, hold to raise a living wall. Tear the plating off a machine and throw it back." },
+      { "icon": "bloom", "name": "Pulse Bloom", "kind": "Burst", "text": "A wave of living energy that scrambles drones and cracks open armor." },
+      { "icon": "glider", "name": "Solar Glider", "kind": "Traversal", "text": "Leaf wings that unfold in the air. Up to twenty seconds of flight on sunlight." }
+    ]
+  },
+  "atlas": {
+    "kicker": "The Living Atlas",
+    "title": "Every species is real",
+    "intro": "Look at something living and Rook scans it into the Atlas. Every plant, fungus and animal in the game is a real species, with real ecology, and a reason it lives in Greenhaven. Tap a card to turn it over.",
+    "species": [
+      { "id": "white_clover", "name": "White clover", "sci": "Trifolium repens", "kind": "Plant", "fact": "Bacteria in its roots fix nitrogen from the air, so it feeds the soil around it.", "greenhaven": "Sown between the terrace rows as living fertiliser. Greenhaven buys no nitrogen." },
+      { "id": "runner_bean", "name": "Scarlet runner bean", "sci": "Phaseolus coccineus", "kind": "Plant", "fact": "Another nitrogen fixer. Its flowers feed bees and, at home, hummingbirds.", "greenhaven": "The dried beans are a winter staple at the long tables." },
+      { "id": "apricot", "name": "Apricot", "sci": "Prunus armeniaca", "kind": "Plant", "fact": "Its early blossom is one of the first big meals of the year for bees.", "greenhaven": "Anyone may pick from the public trees on the avenue." },
+      { "id": "lavender", "name": "English lavender", "sci": "Lavandula angustifolia", "kind": "Plant", "fact": "Drought tolerant and loved by bees and butterflies.", "greenhaven": "The purple drifts on the roofs are there for the pollinators first." },
+      { "id": "valley_oak", "name": "Valley oak", "sci": "Quercus lobata", "kind": "Plant", "fact": "One old oak can support hundreds of species of insects, birds and fungi.", "greenhaven": "The village was built around the heritage oak, not over it." },
+      { "id": "chicken_of_the_woods", "name": "Chicken of the woods", "sci": "Laetiporus sulphureus", "kind": "Fungus", "fact": "A wood rotting fungus that turns dead heartwood back into soil.", "greenhaven": "Left alone on the old logs. Only trained foragers pick it." },
+      { "id": "oyster_mushroom", "name": "Oyster mushroom", "sci": "Pleurotus ostreatus", "kind": "Fungus", "fact": "One of the few fungi that traps tiny nematodes for nitrogen.", "greenhaven": "Grown on spent straw from the terraces, then the straw goes back to the soil." },
+      { "id": "honey_bee", "name": "Western honey bee", "sci": "Apis mellifera", "kind": "Insect", "fact": "A colony of tens of thousands pollinates crops and wild flowers for kilometres.", "greenhaven": "The hives sit on the green roofs." },
+      { "id": "monarch", "name": "Monarch butterfly", "sci": "Danaus plexippus", "kind": "Insect", "fact": "Its caterpillars eat only milkweed. Some migrate thousands of kilometres.", "greenhaven": "Milkweed grows wild along the river so the monarchs keep coming through." },
+      { "id": "great_blue_heron", "name": "Great blue heron", "sci": "Ardea herodias", "kind": "Bird", "fact": "Stands still in shallow water and strikes fast. A sign of a living river.", "greenhaven": "It came back the year the river was restored." },
+      { "id": "green_tree_frog", "name": "Green tree frog", "sci": "Hyla cinerea", "kind": "Amphibian", "fact": "Breathes partly through its skin, so it needs clean water.", "greenhaven": "They sit on the solar lily pads, which make warm perches." },
+      { "id": "firefly", "name": "Common eastern firefly", "sci": "Photinus pyralis", "kind": "Insect", "fact": "The flashes are courtship. Light pollution and pesticides make them vanish.", "greenhaven": "The terraces stay dark and unsprayed after sunset for them." }
+    ]
+  },
+  "gallery": {
+    "kicker": "From the build",
+    "title": "Greenhaven Commons at golden hour",
+    "note": "Real screenshots from the current early build. Placeholder models and all.",
+    "reel": { "src": "/rootsignal/reel.mp4", "poster": "/rootsignal/reel-poster.jpg", "caption": "Breaker Yard and the Iron Harvester, filmed in engine" },
+    "shots": [
+      { "src": "/rootsignal/shot-commons.jpg", "alt": "Greenhaven Commons with living towers at golden hour" },
+      { "src": "/rootsignal/shot-rook-nadi.jpg", "alt": "Rook meets Nadi under the solar sails" },
+      { "src": "/rootsignal/shot-greenhouse.jpg", "alt": "The greenhouse and a sun tower" },
+      { "src": "/rootsignal/shot-meal.jpg", "alt": "The long tables set for the evening meal" },
+      { "src": "/rootsignal/shot-atlas.jpg", "alt": "Scanning a honey bee into the Living Atlas" },
+      { "src": "/rootsignal/shot-suntowers.jpg", "alt": "Sun towers with heliostat mirrors over the terraces" },
+      { "src": "/rootsignal/shot-hall.jpg", "alt": "The Commons Hall with its solar petals" },
+      { "src": "/rootsignal/shot-terraces.jpg", "alt": "Food terraces and lavender" },
+      { "src": "/rootsignal/shot-bridge.jpg", "alt": "The timber gate on the bridge into the village" }
+    ],
+    "concepts": [
+      { "src": "/rootsignal/concept-glider.jpg", "alt": "Solar glider concept sheet" },
+      { "src": "/rootsignal/concept-nadi.jpg", "alt": "Nadi Sol character turnaround" }
+    ]
+  },
+  "roadmap": {
+    "kicker": "Devlog",
+    "title": "Where the build is",
+    "columns": [
+      { "label": "Playable now", "tone": "done", "items": ["Breaker Yard: three waves of drones and machines", "The Iron Harvester boss, four phases, two ways to win", "Greenhaven Commons at golden hour", "The orchard at dusk with voiced talk scenes", "Tendril swinging, air combos and the solar glider", "The Living Atlas with 12 real species", "Saving"] },
+      { "label": "Building", "tone": "now", "items": ["First outside playtests", "Mouse controls and combat feel", "Performance on older machines", "Hero buildings and villagers"] },
+      { "label": "Next", "tone": "next", "items": ["The farm mystery", "The channel", "Sound and music", "Windows build", "Play in the browser"] }
+    ]
+  },
+  "community": {
+    "kicker": "Grow it with us",
+    "title": "Follow, play, back it",
+    "intro": "ROOTSIGNAL is made by a tiny team in the open. Every follow, playtest and share decides how fast it grows.",
+    "platforms": [
+      { "id": "itch", "name": "itch.io", "text": "Download the playtest build and follow devlogs.", "url": "", "live": false },
+      { "id": "crowdfund", "name": "Crowdfunding", "text": "Back the game and get your name in the credits.", "url": "", "live": false },
+      { "id": "discord", "name": "Discord", "text": "Talk to the dev, report bugs, vote on what comes next.", "url": "", "live": false },
+      { "id": "instagram", "name": "Instagram", "text": "Clips and art as they happen.", "url": "https://www.instagram.com/greenfire_media/", "live": true },
+      { "id": "tiktok", "name": "TikTok", "text": "Short gameplay clips.", "url": "", "live": false },
+      { "id": "youtube", "name": "YouTube", "text": "Devlogs and full playthroughs.", "url": "", "live": false },
+      { "id": "steam", "name": "Steam", "text": "Wishlist it when the page opens.", "url": "", "live": false }
+    ]
+  },
+  "playtest": {
+    "kicker": "First wave",
+    "title": "Play it before anyone else",
+    "intro": "The first playtest is small. Sign up and you get the build by email, a controls card, and a short form to tell me what felt good and what broke.",
+    "note": "Mac first. Windows is next, and browser play after that. Sign up on any computer and you will hear when your version is ready.",
+    "button": "Sign me up to playtest",
+    "sent_title": "You are on the list.",
+    "sent_text": "I will email you when the next build is ready for your computer. Check your spam folder just in case."
+  },
+  "feedback": {
+    "title": "Already played?",
+    "intro": "Tell me what happened. Short is fine. Every answer is read.",
+    "button": "Send my notes"
+  }
+}

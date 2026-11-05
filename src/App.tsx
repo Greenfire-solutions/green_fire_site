@@ -25,6 +25,8 @@ const TechPage = lazy(() => import('./pages/TechPage').then((m) => ({ default: m
 const StorePage = lazy(() => import('./pages/StorePage').then((m) => ({ default: m.StorePage })));
 // Where a store checkout lands: the downloads, checked against Stripe.
 const StoreAccountPage = lazy(() => import('./pages/StoreAccountPage').then((m) => ({ default: m.StoreAccountPage })));
+// The ROOTSIGNAL game page (fonts, art and its own styles) loads only on /rootsignal.
+const RootsignalPage = lazy(() => import('./pages/RootsignalPage').then((m) => ({ default: m.RootsignalPage })));
 import { ROUTES } from './lib/routes';
 
 /* Only reached when the app, not a blog file, is showing a /blog address.
@@ -96,6 +98,15 @@ function PublicSite() {
             <Route path="/start" element={<StartPage />} />
             <Route path="/invest" element={<InvestPage />} />
             <Route path="/games" element={<GameLabPage />} />
+            <Route
+              path="/rootsignal"
+              element={
+                <Suspense fallback={<div className="min-h-[92vh] bg-[#0b1510]" />}>
+                  <RootsignalPage />
+                </Suspense>
+              }
+            />
+            <Route path="/play" element={<Navigate to="/rootsignal" replace />} />
             <Route path="/game-lab" element={<Navigate to="/games" replace />} />
             <Route path="/start/thanks" element={<StartThanksPage />} />
             <Route path="/ai" element={<Navigate to="/start" replace />} />

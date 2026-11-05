@@ -1,0 +1,106 @@
+/* /rootsignal only. This file is imported by the lazy RootsignalPage, so the
+   fonts and these rules load for visitors to the game page and nobody else. */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Marcellus+SC&display=swap');
+
+.rs {
+  --rs-ink: #0b1510;
+  --rs-deep: #102118;
+  --rs-moss: #1d3a28;
+  --rs-leaf: #7fbf6a;
+  --rs-gold: #f0c26a;
+  --rs-amber: #e8913f;
+  --rs-ember: #c8572e;
+  --rs-parch: #f4e7c8;
+  --rs-parch-ink: #3b2a17;
+  --rs-sky: #8fb9c9;
+  background: var(--rs-ink);
+  color: #efe6d2;
+}
+.rs-display { font-family: 'Marcellus SC', 'Cormorant Garamond', Georgia, serif; letter-spacing: 0.06em; }
+.rs-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+.rs-gold { color: var(--rs-gold); }
+
+/* the wordmark: warm gold with a soft sunset glow */
+.rs-wordmark {
+  font-family: 'Marcellus SC', Georgia, serif;
+  letter-spacing: 0.14em;
+  background: linear-gradient(180deg, #fff3c9 0%, #f0c26a 45%, #d77a34 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 24px rgba(240, 160, 70, 0.35));
+}
+
+/* a framed panel: thin gold line with corner leaves */
+.rs-frame {
+  position: relative;
+  border: 1px solid rgba(240, 194, 106, 0.28);
+  background: linear-gradient(180deg, rgba(29, 58, 40, 0.55), rgba(11, 21, 16, 0.85));
+  border-radius: 18px;
+}
+.rs-frame::before,
+.rs-frame::after {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background: no-repeat center / contain
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cpath d='M2 24C2 12 12 2 24 2' fill='none' stroke='%23f0c26a' stroke-width='1.4'/%3E%3Cpath d='M7 15c3-1 5-4 5-8-3 1-5 4-5 8z' fill='%237fbf6a'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.rs-frame::before { top: -6px; left: -6px; }
+.rs-frame::after { bottom: -6px; right: -6px; transform: rotate(180deg); }
+
+/* parchment field-guide card */
+.rs-parch {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.45), transparent 55%),
+    radial-gradient(circle at 80% 90%, rgba(150, 100, 40, 0.18), transparent 50%),
+    var(--rs-parch);
+  color: var(--rs-parch-ink);
+  box-shadow: inset 0 0 0 1px rgba(110, 76, 30, 0.35), inset 0 0 30px rgba(120, 80, 30, 0.18), 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+}
+
+/* flip cards for the Living Atlas */
+.rs-flip { perspective: 1000px; }
+.rs-flip-inner { position: relative; height: 100%; transition: transform 0.6s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d; }
+.rs-flip.is-flipped .rs-flip-inner { transform: rotateY(180deg); }
+.rs-flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 14px; overflow: hidden; }
+.rs-flip-back { transform: rotateY(180deg); }
+@media (hover: hover) {
+  .rs-flip:hover .rs-flip-inner { transform: rotateY(180deg); }
+}
+
+/* drifting spirit orbs */
+.rs-orb {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 246, 210, 0.95) 0%, rgba(240, 194, 106, 0.55) 35%, rgba(240, 194, 106, 0) 70%);
+  animation: rs-drift 9s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes rs-drift {
+  0%, 100% { transform: translate(0, 0); opacity: 0.85; }
+  50% { transform: translate(14px, -22px); opacity: 0.45; }
+}
+
+/* the hero image drifts very slowly, like a held camera */
+.rs-hero-img { animation: rs-pan 40s ease-in-out infinite alternate; transform-origin: 60% 40%; }
+@keyframes rs-pan { from { transform: scale(1.04); } to { transform: scale(1.12) translate(-1.5%, 1%); } }
+
+/* Vital Flux bar */
+.rs-flux { background: linear-gradient(90deg, #3d8f4f, #7fbf6a 40%, #f0c26a 80%, #fff3c9); box-shadow: 0 0 18px rgba(127, 191, 106, 0.6); }
+
+.rs-dropcap::first-letter {
+  float: left;
+  font-family: 'Marcellus SC', Georgia, serif;
+  font-size: 4.2em;
+  line-height: 0.85;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--rs-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rs-orb, .rs-hero-img { animation: none; }
+  .rs-flip-inner { transition: none; }
+}

@@ -15,6 +15,7 @@ export const ROUTES = {
   start: '/start',
   invest: '/invest',
   games: '/games',
+  rootsignal: '/rootsignal',
   pilotRoadmap: '/pilot-roadmap',
   /** Static HTML written at build time by scripts/seo/build.mjs, not a React route. */
   blog: '/blog/',
@@ -49,6 +50,7 @@ export const PRIMARY_NAV = [
   { path: ROUTES.howItWorks, label: 'How It Works' },
   { path: ROUTES.start, label: 'AI Help' },
   { path: ROUTES.games, label: 'Kids Game Lab' },
+  { path: ROUTES.rootsignal, label: 'ROOTSIGNAL' },
   { path: ROUTES.store, label: 'Store' },
   { path: ROUTES.offerings, label: 'Offerings' },
   { path: ROUTES.tech, label: 'Tech' },
@@ -61,6 +63,7 @@ export const FOOTER_NAV = [
   { path: ROUTES.howItWorks, label: 'About' },
   { path: ROUTES.store, label: 'App Store' },
   { path: ROUTES.games, label: 'Kids Game Lab' },
+  { path: ROUTES.rootsignal, label: 'ROOTSIGNAL game' },
   { path: ROUTES.blog, label: 'Blog' },
   { path: ROUTES.pilotRoadmap, label: 'Pilot Roadmap' },
   { path: ROUTES.invest, label: 'Funders and Partners' },

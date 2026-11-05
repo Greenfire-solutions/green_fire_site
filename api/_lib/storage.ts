@@ -77,6 +77,23 @@ const INTAKE_PREFIX = 'intakes/';
 export const writeIntake = (intake: Record<string, unknown>) => writeSealed(INTAKE_PREFIX, intake);
 export const readIntakes = (limit = 500) => readSealed(INTAKE_PREFIX, limit);
 
+/* ---------------------------------------------------------- ROOTSIGNAL
+   /rootsignal: people who want to playtest the game, and what testers say
+   after playing. Sealed like a lead, but in their own folders on purpose:
+   the operator pulls leads/ into the client funnel, and a playtester must
+   never be followed up as a sales lead. */
+const PLAYTESTER_PREFIX = 'rootsignal/playtesters/';
+const FEEDBACK_PREFIX = 'rootsignal/feedback/';
+export const writePlaytester = (p: Record<string, unknown>) => writeSealed(PLAYTESTER_PREFIX, p);
+export const readPlaytesters = (limit = 1000) => readSealed(PLAYTESTER_PREFIX, limit);
+export const writeFeedback = (f: Record<string, unknown>) => writeSealed(FEEDBACK_PREFIX, f);
+export const readFeedback = (limit = 1000) => readSealed(FEEDBACK_PREFIX, limit);
+/** How many have signed up, for the public counter. Counts files only, opens none. */
+export async function countPlaytesters(): Promise<number> {
+  if (!r2Configured()) return 0;
+  return (await r2List(PLAYTESTER_PREFIX, 5000)).length;
+}
+
 /* ------------------------------------------------------------ settings
    Small values Jordan changes from the operator without a deploy, such as
    the Beginners Kit download link shown on /activate. Public JSON on

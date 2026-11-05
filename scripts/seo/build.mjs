@@ -326,7 +326,7 @@ for (const [route, m] of Object.entries(seo.routes)) {
     <meta property="og:title" content="${esc(m.title)}">
     <meta property="og:description" content="${esc(m.description)}">
     <meta property="og:url" content="${esc(abs(route))}">
-    <meta property="og:image" content="${esc(abs(seo.defaultImage))}">
+    <meta property="og:image" content="${esc(abs(m.image || seo.defaultImage))}">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="alternate" type="application/rss+xml" title="${esc(seo.siteName)} blog" href="/blog/feed.xml">
     <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c')}</script>
