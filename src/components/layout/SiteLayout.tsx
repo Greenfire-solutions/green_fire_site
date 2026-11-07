@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Flame, Mail, Menu, X } from 'lucide-react';
+import { Mail, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSiteContent } from '../../context/ContentContext';
 import { siteConfig } from '../../config/siteConfig';
@@ -39,9 +39,13 @@ export function SiteLayout({ children }: SiteLayoutProps) {
       <header className="sticky top-0 z-50 border-b border-white/5 bg-neutral-950/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <Link to={ROUTES.home} className="flex min-w-0 items-center gap-3 group">
-            <div className="shrink-0 rounded-full bg-emerald-500/10 p-2.5 ring-1 ring-emerald-400/30 transition-all group-hover:bg-emerald-500/20">
-              <Flame className="h-6 w-6 text-emerald-400" />
-            </div>
+            <img
+              src="/brand/greenfire-logo-128.png"
+              alt=""
+              width={44}
+              height={44}
+              className="h-10 w-10 md:h-11 md:w-11 shrink-0 transition-transform duration-300 group-hover:scale-110"
+            />
             <div className="min-w-0 text-left">
               <span className="block truncate text-sm md:text-lg font-bold tracking-wide text-white leading-tight">
                 {siteConfig.organizationName}
@@ -129,7 +133,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
           <div className="mb-8 flex flex-col md:flex-row md:items-start md:justify-between gap-8">
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <Flame className="h-6 w-6 text-emerald-500/50" />
+                <img src="/brand/greenfire-logo-128.png" alt="" width={36} height={36} className="h-9 w-9 opacity-80" loading="lazy" />
                 <span className="text-lg font-semibold text-stone-300">{siteConfig.organizationName}</span>
               </div>
               <p className="text-xs uppercase tracking-widest text-emerald-500/50 mb-2">{settings.footerTagline}</p>

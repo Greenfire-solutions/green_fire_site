@@ -38,7 +38,7 @@ export function HomePage() {
   return (
     <>
       {/* ——— Clear above-the-fold story ——— */}
-      <PageHero label={homepageHero.label} title={homepageHero.headline} subtitle={homepageHero.subheadline}>
+      <PageHero emblem label={homepageHero.label} title={homepageHero.headline} subtitle={homepageHero.subheadline}>
         <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap items-start">
           <BookButton subject={homepageHero.primaryCta.subject}>
             {homepageHero.primaryCta.label}

@@ -140,7 +140,8 @@ function page({ path, title, description, body, head = '', graph = [], type = 'w
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(abs(path))}">
 ${noindex ? '<meta name="robots" content="noindex">' : '<meta name="robots" content="index,follow,max-image-preview:large">'}
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="${esc(seo.siteName)} blog" href="/blog/feed.xml">
 <meta property="og:site_name" content="${esc(seo.siteName)}">
 <meta property="og:type" content="${type}">

@@ -29,15 +29,27 @@ export function PageHero({
   title,
   subtitle,
   children,
+  emblem = false,
 }: {
   label?: string;
   title: React.ReactNode;
   subtitle?: string;
   children?: React.ReactNode;
+  emblem?: boolean;
 }) {
   return (
     <section className="relative overflow-hidden border-b border-emerald-900/40">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.15),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(251,146,60,0.12),transparent_40%)]" />
+      {emblem && (
+        <img
+          src="/brand/greenfire-hero-emblem.png"
+          alt=""
+          aria-hidden="true"
+          width={640}
+          height={640}
+          className="pointer-events-none absolute right-[3%] top-1/2 hidden w-[26rem] -translate-y-1/2 xl:block 2xl:right-[8%] 2xl:w-[30rem]"
+        />
+      )}
       <div className="relative mx-auto max-w-7xl px-6 py-16 md:py-24">
         {label && <SectionLabel text={label} />}
         <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-tight text-white md:text-6xl">
