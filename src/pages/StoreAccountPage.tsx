@@ -192,6 +192,7 @@ export function StoreAccountPage() {
                 {anyBuilds && (
                   <p className="mt-3 text-xs text-stone-300">
                     Ready-made apps have everything inside: unzip, drag the folder into Applications, double-click Start. Which Mac do you have? Apple menu, About This Mac: a line that says <b>Chip</b> (Apple M1, M2...) means Apple Silicon; <b>Processor</b> (Intel Core) means Intel Mac.
+                    {owned.some((a) => a.builds?.some((b) => b.arch === 'win')) && <> On Windows, take the <b>Windows</b> download: right-click it, Extract All, then double-click Start in the folder.</>}
                   </p>
                 )}
                 <p className="mt-3 text-xs text-stone-400">Open GREENFIRE_START_HERE.md inside the zip first. Something not working? Reply to your email.</p>

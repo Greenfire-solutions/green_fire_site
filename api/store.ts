@@ -241,7 +241,8 @@ async function shelf(app: string): Promise<Shelved[]> {
 async function newestZip(app: string, arch = '') {
   const zips = await shelf(app);
   const newest = (xs: Shelved[]) => xs.slice().sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0] || null;
-  const mine = arch ? zips.filter((z) => z.version.includes(`-${arch}`)) : [];
+  // the build's kind is the END of its version ("-intel", "-silicon", "-win"), never a word inside the app's name
+  const mine = arch ? zips.filter((z) => z.version.endsWith(`-${arch}`)) : [];
   return (mine.length ? newest(mine) : null) || newest(zips);
 }
 
@@ -282,7 +283,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const app = field(req.query.app, 80);
       const a = await account(String(req.query.s || ''));
       if (!a.owned.includes(app)) return res.status(403).json({ error: 'This checkout does not include that app.' });
-      const arch = /^(intel|silicon)$/.test(String(req.query.arch || '')) ? String(req.query.arch) : '';
+      const arch = /^(intel|silicon|win)$/.test(String(req.query.arch || '')) ? String(req.query.arch) : '';
       const zip = await newestZip(app, arch);
       if (!zip) return res.status(404).json({ error: 'The download is being prepared. Greenfire has been told and will email it to you.' });
       return res.redirect(302, r2PublicUrl(zip.key));
