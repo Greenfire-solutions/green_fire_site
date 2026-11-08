@@ -452,7 +452,7 @@ export function StorePage() {
           <div className="mt-6 flex flex-col items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:flex-row sm:items-center">
             <div>
               <p className="font-bold text-white">Would rather not install anything yourself?</p>
-              <p className="text-sm text-stone-300">Greenfire sets it up on your computer, connects your accounts and shows you how it works. From $500.</p>
+              <p className="text-sm text-stone-300">Greenfire sets it up on your computer, connects your accounts and shows you how it works, as part of Learn It. From $5,000.</p>
             </div>
             <button onClick={() => setWant({ kind: 'setup' })} className="shrink-0 rounded-full border border-white/20 px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/5">
               Have it set up for me
@@ -466,7 +466,7 @@ export function StorePage() {
                 Press Get it and pay by card through Stripe. You land straight on your download page, and the same link comes by email so you never lose it. Every app arrives as a zip with a start here guide inside.
               </Faq>
               <Faq q="What do I need to run it?">
-                A computer you can install things on. The start here guide walks you through it. If you would rather not, Greenfire will set it up for you, from $500.
+                A computer you can install things on. The start here guide walks you through it. If you would rather not, Greenfire will set it up for you as part of Learn It, from $5,000.
               </Faq>
               <Faq q="How does the membership work?">
                 {usd(MEMBER)} a month lets you pick any two member apps each month, from your membership page. Apps you pick stay yours. Picks you do not use do not roll over. Builder, at {usd(BUILDER)} a month, includes every app, the bigger tools too. Cancel any time by replying to your welcome email.
@@ -750,7 +750,7 @@ function Panel({ a, fixed, onClose, onWant, onJoin, onOpen, genreLabel, more }: 
             </>
           )}
           <button onClick={() => onWant({ kind: 'setup', app: a })} className="w-full rounded-full border border-white/15 px-4 py-2.5 text-xs font-semibold text-stone-200 hover:bg-white/5">
-            Want it set up for you? From $500
+            Want it set up for you? From $5,000
           </button>
         </div>
 
@@ -818,7 +818,7 @@ function Reserve({ want, onClose }: { want: Want; onClose: () => void }) {
           : want.kind === 'notify' ? `${app?.title}: tell me when it is ready`
             : `${app?.title}, ${usd(app?.price_usd || 0)}`;
   const note =
-    want.kind === 'setup' ? 'Greenfire installs it on your computer, connects your accounts and shows you how it works. Setup starts at $500.'
+    want.kind === 'setup' ? 'Greenfire installs it on your computer, connects your accounts and shows you how it works. Setup is part of Learn It, from $5,000.'
       : want.kind === 'notify' ? 'One email when it is ready to download. Nothing else.'
         : want.kind === 'membership' && app ? `Checkout is opening soon. Leave your details and you will be first in, starting with ${app.title}.`
           : want.kind === 'builder' && app ? `Checkout is opening soon. Leave your details and you will be first in, with ${app.title} and every other app.`

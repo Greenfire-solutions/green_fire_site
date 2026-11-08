@@ -1,15 +1,113 @@
 {
   "_comment": "THE ONE HOME for the AI offers: the /start page renders from this file, the Greenfire operator's Clients tab reads it, and Pip (the Fellowship workshops agent) quotes from it. Prices, what is included and the checkout links live here and nowhere else. Checkout links are filled by `node _TOOLS/operator/offers.mjs make`, never typed by hand. No em dashes anywhere: Jordan reads them as machine written.",
   "page": {
-    "headline": "Build your own AI dashboards and apps, on your own computer",
-    "intro": "I teach you to build with AI right on your own machine, so the dashboards and apps you make are yours, run locally, and keep working for you. Learn it yourself, have me teach you while we build yours together, or bring your whole team.",
+    "headline": "Learn AI, have it built for you, or build it together",
+    "intro": "I teach people and businesses to build with AI on their own computers, so the dashboards, agents and apps they end up with are theirs and keep working for them. Three ways to work with me: I teach you and set you up, I build your whole AI environment for you, or we work side by side for three months.",
     "short_link": "https://greenfire.earth/start",
     "checkout_note": "Secure checkout by Stripe. The payment page and your card statement say The Great Medicine Show, which is Jordan's own business. Your receipt comes from Stripe.",
-    "_layout_note": "Three offers on /start since 2026-10-27, his decision: $500 learn, $2,000 learn and build, team quoted. One to one onboarding moved to private_offers and is offered on the $500 card as the one to one way to take it."
+    "_layout_note": "OFFICIAL PRICING since 2026-11-08, his decision: $5,000 Learn It (teaching and setup), $10,000 Build It (your AI environment built for you), $18,000 Build It Together (three months working together). Nothing is sold under $5,000. Only Jordan may cut a deal (a small artist or a friend); agents never offer one. The $500 class, the Boulder class, $500 one to one onboarding, the $500 Activation, the $1,500 and $2,000 builds and the $100 self-serve course are retired (private_offers, retired 2026-11-08) and their links deactivated. Kept as they were: $200 a month care, $100 a month Builder membership, the $500 kids Game Creator Lab.",
+    "team_note": "Bringing a whole team or company? The same three packages, sized for your team after a short call. Tell me about your team in the form below."
   },
   "intake_form_url": "https://greenfire.earth/onboard",
   "_intake_note": "Our own onboarding form (api/onboard.ts, questions in api/_lib/onboardQuestions.ts), replacing the Google Form 2026-10-20. Add ?for=<offer id> to preselect the session. Answers land on the operator Clients tab.",
   "offers": [
+    {
+      "id": "learn",
+      "title": "Learn It: AI Teaching and Setup",
+      "step": "Learn it",
+      "price_usd": 5000,
+      "price_label": "$5,000",
+      "deposit_usd": 2500,
+      "unit": "one to one, four sessions of two hours, online or in person",
+      "for": "You want to learn to build with AI yourself, and have everything set up properly on your own computer while you learn.",
+      "teaches": [
+        "Setting up AI on your own computer: Claude, Claude Code, your terminal, GitHub and one project folder for your business",
+        "Talking to AI in plain words so it builds, fixes and changes things for you",
+        "Building a dashboard for your business, with you at the keys",
+        "Making AI agents that research, draft and follow up, and keeping them safe so nothing sends without your yes",
+        "Connecting the tools you already use: email, calendar, payments, socials and your website",
+        "Putting a page or a small site online"
+      ],
+      "includes": [
+        "AI installed, signed in and working on your computer",
+        "Your own business dashboard running, with your customers, offers and week in it",
+        "Your project brief and master prompt, so AI knows your business every time you ask",
+        "Recordings of all four sessions to come back to",
+        "30 days of help by message after the last session"
+      ],
+      "terms": "Half to start ($2,500), half at the last session.",
+      "after": "After you pay the $2,500 to start: pick your first session time, then fill in a short intake form.",
+      "button": "Start learning",
+      "book_url": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ39VZN3DBqcMIJC1ItWGww5gaiMBQ5dv3RGJTSiUmkiCTRdd9NlM5Xi3rdznTUSwoRS4lm9nij_",
+      "checkout_url": "https://buy.stripe.com/eVq3cxd5I6Dtc082Vx1kA18",
+      "checkout_link_id": "plink_1UZedWPj7NJJ79xWENXSC1au"
+    },
+    {
+      "id": "build",
+      "title": "Build It: Your AI Environment, Built for You",
+      "step": "Have it built",
+      "price_usd": 10000,
+      "price_label": "$10,000",
+      "deposit_usd": 5000,
+      "unit": "built around your business, about four weeks",
+      "for": "You want your whole AI setup built for you: dashboards, agents and workflows running on your real business, and you trained to run it.",
+      "teaches": [
+        "Everything in Learn It, taught around the system I build for you",
+        "How to run, change and grow your AI environment yourself",
+        "How to show your team to use it day to day"
+      ],
+      "includes": [
+        "A discovery call and a map of how your week really runs",
+        "Your AI command center built: one dashboard for your whole business, on your own computer",
+        "AI agents set up for your work, such as inbox, follow ups, bookings and content, each one asking before it acts",
+        "Up to five of your workflows connected to the tools you already use",
+        "Your website or landing pages built or connected, if you need them",
+        "Everything in Learn It: the setup, the teaching and the recordings",
+        "A two hour handover for you and your team",
+        "30 days of fixes after handover"
+      ],
+      "terms": "Half to start ($5,000), half at handover. Anything beyond the five workflows is quoted before it is built. Optional care after handover is $200 a month.",
+      "after": "After you pay the $5,000 to start: a short intake form, and Jordan emails you within a day to book the discovery call.",
+      "button": "Start my build",
+      "checkout_url": "https://buy.stripe.com/00w00le9Md1R1lucw71kA19",
+      "checkout_link_id": "plink_1UZedXPj7NJJ79xW8JcmCx41",
+      "legacy_link_ids": [
+        "plink_1USVWsPj7NJJ79xWnCoXwo8a",
+        "plink_1UV2qmPj7NJJ79xWhrtXS9dH"
+      ],
+      "_price_note": "Was $1,700 (2026-10), then $2,000 Learn and Build (2026-10-27, $1,000 deposit link plink_1UV2qmPj7NJJ79xWhrtXS9dH). $10,000 since 2026-11-08, his decision; old links kept here so old sales still map."
+    },
+    {
+      "id": "partner",
+      "title": "Build It Together: Three Month Partnership",
+      "step": "Build it together",
+      "price_usd": 18000,
+      "price_label": "$18,000",
+      "deposit_usd": 6000,
+      "unit": "three months, working side by side",
+      "for": "You want me alongside you for three months, building with you as your business grows: new agents, apps and automations every month, and you learning all of it as we go.",
+      "teaches": [
+        "Everything in Learn It and Build It",
+        "How to turn AI into new offers, content and income for your business",
+        "How to lead your team in building with AI, not just using it"
+      ],
+      "includes": [
+        "Everything in Build It",
+        "A 90 minute working session every week for twelve weeks",
+        "New agents, apps and automations built each month as your business needs them",
+        "Your team trained alongside you, up to five people",
+        "A direct line to Jordan by message on weekdays",
+        "A monthly review of what is working, what earns and what to build next",
+        "Care included for the three months, then $200 a month only if you want it"
+      ],
+      "terms": "Paid in thirds: $6,000 to start, $6,000 at the start of month two, $6,000 at the start of month three.",
+      "after": "After you pay the first $6,000: a short intake form, and Jordan emails you within a day to set our first working session.",
+      "button": "Start our partnership",
+      "checkout_url": "https://buy.stripe.com/6oU9AV6Hk4vl9S01Rt1kA1a",
+      "checkout_link_id": "plink_1UZedYPj7NJJ79xWc1eINmUb"
+    }
+  ],
+  "private_offers": [
     {
       "id": "workshop",
       "video": "/videos/start-learn.mp4",
@@ -29,19 +127,18 @@
       "after": "After you pay: a short intake form, then Jordan emails you the joining link before the day.",
       "button": "Take a seat",
       "checkout_url": "https://buy.stripe.com/3cIcN71n0e5VaW49jV1kA0l",
-      "checkout_link_id": null,
+      "checkout_link_id": "plink_1UT5hgPj7NJJ79xWSMbYjudK",
       "_checkout_note": "Greenfire's class (2026-10-24). Run by the one shared class engine in the GMS operator (product ai-workflow-workshop, brand greenfire): after paying, buyers land on /start/thanks here, mail is signed Jordan Larsen, and it is not listed on the GMS site. The Fellowship's teaching autopilot moves this link to each new run.",
       "step": "Learn it",
-      "alt": {
-        "label": "Rather learn one to one? Same $500, two hours at a time you pick.",
-        "offer": "onboarding"
-      },
       "video_len": "0:50",
       "_video_note": "Films from _TOOLS/intro-videos/v2 (render.py + mux.sh): his footage, the Business Kit dashboard filmed in a sandbox, an ElevenLabs voice and 9 Lives. video_len is set from the finished film.",
       "legacy_link_ids": [
         "plink_1UVDsWPj7NJJ79xWkQTPtEO8"
       ],
-      "_early_note": "plink_1UVDsWPj7NJJ79xWkQTPtEO8 is a private $300 link (capped at 3) for the three people quoted $300 on Oct 21 (Connor, Cirque Vida, Fungi Flows). Jordan, 2026-10-27: nobody else gets it."
+      "_early_note": "plink_1UVDsWPj7NJJ79xWkQTPtEO8 is a private $300 link (capped at 3) for the three people quoted $300 on Oct 21 (Connor, Cirque Vida, Fungi Flows). Jordan, 2026-10-27: nobody else gets it.",
+      "retired": "2026-11-08",
+      "_retired_note": "Retired 2026-11-08 when the official pricing became $5,000 / $10,000 / $18,000. Kept here so past payments and intakes still map. Never sold or quoted again.",
+      "_link_state": "Stripe link deactivated 2026-11-08 (reversible in Stripe if Jordan ever wants it back for a friend)."
     },
     {
       "id": "workshop-boulder",
@@ -63,37 +160,10 @@
       "button": "Take a Boulder seat",
       "checkout_url": "https://buy.stripe.com/9B68wR5Dg1j9d4c9jV1kA12",
       "checkout_link_id": "plink_1UXslwPj7NJJ79xW552EGuIx",
-      "step": "Learn it in person"
-    },
-    {
-      "id": "build",
-      "video": "/videos/start-build.mp4",
-      "poster": "/videos/start-build.jpg",
-      "title": "Learn and Build, Together",
-      "price_usd": 2000,
-      "price_label": "$2,000",
-      "unit": "one to one, built around your business",
-      "for": "You want to learn how to build with AI and walk away with your real dashboard or app already built and running.",
-      "includes": [
-        "A 20 minute call first, so we build the right thing",
-        "Everything in Learn to Build, one to one on your computer",
-        "Your dashboard or app built with you, around your real business",
-        "Up to three of your workflows connected",
-        "A two hour handover so you can run it and change it yourself",
-        "Two weeks of fixes after handover"
-      ],
-      "terms": "Half to start ($1,000), half at handover. Anything beyond the three workflows is quoted before it is built. Optional care after handover is $200 a month.",
-      "after": "After you pay the $1,000 deposit: a short intake form, and Jordan emails you within a day to book the 20 minute call.",
-      "button": "Start learning and building",
-      "deposit_usd": 1000,
-      "checkout_url": "https://buy.stripe.com/dRm6oJ4zcbXN2pygMn1kA0o",
-      "checkout_link_id": "plink_1UV2qmPj7NJJ79xWhrtXS9dH",
-      "step": "Learn it and build it",
-      "_price_note": "Was the $1,700 done for you build ($850 deposit, link plink_1USVWsPj7NJJ79xWnCoXwo8a). Raised to $2,000 with teaching on 2026-10-27, his decision; the new deposit link is made by offers.mjs make.",
-      "legacy_link_ids": [
-        "plink_1USVWsPj7NJJ79xWnCoXwo8a"
-      ],
-      "video_len": "0:45"
+      "step": "Learn it in person",
+      "retired": "2026-11-08",
+      "_retired_note": "Retired 2026-11-08 when the official pricing became $5,000 / $10,000 / $18,000. Kept here so past payments and intakes still map. Never sold or quoted again.",
+      "_link_state": "Stripe link deactivated 2026-11-08 (reversible in Stripe if Jordan ever wants it back for a friend)."
     },
     {
       "id": "team",
@@ -116,10 +186,11 @@
       "checkout_link_id": null,
       "_checkout_note": "No checkout on purpose: a team is quoted after the call, then paid by invoice or a link made for that job.",
       "step": "Your whole team",
-      "video_len": "0:36"
-    }
-  ],
-  "private_offers": [
+      "video_len": "0:36",
+      "retired": "2026-11-08",
+      "_retired_note": "Retired 2026-11-08 when the official pricing became $5,000 / $10,000 / $18,000. Kept here so past payments and intakes still map. Never sold or quoted again.",
+      "_link_state": "Stripe link deactivated 2026-11-08 (reversible in Stripe if Jordan ever wants it back for a friend)."
+    },
     {
       "id": "onboarding",
       "video": "/videos/start-onboarding.mp4",
@@ -141,7 +212,10 @@
       "checkout_link_id": "plink_1UT5iJPj7NJJ79xWjODmRQGw",
       "book_url": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ39VZN3DBqcMIJC1ItWGww5gaiMBQ5dv3RGJTSiUmkiCTRdd9NlM5Xi3rdznTUSwoRS4lm9nij_",
       "_book_note": "His Google Calendar booking page (made 2026-10-20): weekdays 1 to 5pm Central, 2 hour slots, 24 hours notice, one a day, his busy times blocked, Google Meet. Shown on /start/thanks after payment and sent in the welcome. Change the hours in Google Calendar, not here.",
-      "_note": "Off /start as its own card since 2026-10-27: it is now the one to one way to take the $500 Learn to Build (the `alt` line on the workshop card). The checkout link and calendar still work and stay mapped for payments."
+      "_note": "Off /start as its own card since 2026-10-27: it is now the one to one way to take the $500 Learn to Build (the `alt` line on the workshop card). The checkout link and calendar still work and stay mapped for payments.",
+      "retired": "2026-11-08",
+      "_retired_note": "Retired 2026-11-08 (official pricing $5,000 / $10,000 / $18,000). Link deactivated; kept so past payments map. Never sold or quoted again.",
+      "_link_state": "Stripe link deactivated 2026-11-08 (reversible in Stripe if Jordan ever wants it back for a friend)."
     },
     {
       "id": "activation",
@@ -151,7 +225,10 @@
       "regular_label": "$1,000",
       "unit": "initial setup, one to one, online",
       "form_url": "https://greenfire.earth/activate",
-      "_note": "Not shown on /start on purpose (the page and Pip read `offers` only). Sold by hand at half the usual $1,000, paid by invoice or a link made for the job, so mark it paid on the Clients tab. Its prep page is /activate (api/_lib/activatePage.ts): a few questions, then Claude Pro, Warp, Claude Code, GitHub, the project folder, the master prompt and the Beginners Kit link, which is set from the Clients tab."
+      "_note": "Not shown on /start on purpose (the page and Pip read `offers` only). Sold by hand at half the usual $1,000, paid by invoice or a link made for the job, so mark it paid on the Clients tab. Its prep page is /activate (api/_lib/activatePage.ts): a few questions, then Claude Pro, Warp, Claude Code, GitHub, the project folder, the master prompt and the Beginners Kit link, which is set from the Clients tab.",
+      "retired": "2026-11-08",
+      "_retired_note": "Retired 2026-11-08 (official pricing $5,000 / $10,000 / $18,000). Link deactivated; kept so past payments map. Never sold or quoted again.",
+      "_link_state": "Stripe link deactivated 2026-11-08 (reversible in Stripe if Jordan ever wants it back for a friend)."
     },
     {
       "id": "system_and_site",
@@ -166,7 +243,10 @@
       "terms": "Half to start ($750), half at handover. Optional care after handover is $200 a month.",
       "checkout_url": "https://buy.stripe.com/dRmbJ3c1EaTJc081Rt1kA0G",
       "checkout_link_id": "plink_1UVYdHPj7NJJ79xWPgGQ9up0",
-      "_note": "Jordan's decision 2026-10-23: one time build at $2,000, on sale for $1,500, with $200 a month after care and assistance. Not shown on /start on purpose. No checkout link yet: paid by invoice or a link made for the job, so mark it paid on the Clients tab."
+      "_note": "Jordan's decision 2026-10-23: one time build at $2,000, on sale for $1,500, with $200 a month after care and assistance. Not shown on /start on purpose. No checkout link yet: paid by invoice or a link made for the job, so mark it paid on the Clients tab.",
+      "retired": "2026-11-08",
+      "_retired_note": "Retired 2026-11-08 (official pricing $5,000 / $10,000 / $18,000). Link deactivated; kept so past payments map. Never sold or quoted again.",
+      "_link_state": "Stripe link deactivated 2026-11-08 (reversible in Stripe if Jordan ever wants it back for a friend)."
     },
     {
       "id": "game_lab",
@@ -199,40 +279,32 @@
     {
       "id": "artist",
       "label": "Artist or creator",
-      "best_first": "workshop",
-      "note": "Musicians, makers and solo creators: Learn to Build first, then the Builder membership to keep going."
+      "best_first": "learn",
+      "note": "Musicians, makers and solo creators: Learn It, then the Builder membership to keep going."
     },
     {
       "id": "small_business",
       "label": "Small business",
       "best_first": "build",
-      "note": "Owner run businesses: Learn and Build, so they learn it and leave with their own dashboard running. The $500 class if they want to start smaller."
+      "note": "Owner run businesses: Build It, so their AI environment is built and they are trained to run it. Learn It if they want to do the building themselves."
     },
     {
       "id": "company",
       "label": "Company or team",
-      "best_first": "team",
-      "note": "Five or more people: team training on a call and a quote, and Learn and Build for the company afterwards."
+      "best_first": "partner",
+      "note": "Five or more people: Build It Together, three months with the team trained alongside. Sized after a short call."
     },
     {
       "id": "individual",
       "label": "Just me, learning",
-      "best_first": "workshop",
-      "note": "People learning for themselves: Learn to Build."
+      "best_first": "learn",
+      "note": "People learning for themselves: Learn It."
     }
   ],
-  "self_serve": {
-    "title": "Rather do it yourself?",
-    "price_label": "$100 once",
-    "about": "The self-serve course: set up Claude on your own computer and have it build your AI dashboard, one animated step at a time, with buttons that copy exactly what to paste. Included with the Builder membership.",
-    "button": "See the course",
-    "url": "/launch",
-    "_note": "greenfire.earth/launch, gated in api/store.ts (2026-10-28). Its $100 link is gf_settings checkout:course (store-sell.mjs makeCourseLink)."
-  },
   "membership": {
     "title": "Builder membership",
     "price_label": "$100 a month",
-    "about": "Keep building after your class or build. Every week there is something new to use, and help when you get stuck.",
+    "about": "Keep building after your package. Every week there is something new to use, and help when you get stuck.",
     "includes": [
       "A weekly shared clinic: bring what you are building and get unstuck",
       "A new tool every week from the Greenfire collective",
@@ -244,5 +316,11 @@
     "button": "Become a member",
     "checkout_url": "https://buy.stripe.com/14A6oJghU5zpfckfIj1kA0n",
     "_note": "Mirrors the builder tier in _TOOLS/operator/collective-policy.json (the one home for tiers; its link is gf_settings checkout:builder). Change the price or benefits there first, then here. Cancel any time is Stripe subscription behaviour."
+  },
+  "retired_self_serve": {
+    "price_label": "$100 once",
+    "url": "/launch",
+    "retired": "2026-11-08",
+    "_note": "The $100 self-serve course is no longer sold on its own (2026-11-08). It stays included with the Builder membership; past buyers keep access."
   }
 }

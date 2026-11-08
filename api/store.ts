@@ -131,7 +131,9 @@ async function account(sid: string) {
 }
 
 /* /launch. The two links are gf_settings checkout:course and checkout:builder
-   in the operator; change them there and here together. */
+   in the operator; change them there and here together. Since 2026-11-08 the
+   course is not sold on its own (the smallest offer is $5,000): the page only
+   offers Builder, and COURSE_BUY stays so past buyers' sessions still map. */
 const COURSE_BUY = 'https://buy.stripe.com/7sY8wR2r43rh8NW0Np1kA0H';
 const BUILDER_JOIN = 'https://buy.stripe.com/14A6oJghU5zpfckfIj1kA0n';
 const COOKIE = 'gf_launch';
@@ -211,8 +213,8 @@ async function launch(req: VercelRequest, res: VercelResponse) {
         return res.status(200).send(page('index.html').replace('</head>', '<script>if(location.search)history.replaceState(null,"",location.pathname+location.hash)</script>\n</head>'));
       }
       if (a.kind === 'unpaid' || (a.kind === 'course' && !a.paid)) note = 'Your payment is not finished yet. If you just paid, wait a minute and refresh this page.';
-      else if (a.kind === 'plan' && a.plan === 'store') note = 'The Store membership does not include this course. Builder does, or you can get the course on its own below.';
-      else if (a.kind === 'plan') note = 'Your Builder membership is not active right now, so the course is locked. Rejoin below, or get the course on its own.';
+      else if (a.kind === 'plan' && a.plan === 'store') note = 'The Store membership does not include this course. The Builder membership below includes it.';
+      else if (a.kind === 'plan') note = 'Your Builder membership is not active right now, so the course is locked. Rejoin below to open it again.';
       else if (fromUrl) note = 'That checkout was not for this course.';
       /* A cookie that no longer opens anything is dropped, so the page stops asking Stripe about it. */
       if (!fromUrl) res.setHeader('Set-Cookie', `${COOKIE}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax`);

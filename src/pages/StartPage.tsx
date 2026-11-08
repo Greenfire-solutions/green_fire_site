@@ -9,7 +9,7 @@ import data from '../data/startOffers.json';
 
 type Offer = (typeof data.offers)[number] & {
   when?: string; terms?: string; book_url?: string; video?: string; poster?: string; video_len?: string;
-  after?: string; step?: string; alt?: { label: string; offer: string };
+  after?: string; step?: string; alt?: { label: string; offer: string }; teaches?: string[];
 };
 const offers = data.offers as Offer[];
 const hidden = (data.private_offers || []) as { id: string; checkout_url?: string; title: string }[];
@@ -42,7 +42,24 @@ function OfferRow({ o, i, onAsk }: { o: Offer; i: number; onAsk: (id: string) =>
   const alt = o.alt && hidden.find((h) => h.id === o.alt!.offer);
   return (
     <article id={o.id} className="grid scroll-mt-24 items-center gap-8 rounded-3xl border border-white/10 bg-neutral-950 p-5 md:p-8 lg:grid-cols-5 lg:gap-12">
-      <div className={`lg:col-span-3 ${i % 2 ? 'lg:order-2' : ''}`}>{o.video ? <Intro o={o} /> : null}</div>
+      <div className={`lg:col-span-3 flex flex-col gap-6 ${i % 2 ? 'lg:order-2' : ''}`}>
+        {o.video ? <Intro o={o} /> : null}
+        {/* What Jordan teaches in this package (2026-11-08): its own list, apart
+            from what the buyer walks away with, so the two are never blurred. */}
+        {o.teaches?.length ? (
+          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-6 md:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">What I teach</p>
+            <ul className="mt-4 space-y-3 text-base text-stone-200">
+              {o.teaches.map((x) => (
+                <li key={x} className="flex gap-3">
+                  <span className="mt-1 text-emerald-400">●</span>
+                  <span>{x}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </div>
       <div className="lg:col-span-2">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">
           {i + 1}. {o.step}
@@ -52,7 +69,8 @@ function OfferRow({ o, i, onAsk }: { o: Offer; i: number; onAsk: (id: string) =>
         <p className="mt-1 text-xs uppercase tracking-wider text-stone-500">{o.unit}</p>
         {o.when && <p className="mt-3 text-sm text-orange-200">Next class: {o.when}</p>}
         <p className="mt-5 text-base text-stone-200">{o.for}</p>
-        <ul className="mt-4 space-y-2 text-sm text-stone-300">
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-stone-400">What you will have</p>
+        <ul className="mt-3 space-y-2 text-sm text-stone-300">
           {o.includes.map((x) => (
             <li key={x} className="flex gap-2">
               <span className="mt-0.5 text-emerald-400">✓</span>
@@ -160,7 +178,9 @@ export function StartPage() {
      here (2026-10-24), so the page opens on the card they were about. */
   const { hash } = useLocation();
   useEffect(() => {
-    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' });
+    /* The retired $500 class (2026-11-08): its old #workshop links open on Learn It. */
+    const id = hash.slice(1) === 'workshop' ? 'learn' : hash.slice(1);
+    if (id) document.getElementById(id)?.scrollIntoView({ block: 'start' });
   }, [hash]);
   const ask = (id: string) => {
     setOffer(id);
@@ -189,19 +209,13 @@ export function StartPage() {
           {offers.map((o, i) => (
             <OfferRow key={o.id} o={o} i={i} onAsk={ask} />
           ))}
+          {data.page.team_note && (
+            <p className="text-center text-sm text-stone-300">
+              {data.page.team_note}{' '}
+              <button onClick={() => ask('unsure')} className="text-emerald-300 underline hover:text-emerald-200">Tell me about your team</button>
+            </p>
+          )}
           <p className="text-center text-[11px] leading-snug text-stone-500">{data.page.checkout_note}</p>
-        </div>
-      </section>
-
-      <section id="course" className="scroll-mt-24 px-6 pb-14">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-4 rounded-3xl border border-emerald-500/30 bg-emerald-500/[0.06] p-6 md:flex-row md:items-center md:justify-between md:p-8">
-          <div>
-            <h2 className="text-2xl font-semibold text-white">{data.self_serve.title} <span className="text-emerald-300">{data.self_serve.price_label}</span></h2>
-            <p className="mt-2 max-w-3xl text-stone-300">{data.self_serve.about}</p>
-          </div>
-          <a href={data.self_serve.url} className="shrink-0 rounded-xl bg-emerald-400 px-6 py-3 text-sm font-semibold text-black hover:bg-emerald-300">
-            {data.self_serve.button}
-          </a>
         </div>
       </section>
 
@@ -243,7 +257,7 @@ export function StartThanksPage() {
   const id = new URLSearchParams(useLocation().search).get('offer') || '';
   /* A one to one buyer comes back with offer=onboarding, a private offer, and
      still needs its calendar link. */
-  const o = [...offers, ...(hidden as Offer[])].find((x) => x.id === id);
+  const o = [...offers, ...(hidden as unknown as Offer[])].find((x) => x.id === id);
   return (
     <section className="mx-auto max-w-2xl px-6 py-24 text-center">
       <SectionLabel text="Payment received" />
