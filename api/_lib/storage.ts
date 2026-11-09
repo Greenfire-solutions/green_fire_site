@@ -116,3 +116,14 @@ export async function writeSettings(next: OnboardSettings): Promise<OnboardSetti
   await r2Put(SETTINGS_KEY, JSON.stringify(merged), 'application/json');
   return merged;
 }
+
+/* ------------------------------------------------------------ audience
+   The weekly note's list (operator audience.mjs, 2026-11-08). Three kinds of
+   record, sealed like a lead: `free` (took a free app and said yes to the
+   note), `join` (clicked the invitation's link), `out` (clicked stop). The
+   operator pulls them through /api/store?action=audience and is the only
+   reader; the site never decides who is on the list, it only files the yes
+   and the no. */
+const AUDIENCE_PREFIX = 'audience/';
+export const writeAudience = (rec: Record<string, unknown>) => writeSealed(AUDIENCE_PREFIX, rec);
+export const readAudience = (limit = 5000) => readSealed(AUDIENCE_PREFIX, limit);

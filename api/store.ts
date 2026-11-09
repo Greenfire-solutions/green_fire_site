@@ -3,7 +3,35 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { r2GetText, r2Put, r2PublicUrl, r2PresignPut, r2Configured, r2List, secretName } from './_lib/r2.js';
 import { requireAdmin } from './_lib/auth.js';
-import { writeLead } from './_lib/storage.js';
+import { writeLead, writeAudience, readAudience } from './_lib/storage.js';
+import crypto from 'node:crypto';
+
+/* THE WEEKLY NOTE'S DOORS (2026-11-08, operator audience.mjs and note.mjs).
+   Three public actions and one for the operator:
+     POST free     a free app's download, in exchange for an email and a yes to
+                   the weekly note; answers with the GitHub link to open
+     GET  join     the invitation's one click: the address, signed, goes on
+     GET  unsub    the stop link at the foot of every email: signed, goes off
+     GET  audience (admin) every record, for the operator to pull
+   The signature is an HMAC of the address with ADMIN_PASSWORD, the one secret
+   the operator and the site both hold; audience.mjs tokenFor() is the twin of
+   audienceToken() below, change both or neither. A bad token is answered with
+   a plain page and nothing is filed, so a guessed link cannot take anyone off. */
+export const audienceToken = (email: string) => {
+  const secret = process.env.ADMIN_PASSWORD || '';
+  if (!secret) throw new Error('ADMIN_PASSWORD is not configured on the server.');
+  return crypto.createHmac('sha256', secret).update(`audience:${email.trim().toLowerCase()}`).digest('base64url').slice(0, 22);
+};
+const plainPage = (title: string, text: string) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><meta name="robots" content="noindex"><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b1410;color:#e7efe9;font:17px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;padding:24px}main{max-width:520px;text-align:center}h1{font-size:1.6rem;color:#8CC63F;margin:0 0 12px}p{margin:0 0 10px;color:#c9d6cd}a{color:#8CC63F}</style></head><body><main><h1>${title}</h1><p>${text}</p><p><a href="https://greenfire.earth">greenfire.earth</a></p></main></body></html>`;
+function signedEmail(req: VercelRequest): string | null {
+  try {
+    const email = Buffer.from(String(req.query.e || ''), 'base64url').toString('utf8').trim().toLowerCase();
+    if (!EMAIL.test(email)) return null;
+    const want = audienceToken(email), got = String(req.query.t || '');
+    if (got.length !== want.length || !crypto.timingSafeEqual(Buffer.from(got) as never, Buffer.from(want) as never)) return null;
+    return email;
+  } catch { return null; }
+}
 
 /* THE APP STORE (2026-10-26). The one function the store gets: Vercel Hobby
    allows 12 and every other one is taken, so everything the /store page needs
@@ -258,6 +286,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method === 'GET' && action === 'launch') return launch(req, res);
   if (req.method === 'POST' && ['progress', 'help', 'feedback'].includes(action)) return courseAction(action, req, res);
+
+  /* --- the weekly note's doors --- */
+  if (req.method === 'GET' && (action === 'join' || action === 'unsub')) {
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    const email = signedEmail(req);
+    if (!email) return res.status(400).send(plainPage('That link did not check out', 'Please use the whole link from the email, or write to civilizationexplorer@gmail.com and Jordan will sort it by hand.'));
+    try {
+      await writeAudience({ at: new Date().toISOString(), kind: action === 'join' ? 'join' : 'out', email });
+    } catch {
+      return res.status(500).send(plainPage('Not saved just now', 'Please try the link again in a minute, or write to civilizationexplorer@gmail.com.'));
+    }
+    return res.status(200).send(action === 'join'
+      ? plainPage('You are on', 'One short note a week from Jordan on what he built, Thursdays. Every one has a one click stop at the bottom.')
+      : plainPage('You are off', 'No more notes. If that was a mistake, the join link in any earlier email puts you back on.'));
+  }
+  if (req.method === 'POST' && action === 'free') {
+    const b = (req.body || {}) as Record<string, unknown>;
+    if (field(b.website, 200)) return res.status(200).json({ ok: true, url: 'https://github.com/Greenfire-solutions' });
+    const email = field(b.email, 160).toLowerCase();
+    const app = field(b.app, 80).toLowerCase();
+    if (!EMAIL.test(email)) return res.status(400).json({ error: 'Please check your email address.' });
+    const a = (await catalogApps()).find((x) => x.id === app && x.free) as (App & { github?: string | null }) | undefined;
+    if (!a?.github) return res.status(404).json({ error: 'That app is not a free one.' });
+    try {
+      await writeAudience({ at: new Date().toISOString(), kind: 'free', email, name: field(b.name, 120), app });
+    } catch {
+      /* The download still opens: a storage hiccup must never cost someone the app they asked for. */
+    }
+    return res.status(200).json({ ok: true, url: a.github });
+  }
+  if (req.method === 'GET' && action === 'audience') {
+    if (!requireAdmin(req, res)) return;
+    res.setHeader('Cache-Control', 'no-store');
+    try { return res.status(200).json({ records: await readAudience() }); } catch (e) { return fail(e); }
+  }
   if (req.method === 'GET' && action === 'students') {
     if (!requireAdmin(req, res)) return;
     res.setHeader('Cache-Control', 'no-store');

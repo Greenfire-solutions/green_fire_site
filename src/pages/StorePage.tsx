@@ -705,11 +705,7 @@ function Panel({ a, fixed, onClose, onWant, onJoin, onOpen, genreLabel, more }: 
           {a.free ? (
             <>
               <p className="text-sm text-stone-300"><b className="text-emerald-300">Free</b>, open source, for everyone.</p>
-              {a.github && (
-                <a href={a.github} target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
-                  <Github size={16} /> Get it on GitHub
-                </a>
-              )}
+              {a.github && <FreeGet app={a} />}
             </>
           ) : a.ready ? (
             <>
@@ -804,6 +800,37 @@ function LostLink() {
       </form>
       {state === 'error' && <span className="mt-2 block text-rose-300">That did not send. Please email civilizationexplorer@gmail.com.</span>}
     </span>
+  );
+}
+
+/* A free app opens after an email (2026-11-08). The address goes on Jordan's
+   weekly note, which is said in plain words beside the box, and the skip link
+   underneath opens GitHub with no email at all: the code is public, so a gate
+   that could not be walked round would be theatre. */
+function FreeGet({ app }: { app: StoreApp }) {
+  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    setState('sending');
+    try {
+      const r = await fetch('/api/store?action=free', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: f.get('email'), name: f.get('name'), app: app.id, website: f.get('website') }) });
+      const j = (await r.json().catch(() => ({}))) as { ok?: boolean; url?: string };
+      if (r.ok && j.url) { setState('done'); window.open(j.url, '_blank', 'noopener'); } else setState('error');
+    } catch {
+      setState('error');
+    }
+  };
+  if (state === 'done') return <p className="text-sm text-emerald-200">Opened on GitHub. If it did not, <a className="underline" href={app.github || '#'} target="_blank" rel="noreferrer">here it is</a>. You will hear from Jordan on Thursdays.</p>;
+  return (
+    <form onSubmit={submit} className="space-y-2">
+      <input name="email" type="email" required autoComplete="email" placeholder="Your email" className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-stone-500 focus:border-emerald-400/60 focus:outline-none" />
+      <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+      <button disabled={state === 'sending'} className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300 disabled:opacity-60">
+        <Github size={16} /> {state === 'sending' ? 'Opening' : 'Get it on GitHub'}
+      </button>
+      <p className="text-xs text-stone-400">The download opens on GitHub, and you get Jordan's short Thursday note on what he built that week. One click stops it. {state === 'error' && <span className="text-rose-300">That did not go through. </span>}<a className="underline" href={app.github || '#'} target="_blank" rel="noreferrer">Skip, just open GitHub</a>.</p>
+    </form>
   );
 }
 
