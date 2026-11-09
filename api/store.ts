@@ -288,11 +288,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'POST' && ['progress', 'help', 'feedback'].includes(action)) return courseAction(action, req, res);
 
   /* --- the weekly note's doors --- */
-  if (req.method === 'GET' && (action === 'join' || action === 'unsub')) {
+  if (action === 'join' || action === 'unsub') {
+    /* A visit never changes anyone's state: mail scanners and link previewers
+       fetch every URL in an email (outside review, 2026-11-08), so a GET shows
+       a page with ONE button, and only the POST that button sends is a yes or
+       a stop. The same POST answers RFC 8058 one-click unsubscribe, which mail
+       apps send to the List-Unsubscribe URL with List-Unsubscribe=One-Click. */
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     const email = signedEmail(req);
     if (!email) return res.status(400).send(plainPage('That link did not check out', 'Please use the whole link from the email, or write to civilizationexplorer@gmail.com and Jordan will sort it by hand.'));
+    if (req.method !== 'POST') {
+      const self = `/api/store?action=${action}&e=${encodeURIComponent(String(req.query.e))}&t=${encodeURIComponent(String(req.query.t))}`;
+      const form = `<form method="post" action="${self}" style="margin-top:18px"><button style="font:inherit;font-weight:700;padding:12px 22px;border-radius:999px;border:0;background:#8CC63F;color:#0b1410;cursor:pointer">${action === 'join' ? 'Yes, put me on' : 'Yes, stop them'}</button></form>`;
+      return res.status(200).send(action === 'join'
+        ? plainPage('One short note a week', `Jordan writes it himself on Thursdays about what he built that week. Press the button and you are on; every note has a one click stop at the bottom.${form}`)
+        : plainPage('Stop the weekly note', `Press the button and no more notes come to this address. If you change your mind, the join link in any earlier email puts you back on.${form}`));
+    }
     try {
       await writeAudience({ at: new Date().toISOString(), kind: action === 'join' ? 'join' : 'out', email });
     } catch {
