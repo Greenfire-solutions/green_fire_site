@@ -242,9 +242,9 @@ export function StorePage() {
           <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-emerald-400">Greenfire App Store</p>
-              <h1 className="mt-1 text-2xl font-bold text-white md:text-4xl">Software you own, made for real work</h1>
+              <h1 className="mt-1 text-2xl font-bold text-white md:text-4xl">Starter kits for people already building with AI</h1>
               <p className="mt-1 max-w-2xl text-sm text-stone-300">
-                Pay once and keep it, or take two apps a month for {usd(MEMBER)}. Everything runs on your own computer, so your files stay yours.
+                Each one is a working app Jordan built for his own projects, handed over as code you own. Open the folder in Claude Code, say what your version needs, and build from there. Pay once and keep it, or take two kits a month for {usd(MEMBER)}. Everything runs on your own computer.
               </p>
               {apps.length > 0 && (
                 <p className="mt-2 text-xs font-semibold text-emerald-300/90">
@@ -405,8 +405,8 @@ export function StorePage() {
 
       <section id="pricing" className="scroll-mt-20 border-t border-white/5 bg-neutral-950 px-4 py-16 md:px-8">
         <div className="mx-auto max-w-7xl">
-          <h2 className="text-2xl font-bold text-white md:text-3xl">Three ways to get your tools</h2>
-          <p className="mt-2 max-w-2xl text-sm text-stone-300">Every app is a clean copy made for you, with a start here guide, delivered as a download. Free apps are always free.</p>
+          <h2 className="text-2xl font-bold text-white md:text-3xl">Three ways to get a kit</h2>
+          <p className="mt-2 max-w-2xl text-sm text-stone-300">Every kit is the whole code of a real app, MIT licensed, with a start here guide, delivered as a download. Some are polished and some are rough: they are starting points for your own project, not finished products with a support desk. If something does not run, reply to the email that comes with it and Jordan fixes it with you. Free kits are always free.</p>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             <div className="flex flex-col rounded-2xl border border-white/10 p-6">
               <p className="text-xs font-bold uppercase tracking-widest text-emerald-400">Buy one app</p>
@@ -462,11 +462,17 @@ export function StorePage() {
           <div className="mt-14 max-w-3xl">
             <h2 className="text-xl font-bold text-white">Questions</h2>
             <div className="mt-4 divide-y divide-white/10 border-y border-white/10">
-              <Faq q="How do I get an app?">
-                Press Get it and pay by card through Stripe. You land straight on your download page, and the same link comes by email so you never lose it. Every app arrives as a zip with a start here guide inside.
+              <Faq q="What is a starter kit?">
+                The complete code of an app Jordan built and uses, with its data layout, its pages and its agents, licensed MIT so it is yours to change and even sell. It is for people who already build with Claude Code or a similar AI coding tool: you open the folder, describe your project, and let the AI reshape it. It is not a boxed product you double click and forget.
+              </Faq>
+              <Faq q="Will it work out of the box?">
+                Often, not always. These are living projects and some corners are still rough. Each kit has a start here guide, and the honest answer is that you should expect to spend your first session with Claude Code getting it to fit your machine and your project. If something does not run, reply to the download email and Jordan sorts it with you.
+              </Faq>
+              <Faq q="How do I get one?">
+                Press Get the kit and pay by card through Stripe. You land straight on your download page, and the same link comes by email so you never lose it. Every kit arrives as a zip with a start here guide inside.
               </Faq>
               <Faq q="What do I need to run it?">
-                A computer you can install things on. The start here guide walks you through it. If you would rather not, Greenfire will set it up for you as part of Learn It, from $5,000.
+                A Mac or Windows computer you can install things on, and Claude Code or another AI coding tool if you want to change it. If you would rather have it built around your business for you, that is Build It, $10,000.
               </Faq>
               <Faq q="How does the membership work?">
                 {usd(MEMBER)} a month lets you pick any two member apps each month, from your membership page. Apps you pick stay yours. Picks you do not use do not roll over. Builder, at {usd(BUILDER)} a month, includes every app, the bigger tools too. Cancel any time by replying to your welcome email.
@@ -700,6 +706,7 @@ function Panel({ a, fixed, onClose, onWant, onJoin, onOpen, genreLabel, more }: 
         <h2 className="mt-1 text-2xl font-bold text-white">{a.title}</h2>
         <p className="mt-1 text-sm font-semibold text-stone-200">{a.line}</p>
         <p className="mt-3 text-sm leading-relaxed text-stone-300">{a.bio}</p>
+        {!a.free && <p className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs leading-relaxed text-stone-300"><b className="text-emerald-200">A starter kit.</b> The whole code, MIT licensed, yours to change. Made to be opened in Claude Code and reshaped for your project. Some parts are rough; if something does not run, reply to the download email and Jordan fixes it with you.</p>}
 
         <div className="mt-6 space-y-3">
           {a.free ? (
@@ -711,11 +718,11 @@ function Panel({ a, fixed, onClose, onWant, onJoin, onOpen, genreLabel, more }: 
             <>
               {a.buy_url ? (
                 <a href={a.buy_url} className="block w-full rounded-full bg-emerald-400 px-4 py-3 text-center text-sm font-bold text-neutral-950 hover:bg-emerald-300">
-                  Get it, {usd(a.price_usd)} once
+                  Get the kit, {usd(a.price_usd)} once
                 </a>
               ) : (
                 <button onClick={() => onWant({ kind: 'app', app: a })} className="w-full rounded-full bg-emerald-400 px-4 py-3 text-sm font-bold text-neutral-950 hover:bg-emerald-300">
-                  Get it, {usd(a.price_usd)} once
+                  Get the kit, {usd(a.price_usd)} once
                 </button>
               )}
               {a.access === 'builder' ? (
