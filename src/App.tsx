@@ -27,6 +27,8 @@ const StorePage = lazy(() => import('./pages/StorePage').then((m) => ({ default:
 const StoreAccountPage = lazy(() => import('./pages/StoreAccountPage').then((m) => ({ default: m.StoreAccountPage })));
 // The ROOTSIGNAL game page (fonts, art and its own styles) loads only on /rootsignal.
 const RootsignalPage = lazy(() => import('./pages/RootsignalPage').then((m) => ({ default: m.RootsignalPage })));
+// MEDIXN, the laser synth plugin sold on Gumroad (data/medixn.ts).
+const MedixnPage = lazy(() => import('./pages/MedixnPage').then((m) => ({ default: m.MedixnPage })));
 import { ROUTES } from './lib/routes';
 
 /* Only reached when the app, not a blog file, is showing a /blog address.
@@ -88,6 +90,14 @@ function PublicSite() {
               element={
                 <Suspense fallback={<div className="min-h-[70vh] bg-[#04110f]" />}>
                   <StoreAccountPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/medixn"
+              element={
+                <Suspense fallback={<div className="min-h-[70vh] bg-[#07060d]" />}>
+                  <MedixnPage />
                 </Suspense>
               }
             />

@@ -77,6 +77,9 @@ export function HomePage() {
             Open the store <ArrowRight className="h-4 w-4" />
           </span>
         </Link>
+        <p className="mx-auto mt-4 max-w-4xl text-center text-sm text-stone-400 sm:text-left">
+          Also new: <Link to={ROUTES.medixn} className="font-semibold text-emerald-300 hover:text-emerald-200">MEDIXN, a laser synthesizer plugin</Link>. Every note draws a shape.
+        </p>
       </section>
 
       <section className="border-b border-white/5 py-14 px-6">

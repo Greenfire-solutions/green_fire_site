@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, Box, Check, ChevronDown, Github, LayoutGrid, Link2, Loader2, Lock, Play, Search, Sparkles, X } from 'lucide-react';
 import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from '../components/store/world';
 import { search, suggestions } from '../lib/storeSearch';
+import { MEDIXN_GUMROAD_URL, MEDIXN_PRICE_USD } from '../data/medixn';
 
 /* THE GREENFIRE APP STORE (2026-10-26). Every app Jordan built, as an object
    on a floating island in a 3D night. The catalogue comes from /api/store,
@@ -251,6 +252,7 @@ export function StorePage() {
                   {ready} ready to download today{soon ? `, ${soon} more on the way` : ''}.
                 </p>
               )}
+              <MedixnStrip />
             </div>
             <div className="pointer-events-auto flex flex-wrap gap-2">
               {mine && (
@@ -634,6 +636,32 @@ function StoreSearch({ apps, genreLabel, onOpen, onAsk }: { apps: StoreApp[]; ge
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+/* MEDIXN is a finished plugin, not a code kit, and it is sold only on
+   Gumroad, so it sits here by hand instead of in the operator's catalogue:
+   no store_apps row, no Stripe link, no shelf zip (see data/medixn.ts). */
+function MedixnStrip() {
+  return (
+    <div className="pointer-events-auto mt-3 flex max-w-2xl flex-wrap items-center gap-x-3 gap-y-2 rounded-2xl border border-[#A86CFF]/40 bg-[#07060d]/85 p-2 pr-3 backdrop-blur">
+      <a href="/medixn" className="flex min-w-0 flex-1 items-center gap-3">
+        <picture className="shrink-0">
+          <source srcSet="/medixn/medixn-torus-thumb.webp" type="image/webp" />
+          <img src="/medixn/medixn-torus-thumb.png" alt="" width={44} height={44} className="h-11 w-11 shrink-0 rounded-lg" />
+        </picture>
+        <span className="min-w-0">
+          <span className="block text-[10px] font-bold uppercase tracking-widest text-[#E6C069]">New from Greenfire Audio</span>
+          <span className="block text-sm font-bold text-white">MEDIXN, a laser synth plugin <span className="font-normal text-stone-300">for Mac and Windows</span></span>
+        </span>
+      </a>
+      <div className="flex items-center gap-2">
+        <a href="/medixn" className="rounded-full border border-white/20 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/5">Details</a>
+        <a href={MEDIXN_GUMROAD_URL} data-buy="medixn" className="rounded-full bg-[#5CFF8A] px-3 py-1.5 text-xs font-bold text-[#07060d] hover:brightness-110">
+          Buy, {usd(MEDIXN_PRICE_USD)}
+        </a>
+      </div>
     </div>
   );
 }
