@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronLeft, ChevronRight, LayoutDashboard, Smartphone, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, LayoutDashboard, Maximize2, Smartphone, Sparkles, Users } from 'lucide-react';
 import { AccessForm, StoreNav } from '../components/store/StoreNav';
 import { BOTS } from '../data/bots';
 import catalog from '../data/agentDecks.json';
@@ -39,7 +39,8 @@ const VIEW_LABEL: Record<string, { label: string; icon: typeof LayoutDashboard }
 };
 
 export function StoreHarnessesPage() {
-  const [pick, setPick] = useState(0);
+  /* Opens on a deck with a live demo (the Fellowship), so the hero is in motion. */
+  const [pick, setPick] = useState(() => Math.max(0, DECKS.findIndex((d) => d.demo)));
   const [view, setView] = useState('command');
   const [ask, setAsk] = useState<{ item: string; note?: string } | null>(null);
   const deck = DECKS[pick];
@@ -113,10 +114,24 @@ export function StoreHarnessesPage() {
                   );
                 })}
               </div>
+              {deck.demo && view === 'command' && (
+                <span className="ml-2 inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-rose-500 ring-1 ring-rose-100">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rose-500" /> Live
+                </span>
+              )}
               <span className="ml-auto hidden text-[11px] font-semibold text-neutral-400 sm:block">Sample business, made up for the demo</span>
+              {deck.demo && (
+                <a href={deck.demo} target="_blank" rel="noreferrer" className="ml-2 hidden items-center gap-1 rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] font-bold text-neutral-600 hover:text-neutral-900 sm:inline-flex">
+                  <Maximize2 size={11} /> Full screen
+                </a>
+              )}
             </div>
             <div className="relative overflow-hidden rounded-[26px] bg-neutral-100" style={{ aspectRatio: view === 'phone' ? undefined : '16 / 10' }}>
-              <img key={deck.id + view} src={deck.images[view] || deck.images.command} alt={`${deck.name}, ${VIEW_LABEL[view]?.label || 'Command'} view`} className={`hb-in ${view === 'phone' ? 'mx-auto max-h-[640px] w-auto py-6' : 'h-full w-full object-cover object-top'}`} />
+              {deck.demo && view === 'command' ? (
+                <LiveDeck key={deck.id} src={deck.demo} name={deck.name} />
+              ) : (
+                <img key={deck.id + view} src={deck.images[view] || deck.images.command} alt={`${deck.name}, ${VIEW_LABEL[view]?.label || 'Command'} view`} className={`hb-in ${view === 'phone' ? 'mx-auto max-h-[640px] w-auto py-6' : 'h-full w-full object-cover object-top'}`} />
+              )}
               <button onClick={() => setPick((pick - 1 + DECKS.length) % DECKS.length)} aria-label="Previous deck" className="hb-pop absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow-lg"><ChevronLeft size={20} /></button>
               <button onClick={() => setPick((pick + 1) % DECKS.length)} aria-label="Next deck" className="hb-pop absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow-lg"><ChevronRight size={20} /></button>
             </div>
@@ -255,6 +270,38 @@ export function StoreHarnessesPage() {
       </section>
 
       {ask && <AccessForm item={ask.item} section="harness" note={ask.note} onClose={() => setAsk(null)} />}
+    </div>
+  );
+}
+
+/* A deck's live demo, playing a made-up bakery day: agents walk the map and
+   change state, missions move, one waits for a yes. The deck is laid out for
+   a 1440 x 900 screen, so the frame is drawn at that size and scaled down to
+   fit, the same picture on a phone as on a desktop. */
+function LiveDeck({ src, name }: { src: string; name: string }) {
+  const box = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const fit = () => setScale(el.clientWidth / 1440);
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return (
+    <div ref={box} className="hb-in absolute inset-0 overflow-hidden bg-[#0d1020]">
+      {scale > 0 && (
+        <iframe
+          src={src}
+          title={`${name}, live demo`}
+          loading="eager"
+          sandbox="allow-scripts allow-same-origin"
+          className="absolute left-0 top-0 origin-top-left border-0"
+          style={{ width: 1440, height: 900, transform: `scale(${scale})` }}
+        />
+      )}
     </div>
   );
 }

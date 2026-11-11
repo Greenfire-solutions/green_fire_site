@@ -24,6 +24,10 @@ const site = path.resolve(here, '..');
 const store = process.env.AGENT_STORE || path.resolve(site, '../Agent Store');
 const out = path.join(site, 'src/data/agentDecks.json');
 const imgDir = path.join(site, 'public/store/decks');
+/* Decks whose live demo (the simulated bakery day, characters moving) plays
+   on the page. Jordan asked 2026-11-11 for the Fellowship in motion as the
+   harness hero. Each one is about 1.5 MB, so only these are copied. */
+const LIVE = ['fellowship'];
 
 const read = (p) => fs.readFileSync(path.join(store, p), 'utf8');
 const html = read('site/index.html');
@@ -60,6 +64,7 @@ for (const m of html.slice(hEnd).matchAll(/<article class="deck">([\s\S]*?)<\/ar
     price_usd: typeof c.price_usd === 'number' && c.price_usd > 0 ? c.price_usd : null,
     buy_url: c.price_usd > 0 && /^https:\/\//.test(c.buy_url || '') ? c.buy_url : null,
     images: Object.fromEntries(views.map((v) => [v, `/store/decks/${id}-${v}.webp`])),
+    demo: LIVE.includes(id) && fs.existsSync(path.join(store, 'site/demo', id, 'index.html')) ? `/store/decks/demo/${id}/index.html` : null,
   });
 }
 if (!decks.length) throw new Error('No decks found on the Agent Store page; refusing to write an empty catalogue');
@@ -88,6 +93,15 @@ fs.mkdirSync(imgDir, { recursive: true });
 let copied = 0;
 for (const d of decks) for (const v of Object.keys(d.images)) {
   fs.copyFileSync(path.join(store, 'site/assets', `${d.id}-${v}.webp`), path.join(imgDir, `${d.id}-${v}.webp`));
+  copied++;
+}
+/* The live demos: the shipped deck files plus the demo script they load as ../demo.js. */
+const demoDir = path.join(imgDir, 'demo');
+fs.rmSync(demoDir, { recursive: true, force: true });
+for (const d of decks.filter((x) => x.demo)) {
+  fs.mkdirSync(demoDir, { recursive: true });
+  fs.copyFileSync(path.join(store, 'site/demo/demo.js'), path.join(demoDir, 'demo.js'));
+  fs.cpSync(path.join(store, 'site/demo', d.id), path.join(demoDir, d.id), { recursive: true });
   copied++;
 }
 fs.writeFileSync(out, JSON.stringify(data, null, 1) + '\n');

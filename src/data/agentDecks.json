@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-11T18:48:56.212Z",
+ "synced": "2026-11-11T19:19:22.647Z",
  "harness": {
   "version": "0.3.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -48,7 +48,8 @@
    "images": {
     "command": "/store/decks/essential-command.webp",
     "phone": "/store/decks/essential-phone.webp"
-   }
+   },
+   "demo": null
   },
   {
    "id": "federation",
@@ -62,7 +63,8 @@
     "command": "/store/decks/federation-command.webp",
     "council": "/store/decks/federation-council.webp",
     "phone": "/store/decks/federation-phone.webp"
-   }
+   },
+   "demo": null
   },
   {
    "id": "fellowship",
@@ -76,7 +78,8 @@
     "command": "/store/decks/fellowship-command.webp",
     "council": "/store/decks/fellowship-council.webp",
     "phone": "/store/decks/fellowship-phone.webp"
-   }
+   },
+   "demo": "/store/decks/demo/fellowship/index.html"
   },
   {
    "id": "goddess-temple",
@@ -89,7 +92,8 @@
    "images": {
     "command": "/store/decks/goddess-temple-command.webp",
     "phone": "/store/decks/goddess-temple-phone.webp"
-   }
+   },
+   "demo": null
   },
   {
    "id": "mosswood",
@@ -102,7 +106,8 @@
    "images": {
     "command": "/store/decks/mosswood-command.webp",
     "phone": "/store/decks/mosswood-phone.webp"
-   }
+   },
+   "demo": null
   },
   {
    "id": "neon-underground",
@@ -115,7 +120,8 @@
    "images": {
     "command": "/store/decks/neon-underground-command.webp",
     "phone": "/store/decks/neon-underground-phone.webp"
-   }
+   },
+   "demo": null
   },
   {
    "id": "petal-desk",
@@ -128,7 +134,8 @@
    "images": {
     "command": "/store/decks/petal-desk-command.webp",
     "phone": "/store/decks/petal-desk-phone.webp"
-   }
+   },
+   "demo": null
   },
   {
    "id": "pixel-hq",
@@ -141,7 +148,8 @@
    "images": {
     "command": "/store/decks/pixel-hq-command.webp",
     "phone": "/store/decks/pixel-hq-phone.webp"
-   }
+   },
+   "demo": null
   },
   {
    "id": "quiet-hours",
@@ -154,7 +162,8 @@
    "images": {
     "command": "/store/decks/quiet-hours-command.webp",
     "phone": "/store/decks/quiet-hours-phone.webp"
-   }
+   },
+   "demo": null
   }
  ]
 }

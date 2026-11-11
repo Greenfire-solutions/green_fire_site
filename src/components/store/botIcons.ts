@@ -1,5 +1,14 @@
-import { Bot, BookCheck, Cable, CircleCheckBig, Filter, Fingerprint, HeartPulse, MonitorCheck, MousePointerClick, PenLine, Ruler, ShieldCheck, Wrench, type LucideIcon } from 'lucide-react';
+import {
+  BadgeCheck, BookCheck, Bot, Cable, CircleCheckBig, Clapperboard, Copy, EyeOff, Film, Filter, Fingerprint, HeartPulse, Lock, Megaphone,
+  MonitorCheck, Mouse, MousePointerClick, Music, PenLine, Presentation, Radar, Route, Ruler, Scissors, ShieldCheck, Shirt, Telescope,
+  UserRoundSearch, Video, Wrench, type LucideIcon,
+} from 'lucide-react';
 
-/* The icons data/bots.ts may name. Listed one by one so only these ship. */
-const ICONS: Record<string, LucideIcon> = { BookCheck, Cable, CircleCheckBig, Filter, Fingerprint, HeartPulse, MonitorCheck, MousePointerClick, PenLine, Ruler, ShieldCheck, Wrench };
+/* The icons a bot may name (bot.json "icon"). Listed one by one so only these
+   ship; a name not listed here shows the plain bot icon. */
+const ICONS: Record<string, LucideIcon> = {
+  BadgeCheck, BookCheck, Cable, CircleCheckBig, Clapperboard, Copy, EyeOff, Film, Filter, Fingerprint, HeartPulse, Lock, Megaphone,
+  MonitorCheck, Mouse, MousePointerClick, Music, PenLine, Presentation, Radar, Route, Ruler, Scissors, ShieldCheck, Shirt, Telescope,
+  UserRoundSearch, Video, Wrench,
+};
 export const botIcon = (name: string): LucideIcon => ICONS[name] || Bot;

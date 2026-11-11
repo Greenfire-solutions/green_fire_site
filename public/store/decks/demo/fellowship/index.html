@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fellowship · The realm</title>
+<style>
+  :root { --night: #0a1612; --wood: #2a1c10; --wood-hi: #4a3219; --parch: #f1e3bd; --parch-lo: #dcc999; --ink: #2b1d0e; --mute: #6d5a3d; --light: #f6ecd2; --gold: #f2c14e;
+    --ok: #2f7d3b; --warn: #a8620a; --bad: #a3262a; --info: #1f5a8c; --idle: #7a6a50; --px: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: var(--night); color: var(--ink); font: 13px/1.45 var(--px); }
+  .top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; padding: 10px 16px; background: var(--wood); color: var(--light); border-bottom: 4px solid #000; }
+  .brand b { font-size: 18px; letter-spacing: .08em; text-shadow: 2px 2px 0 #000; } .brand span { display: block; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+  #biz { margin-right: auto; color: var(--parch-lo); overflow-wrap: anywhere; } .count { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; background: #000; border: 2px solid var(--wood-hi); padding: 2px 8px; color: var(--gold); } .count.warn { color: #ffb4a8; }
+  nav { display: flex; gap: 6px; } nav a { color: var(--light); text-decoration: none; border: 2px solid var(--wood-hi); padding: 3px 10px; background: var(--wood); } nav a.on { background: var(--gold); color: #000; border-color: #000; } nav a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  #err { display: none; margin: 12px 16px 0; padding: 10px 14px; background: #3b0f12; color: #ffd9d9; border: 3px solid var(--bad); }
+  .shell { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 16px; padding: 16px; max-width: 1560px; margin: 0 auto; align-items: start; }
+  /* the realm: the map is the stage and everyone walks on it */
+  #realm { position: relative; aspect-ratio: 3 / 2; background: url("art/map.webp") center / 100% 100%; image-rendering: pixelated; border: 4px solid var(--wood); box-shadow: 0 0 0 2px var(--wood-hi) inset, 5px 5px 0 #000; overflow: hidden; }
+  .flag { position: absolute; transform: translate(-50%, -100%); background: var(--parch); border: 2px solid #000; box-shadow: 2px 2px 0 #000; padding: 1px 6px; font: 700 10px var(--px); max-width: 24%; text-align: center; cursor: pointer; z-index: 5; overflow-wrap: anywhere; }
+  .flag::after { content: ""; position: absolute; left: 50%; top: 100%; width: 2px; height: 12px; background: #000; z-index: 1; } .flag.sel { background: var(--gold); z-index: 6; } .flag.blocked { background: #e7b3b0; } .flag.done { opacity: .6; } .flag:focus-visible { outline: 2px solid #fff; }
+  .hero { position: absolute; width: 5.6%; min-width: 34px; aspect-ratio: 40 / 62; transform: translate(-50%, -92%); transition: left linear, top linear; cursor: pointer; border: 0; padding: 0; background: none; }
+  .hero .spr { position: absolute; inset: 0; background: center bottom / contain no-repeat; image-rendering: pixelated; filter: drop-shadow(0 2px 0 rgba(0, 0, 0, .55)); }
+  .hero.flip .spr { transform: scaleX(-1); } .hero.walking .spr { animation: step .5s steps(1) infinite; } @keyframes step { 0%, 100% { background-image: var(--idle-img); } 50% { background-image: var(--walk-img); } }
+  .hero.error .spr { filter: grayscale(1) drop-shadow(0 2px 0 rgba(0, 0, 0, .55)); } .hero.dim .spr { opacity: .8; } .hero.dim .tagn { opacity: .7; }
+  .hero .tagn { position: absolute; left: 50%; top: 100%; transform: translateX(-50%); font: 700 10px var(--px); color: #fff; background: rgba(0, 0, 0, .78); padding: 0 4px; white-space: nowrap; border: 1px solid var(--c, #000); }
+  .hero .mark { position: absolute; left: 50%; bottom: 104%; transform: translateX(-50%); width: 14px; height: 16px; line-height: 13px; text-align: center; font: 700 11px var(--px); color: #fff; background: var(--warn); border: 2px solid #000; display: none; }
+  .hero.waiting_on_owner .mark { display: block; animation: hop 1s steps(2) infinite; } .hero.blocked .mark, .hero.error .mark { display: block; background: var(--bad); } @keyframes hop { 50% { transform: translate(-50%, -3px); } }
+  .hero.sel .tagn { background: var(--gold); color: #000; } .hero:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .legend { position: absolute; left: 8px; bottom: 8px; background: rgba(0, 0, 0, .7); color: var(--light); font-size: 10px; padding: 3px 8px; border: 1px solid var(--wood-hi); z-index: 7; }
+  /* the side book: quests, the chosen card, seals, chronicle */
+  .book { background: var(--parch); border: 4px solid var(--wood); box-shadow: 0 0 0 2px var(--wood-hi) inset, 5px 5px 0 #000; padding: 12px 14px; min-width: 0; }
+  h2 { font: 700 13px var(--px); letter-spacing: .12em; text-transform: uppercase; margin: 16px 0 8px; padding-bottom: 5px; border-bottom: 2px dashed var(--mute); } h2:first-child { margin-top: 0; }
+  .quest { display: block; width: 100%; text-align: left; font: inherit; color: inherit; background: var(--parch-lo); border: 2px solid var(--mute); padding: 7px 9px; margin-bottom: 8px; cursor: pointer; } .quest.sel { border-color: #000; box-shadow: 3px 3px 0 #000; background: #f7e7b4; } .quest:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+  .qrow { display: flex; gap: 8px; justify-content: space-between; align-items: baseline; } .qt { font-weight: 700; overflow-wrap: anywhere; }
+  .bar { height: 10px; background: var(--parch); border: 2px solid #000; margin: 6px 0 4px; } .bar i { display: block; height: 100%; background: repeating-linear-gradient(90deg, var(--ok) 0 8px, #3f9a4c 8px 10px); }
+  .party { font-size: 10px; color: var(--mute); } .steps { margin-top: 6px; display: none; } .quest.sel .steps { display: block; }
+  .step { color: var(--mute); } .step.done { color: var(--ink); } .tick { display: inline-block; width: 10px; height: 10px; border: 2px solid #000; margin-right: 7px; background: var(--parch); } .step.done .tick { background: var(--ok); }
+  .tag { font-size: 10px; text-transform: uppercase; color: #fff; background: var(--c, var(--idle)); border: 2px solid #000; padding: 0 6px; white-space: nowrap; }
+  .tag.active, .tag.working { --c: var(--info); } .tag.waiting_on_owner, .tag.pending_approval { --c: var(--warn); } .tag.blocked, .tag.error, .tag.outcome_unknown { --c: var(--bad); } .tag.done { --c: var(--ok); }
+  .card { display: grid; grid-template-columns: 60px 1fr; gap: 8px; background: var(--parch-lo); border: 2px solid #000; box-shadow: 3px 3px 0 #000; padding: 8px; } .card .spr { width: 56px; height: 74px; background: center bottom / contain no-repeat; image-rendering: pixelated; }
+  .cast { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); } .name { font-weight: 700; overflow-wrap: anywhere; } .role { font-size: 11px; color: var(--mute); overflow-wrap: anywhere; } .doing { margin-top: 4px; overflow-wrap: anywhere; }
+  .seal, .act { display: flex; gap: 8px; align-items: start; justify-content: space-between; padding: 6px 0; border-top: 2px dotted var(--parch-lo); } .seal div { font-weight: 700; overflow-wrap: anywhere; min-width: 0; } .act div { overflow-wrap: anywhere; min-width: 0; } .act small { color: var(--mute); white-space: nowrap; font-size: 10px; }
+  .hint { font-size: 10px; color: var(--mute); margin: 4px 0 0; } .none { color: var(--mute); font-style: italic; }
+  @media (max-width: 1080px) { .shell { grid-template-columns: 1fr; } }
+  /* ambient life, in the pixel style: stepped flicker for firelight, soft drift for fireflies. Opacity and transform only. */
+  .amb, .motes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; } .motes { z-index: 150; }
+  .dusk { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 56%, transparent 52%, rgba(4, 8, 22, .42)); animation: dusk 5.3s steps(1) infinite; }
+  @keyframes dusk { 0%, 100% { opacity: 1; } 23% { opacity: .86; } 41% { opacity: .96; } 67% { opacity: .82; } 84% { opacity: .93; } }
+  .lamp { position: absolute; left: var(--x); top: var(--y); width: var(--w, 9%); aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; mix-blend-mode: screen; background: radial-gradient(closest-side, rgba(255, 178, 74, .5), rgba(255, 132, 40, .16) 55%, transparent); animation: flicker var(--t, 2.3s) steps(1) infinite; animation-delay: var(--d, 0s); }
+  .lamp.cold { background: radial-gradient(closest-side, rgba(120, 200, 255, .5), rgba(80, 150, 255, .14) 55%, transparent); animation-name: shimmer; } .lamp.moon { background: radial-gradient(closest-side, rgba(255, 244, 200, .34), rgba(255, 236, 170, .1) 60%, transparent); animation-name: shimmer; }
+  @keyframes flicker { 0%, 100% { opacity: .7; transform: scale(1); } 11% { opacity: 1; transform: scale(1.06); } 24% { opacity: .55; transform: scale(.94); } 38% { opacity: .92; transform: scale(1.03); } 52% { opacity: .68; transform: scale(.97); } 66% { opacity: 1; transform: scale(1.08); } 81% { opacity: .6; transform: scale(.95); } }
+  @keyframes shimmer { 0%, 100% { opacity: .45; } 25% { opacity: .7; } 50% { opacity: 1; } 75% { opacity: .7; } }
+  .star { position: absolute; left: var(--x); top: var(--y); width: 2px; height: 2px; background: #fff; animation: starblink var(--t, 3.1s) steps(1) infinite; animation-delay: var(--d, 0s); } @keyframes starblink { 0%, 100% { opacity: .15; } 40% { opacity: 1; } 55% { opacity: .5; } }
+  .motes i { position: absolute; width: 3px; height: 3px; background: #ffe9a0; box-shadow: 0 0 6px 1px rgba(255, 214, 110, .8); opacity: 0; animation: mote 11s ease-in-out infinite; will-change: transform, opacity; } .motes i.green { background: #dcff9c; box-shadow: 0 0 6px 1px rgba(170, 255, 120, .75); }
+  @keyframes mote { 0% { transform: translate(0, 0); opacity: 0; } 18% { opacity: .95; } 36% { opacity: .35; } 50% { transform: translate(var(--dx), var(--dy)); opacity: .9; } 72% { opacity: .4; } 86% { opacity: .85; } 100% { transform: translate(calc(var(--dx) * 1.7), calc(var(--dy) * .15)); opacity: 0; } }
+  /* a light under each character says what it is doing: blue while on a quest, gold while it waits on the owner, red when stopped */
+  .hero::before { content: ""; position: absolute; left: 50%; bottom: -5%; width: 130%; height: 24%; translate: -50% 0; border-radius: 50%; pointer-events: none; opacity: 0; background: radial-gradient(closest-side, var(--halo, transparent), transparent); }
+  .hero.working::before { --halo: rgba(120, 205, 255, .85); animation: halo 1.8s steps(4) infinite alternate; } .hero.waiting_on_owner::before { --halo: rgba(255, 205, 90, .95); animation: halo 1.1s steps(4) infinite alternate; } .hero.blocked::before, .hero.error::before { --halo: rgba(230, 70, 70, .8); opacity: .7; }
+  @keyframes halo { from { opacity: .35; transform: scale(.8); } to { opacity: 1; transform: scale(1.12); } }
+  .hero:not(.walking):not(.working):not(.error) .spr { animation: bob 2.6s steps(1) infinite; animation-delay: var(--bd, 0s); } @keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -2.5%; } }
+  .burst { position: absolute; left: 50%; bottom: -8%; width: 150%; aspect-ratio: 2 / 1; margin-left: -75%; border: 2px solid var(--bc, #fff); border-radius: 50%; pointer-events: none; opacity: 0; }
+  /* quest flags: a small pennant waves on the pole, and a quest that waits on the owner rings in gold */
+  .ft { display: block; } .pen { position: absolute; left: calc(50% + 2px); top: 100%; width: 12px; height: 9px; background: #58a6e6; clip-path: polygon(0 0, 100% 50%, 0 100%); transform-origin: left center; animation: wave 1.2s steps(1) infinite; animation-delay: var(--wd, 0s); }
+  .flag.waiting_on_owner .pen { background: var(--gold); } .flag.blocked .pen { background: #e0524c; } .flag.done .pen { background: #5fb86b; animation: none; }
+  @keyframes wave { 0%, 100% { transform: none; } 25% { transform: scaleX(.75) skewY(9deg); } 50% { transform: scaleX(.92) skewY(-7deg); } 75% { transform: scaleX(.68) skewY(5deg); } }
+  .flag.waiting_on_owner::before { content: ""; position: absolute; inset: -6px; border: 2px solid var(--gold); pointer-events: none; opacity: 0; animation: ring 1.6s steps(5) infinite; } @keyframes ring { from { opacity: .95; transform: scale(.94); } to { opacity: 0; transform: scale(1.14); } }
+  /* the book settles in, a wax seal beats on what awaits the owner, and the top bar reads by candlelight */
+  #realm, .book { animation: settle .6s steps(6) both; } .book { animation-delay: .12s; } @keyframes settle { from { opacity: 0; transform: translateY(8px); } }
+  .seal::before { content: ""; flex: none; width: 12px; height: 12px; margin-top: 3px; border: 2px solid #000; border-radius: 50%; background: var(--bad); box-shadow: inset 2px 2px 0 rgba(255, 255, 255, .3), inset -2px -2px 0 rgba(0, 0, 0, .25); animation: wax 1.6s steps(1) infinite; animation-delay: var(--s1600, 0ms); } .seal div { flex: 1; }
+  @keyframes wax { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); filter: brightness(1.35); } }
+  .card.working .spr { animation: step .5s steps(1) infinite; animation-delay: var(--s500, 0ms); } .card.idle .spr, .card.waiting_on_owner .spr { animation: bob 2.6s steps(1) infinite; animation-delay: var(--s2600, 0ms); }
+  .brand span { animation: candle 3.7s steps(1) infinite; } @keyframes candle { 0%, 100% { opacity: 1; } 17% { opacity: .78; } 31% { opacity: .95; } 58% { opacity: .72; } 74% { opacity: .9; } }
+  .count.warn { animation: candle 2.9s steps(1) infinite; }
+  @media (max-width: 600px) { .motes i:nth-child(2n) { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .hero { transition: none !important; } .hero.walking .spr, .hero .mark { animation: none !important; } *, *::before, *::after { animation: none !important; } .motes, .burst { display: none; } }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand"><b>THE FELLOWSHIP</b><span>The realm</span></div><div id="biz"></div>
+  <span class="count" id="online"></span><span class="count" id="active"></span><span class="count" id="sys"></span>
+  <nav aria-label="Views"><a class="on" href="index.html">The realm</a><a href="council.html">Party</a></nav>
+</div>
+<div id="err" role="status"></div>
+<div class="shell">
+  <div id="realm" aria-label="The realm map. Each character is one agent."><div class="amb" aria-hidden="true">
+      <i class="lamp moon" style="--x: 67.2%; --y: 4%; --w: 12%; --t: 9s"></i><i class="lamp moon" style="--x: 67%; --y: 12%; --w: 8%; --t: 4.2s; --d: -1s"></i>
+      <i class="lamp" style="--x: 75.2%; --y: 34.6%; --w: 9%"></i><i class="lamp" style="--x: 79.6%; --y: 45.4%; --w: 11%; --t: 2.9s; --d: -.7s"></i><i class="lamp" style="--x: 51.4%; --y: 87.6%; --w: 8%; --t: 2.6s; --d: -1.3s"></i><i class="lamp" style="--x: 85.4%; --y: 19.5%; --w: 10%; --t: 3.4s; --d: -2s"></i>
+      <i class="lamp cold" style="--x: 45.2%; --y: 42.8%; --w: 5%; --t: 3.6s"></i><i class="lamp cold" style="--x: 56.4%; --y: 43.6%; --w: 5%; --t: 3.6s; --d: -1.8s"></i>
+      <i class="star" style="--x: 12%; --y: 1.6%"></i><i class="star" style="--x: 31%; --y: 2.4%; --t: 4.3s; --d: -1s"></i><i class="star" style="--x: 55%; --y: 1.2%; --t: 3.7s; --d: -2s"></i><i class="star" style="--x: 90%; --y: 2%; --t: 5.1s; --d: -3s"></i>
+      <i class="dusk"></i>
+    </div><div class="motes" aria-hidden="true"></div><div class="legend">Walking: on a quest · By the tavern: at camp · !: needs you</div></div>
+  <aside class="book">
+    <h2>Quests</h2><div id="quests"></div>
+    <h2>Chosen hero</h2><div id="chosen"></div>
+    <h2>Awaiting your seal</h2><div id="seals"></div><p class="hint">Seal or refuse in your owner tool. This deck only shows.</p>
+    <h2>The chronicle</h2><div id="chron"></div>
+  </aside>
+</div>
+<script src="../demo.js"></script>
+<script>
+// The realm: every agent is a character on the map. Working characters walk between their workplace and their quest's flag;
+// idle ones rest by the tavern; ones that need the owner wait at the tower with a mark. Reads feed.json (agent-deck/1).
+// All feed text is set as plain text, never as HTML.
+const $ = id => document.getElementById(id)
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e }
+const CLASSES = { wizard: /strateg|owner|runs|lead|chief/, bard: /creativ|content|post|flyer|video|social/, treasurer: /financ|book|invoice|money|account/, postmaster: /inbox|mail|communic|message/, loremaster: /research|knowledge|analy/, merchant: /sales|outreach|growth|market/, builder: /build|web|site|engineer/, watchman: /secur|guard|review|compliance/, tourmanager: /schedul|calendar|booking|travel/, scribe: /writ|doc|notes|report/, quartermaster: /operat|logist|inventory|supply/, herald: /announce|press|news/, podcaster: /podcast|audio|interview/, smith: /tool|fix|repair|forge/, cleric: /support|care|help|health/, ranger: /scout|prospect|field/ }
+const KEYS = Object.keys(CLASSES)
+// places on the map, in percent of its width and height
+const PLACE = { tower: [48, 52], tavern: [76, 24], forge: [71, 41], stage: [75, 56], pool: [86, 60], mansion: [78, 86], dome: [50, 90], greenhouse: [41, 76], clock: [18, 86], fair: [20, 50], academy: [15, 27], bridge: [33, 60] }
+const WORKPLACE = { wizard: 'tower', bard: 'stage', treasurer: 'mansion', postmaster: 'clock', loremaster: 'academy', merchant: 'fair', builder: 'forge', smith: 'forge', watchman: 'bridge', tourmanager: 'tavern', scribe: 'academy', quartermaster: 'greenhouse', herald: 'stage', podcaster: 'tavern', cleric: 'pool', ranger: 'fair' }
+const QUEST_SITES = [[57, 66], [30, 40], [62, 30], [36, 88], [88, 40], [24, 68]]
+const SAY = { working: 'on a quest', idle: 'at camp', waiting_on_owner: 'needs you', blocked: 'road blocked', error: 'wounded', active: 'under way', done: 'done', pending_approval: 'needs your seal', outcome_unknown: 'fate unknown' }
+const words = s => SAY[s] || String(s).replace(/_/g, ' ')
+const when = iso => { const m = Math.round((Date.now() - Date.parse(iso)) / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : new Date(iso).toLocaleDateString() }
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+let feed = null, last = '', pickedQuest = null, pickedHero = null
+const heroes = new Map() // agent id -> { node, x, y, key, busyUntil, leg }
+// Motion helpers. One-shot effects use the Web Animations API and are skipped when the owner asks for less motion.
+// The book is rebuilt on every changed feed, so its loops read a delay taken from one clock and never restart on a poll.
+const PERIODS = [500, 1600, 2600], PIXEL = { easing: 'steps(6, end)' }
+const stamp = n => { const t = performance.now(); for (const p of PERIODS) n.style.setProperty('--s' + p, '-' + Math.round(t % p) + 'ms') }
+const go = (n, frames, ms, more) => still || document.hidden || !n.animate ? null : n.animate(frames, Object.assign({ duration: ms }, PIXEL, more))
+const BURST = { working: '#8fd4ff', idle: '#f1e3bd', waiting_on_owner: '#f2c14e', blocked: '#ff7a70', error: '#ff7a70' }
+function burst(node, state) { if (still || document.hidden) return; const r = el('i', 'burst'); r.style.setProperty('--bc', BURST[state] || '#fff'); node.append(r)
+  const a = go(r, [{ opacity: 1, transform: 'scale(.3)' }, { opacity: 0, transform: 'scale(1.5)' }], 900, { easing: 'steps(8, end)', fill: 'forwards' }); if (a) setTimeout(() => r.remove(), 960); else r.remove() }
+const flags = new Map(), seen = { quests: null, seals: null, chron: null }, was = { progress: {}, status: {}, steps: {}, hero: null, heroState: null }
+// fireflies over the map, placed once and never touched again
+{ let seed = 5; const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647, box = document.querySelector('.motes')
+  for (let i = 0; i < 16; i++) { const m = el('i', i % 3 === 0 ? 'green' : ''); m.style.left = (4 + rnd() * 92).toFixed(1) + '%'; m.style.top = (14 + rnd() * 80).toFixed(1) + '%'
+    m.style.setProperty('--dx', Math.round(rnd() * 70 - 35) + 'px'); m.style.setProperty('--dy', Math.round(-16 - rnd() * 40) + 'px'); m.style.animationDuration = (8 + rnd() * 9).toFixed(1) + 's'; m.style.animationDelay = (-rnd() * 16).toFixed(1) + 's'; box.append(m) } }
+try { pickedQuest = localStorage.getItem('fellowship-quest') } catch {}
+
+function classFor(a, used) { const t = ((a.role || '') + ' ' + (a.id || '')).toLowerCase(); let k = KEYS.find(k => CLASSES[k].test(t) && !used.has(k)); if (!k) { let h = 0; for (const c of String(a.id)) h = (h * 31 + c.charCodeAt(0)) >>> 0; for (let i = 0; i < KEYS.length; i++) { const c = KEYS[(h + i) % KEYS.length]; if (!used.has(c) || used.size >= KEYS.length) { k = c; break } } } used.add(k); return k }
+const jitter = (p, i, n = 3) => [p[0] + ((i * 37) % 7 - 3) * (n / 3), p[1] + ((i * 53) % 5 - 2) * (n / 3)]
+const sprite = (node, k) => { node.style.setProperty('--idle-img', `url("art/c-${k}-idle.png")`); node.style.setProperty('--walk-img', `url("art/c-${k}-walk.png")`); node.style.backgroundImage = `url("art/c-${k}-idle.png")` }
+
+function moveTo(h, x, y) {
+  const d = Math.hypot(x - h.x, (y - h.y) * 0.67), ms = still ? 0 : Math.max(600, d * 260)
+  h.node.classList.toggle('flip', x < h.x); h.node.style.transitionDuration = ms + 'ms'
+  if (ms) h.node.classList.add('walking')
+  h.node.style.left = x + '%'; h.node.style.top = y + '%'; h.node.style.zIndex = String(10 + Math.round(y))
+  h.x = x; h.y = y; h.busyUntil = Date.now() + ms
+  setTimeout(() => { if (Date.now() >= h.busyUntil - 30) h.node.classList.remove('walking') }, ms + 20)
+}
+// where a character wants to be, given its state and quest
+function plan(a, h, i, siteOf) {
+  const home = PLACE[WORKPLACE[h.key]] || PLACE.tower, site = siteOf[a.id]
+  if (a.state === 'working') return site ? [jitter(home, i), jitter(site, i, 2)] : [jitter(home, i), jitter(PLACE.tower, i)]
+  if (a.state === 'idle') return [jitter(PLACE.tavern, i, 4)]
+  if (a.state === 'waiting_on_owner') return [jitter(PLACE.tower, i, 2)]
+  return [jitter(site || home, i, 2)] // blocked or wounded: stopped where the trouble is
+}
+function tick() {
+  if (!feed) return
+  feed.agents.forEach((a, i) => { const h = heroes.get(a.id); if (!h || Date.now() < h.busyUntil + h.rest) return; const route = h.route; if (!route || !route.length) return
+    h.leg = (h.leg + 1) % route.length; const [x, y] = route[h.leg]
+    if (Math.abs(x - h.x) < 0.3 && Math.abs(y - h.y) < 0.3) return
+    h.rest = route.length > 1 ? 1800 + (i * 700) % 2600 : 0; moveTo(h, x, y) })
+}
+
+function heroCard(a, k) { const c = el('div', 'card ' + a.state), s = el('div', 'spr'), b = el('div'); sprite(s, k); s.setAttribute('role', 'img'); s.setAttribute('aria-label', k)
+  b.append(el('div', 'cast', k), el('div', 'name', a.name), el('div', 'role', a.role || ''), el('span', 'tag ' + a.state, words(a.state)), el('div', 'doing', a.current || 'Resting by the fire')); c.append(s, b); return c }
+const fill = (id, items, none) => $(id).replaceChildren(...(items.length ? items : [el('div', 'none', none)]))
+
+function render() {
+  const f = feed, realm = $('realm'), missions = f.missions || []
+  const m = missions.find(x => x.id === pickedQuest) || missions.find(x => x.status === 'waiting_on_owner') || missions[0] || null
+  $('biz').textContent = f.business.name
+  $('online').textContent = `${f.agents.filter(a => a.state !== 'error').length} in the party`; $('active').textContent = `${missions.filter(x => x.status !== 'done').length} quests afoot`
+  const trouble = f.health.filter(h => h.state !== 'healthy' && h.state !== 'disabled').length + f.agents.filter(a => a.state === 'blocked' || a.state === 'error').length
+  const sys = $('sys'); sys.textContent = trouble ? `${trouble} need attention` : 'all roads open'; sys.className = 'count' + (trouble ? ' warn' : '')
+  // quest flags on the map
+  // flags keep their nodes between renders, so the pennants never restart; a new quest is planted and a changed one flashes
+  const siteOf = {}, siteByMission = {}, first = !seen.quests
+  missions.forEach((q, i) => { const s = QUEST_SITES[i % QUEST_SITES.length]; siteByMission[q.id] = s; for (const id of q.agents || []) if (!siteOf[id] || (m && q.id === m.id)) siteOf[id] = s
+    let b = flags.get(q.id)
+    if (!b) { b = el('button', 'flag'); b.type = 'button'; b.append(el('span', 'ft'), el('i', 'pen')); b.style.setProperty('--wd', -(i * 370 % 1200) + 'ms'); b.onclick = () => pickQuest(q.id); realm.append(b); flags.set(q.id, b)
+      if (!first) go(b, [{ opacity: 0, transform: 'translate(-50%, -160%)' }, { opacity: 1, transform: 'translate(-50%, -100%)' }], 500) }
+    else if (was.status[q.id] && was.status[q.id] !== q.status) go(b, [{ filter: 'brightness(1.7)' }, { filter: 'brightness(1)' }], 800)
+    const cls = `flag ${q.status}${m && q.id === m.id ? ' sel' : ''}`; if (b.className !== cls) b.className = cls
+    b.firstChild.textContent = q.title; b.style.left = s[0] + '%'; b.style.top = (s[1] - 9) + '%' })
+  for (const [id, b] of flags) if (!missions.some(q => q.id === id)) { b.remove(); flags.delete(id) }
+  // characters
+  const used = new Set(), keyOf = {}, onIds = new Set(m ? m.agents || [] : [])
+  f.agents.forEach((a, i) => {
+    const k = keyOf[a.id] = classFor(a, used); let h = heroes.get(a.id)
+    if (!h) { const node = el('button', 'hero'); node.type = 'button'; const s = el('div', 'spr'); sprite(s, k); node.append(el('span', 'mark', '!'), s, el('span', 'tagn', a.name)); node.onclick = () => { pickedHero = a.id; last = ''; render() }
+      const start = jitter(PLACE.tavern, i, 4); node.style.setProperty('--bd', -(i * 430 % 2600) + 'ms'); node.style.left = start[0] + '%'; node.style.top = start[1] + '%'; node.style.transitionDuration = '0ms'; realm.append(node); h = { node, x: start[0], y: start[1], key: k, busyUntil: 0, rest: 0, leg: -1 }; heroes.set(a.id, h) }
+    h.node.className = `hero ${a.state}${h.node.classList.contains('walking') ? ' walking' : ''}${h.node.classList.contains('flip') ? ' flip' : ''}${m && !onIds.has(a.id) ? ' dim' : ''}${pickedHero === a.id ? ' sel' : ''}`
+    if (h.state && h.state !== a.state) burst(h.node, a.state); h.state = a.state
+    h.node.setAttribute('aria-label', `${a.name}, ${k}, ${words(a.state)}`); h.node.querySelector('.tagn').textContent = a.name
+    const route = plan(a, h, i, siteOf), sig = JSON.stringify(route); if (h.sig !== sig) { h.sig = sig; h.route = route; h.leg = -1; h.rest = 0 }
+  })
+  for (const [id, h] of heroes) if (!f.agents.some(a => a.id === id)) { h.node.remove(); heroes.delete(id) }
+  // the book: rebuilt each time, in phase with the clock; what is new inks in, what changed gets a brief mark
+  const book = document.querySelector('.book'); stamp(book)
+  const fresh = (name, key) => seen[name] && !seen[name].has(key)
+  fill('quests', missions.map(q => { const b = el('button', 'quest' + (m && q.id === m.id ? ' sel' : '')); b.type = 'button'; b.onclick = () => pickQuest(q.id)
+    const tagq = el('span', 'tag ' + q.status, words(q.status)), row = el('div', 'qrow'); row.append(el('span', 'qt', q.title), tagq)
+    const pct = Math.round(q.progress * 100), bar = el('div', 'bar'), fillbar = el('i'); fillbar.style.width = pct + '%'; bar.append(fillbar)
+    if (was.progress[q.id] != null && was.progress[q.id] !== pct) go(fillbar, [{ width: was.progress[q.id] + '%' }, { width: pct + '%' }], 700, { easing: 'steps(7, end)' })
+    if (was.status[q.id] && was.status[q.id] !== q.status) go(tagq, [{ transform: 'scale(1.35)' }, { transform: 'scale(1)' }], 500, { easing: 'steps(4, end)' })
+    const names = (q.agents || []).map(id => (f.agents.find(a => a.id === id) || {}).name).filter(Boolean), done = was.steps[q.id]
+    const steps = el('div', 'steps'); for (const s of q.steps || []) { const r = el('div', 'step' + (s.done ? ' done' : '')), t = el('i', 'tick'); r.append(t, document.createTextNode(s.text)); steps.append(r)
+      if (s.done && done && !done.has(s.text)) go(t, [{ transform: 'scale(2)' }, { transform: 'scale(1)' }], 500, { easing: 'steps(4, end)' }) }
+    if (fresh('quests', q.id)) go(b, [{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], 500)
+    b.append(row, bar, el('div', 'party', `${pct}% · ${names.join(', ') || 'no one assigned'}`), steps); return b }), 'No quests in this feed yet.')
+  was.progress = {}; was.status = {}; was.steps = {}
+  for (const q of missions) { was.progress[q.id] = Math.round(q.progress * 100); was.status[q.id] = q.status; was.steps[q.id] = new Set((q.steps || []).filter(s => s.done).map(s => s.text)) }
+  seen.quests = new Set(missions.map(q => q.id))
+  const hero = f.agents.find(a => a.id === pickedHero) || (m && f.agents.find(a => a.id === (m.lead || (m.agents || [])[0]))) || f.agents[0]
+  fill('chosen', hero ? [heroCard(hero, keyOf[hero.id])] : [], 'No one has joined the party yet.')
+  if (hero) { const card = $('chosen').firstChild
+    if (was.hero && was.hero !== hero.id) go(card, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], 400, { easing: 'steps(4, end)' })
+    else if (was.hero && was.heroState !== hero.state) go(card.querySelector('.tag'), [{ transform: 'scale(1.35)' }, { transform: 'scale(1)' }], 500, { easing: 'steps(4, end)' })
+    was.hero = hero.id; was.heroState = hero.state }
+  const pend = f.approvals.filter(a => a.status === 'pending_approval' || a.status === 'outcome_unknown')
+  fill('seals', pend.slice(0, 5).map(a => { const r = el('div', 'seal'); r.append(el('div', null, a.summary), el('span', 'tag ' + a.status, words(a.status)))
+    if (fresh('seals', a.id)) go(r, [{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], 500); return r }), 'Nothing awaits your seal.')
+  seen.seals = new Set(pend.map(a => a.id))
+  // a new line in the chronicle is written in from the left, like a quill crossing the page
+  fill('chron', f.activity.slice(0, 5).map(a => { const r = el('div', 'act'); r.append(el('div', null, a.text), el('small', null, when(a.at)))
+    if (fresh('chron', a.at + a.text)) go(r, [{ clipPath: 'inset(0 100% 0 0)', opacity: .3 }, { clipPath: 'inset(0 0 0 0)', opacity: 1 }], 900, { easing: 'steps(18, end)' }); return r }), 'The chronicle is blank.')
+  seen.chron = new Set(f.activity.map(a => a.at + a.text))
+}
+function pickQuest(id) { pickedQuest = id; pickedHero = null; try { localStorage.setItem('fellowship-quest', id) } catch {} last = ''; render() }
+async function load() {
+  let f; try { f = await (await fetch('feed.json')).json() } catch { f = { error: 'The deck cannot reach its feed.' } }
+  const err = $('err'); if (f.error) { err.style.display = 'block'; err.textContent = f.error + (f.problems ? ': ' + f.problems.join('; ') : ''); return }
+  err.style.display = 'none'; const sig = JSON.stringify(f); if (sig === last) return; last = sig; feed = f; render()
+}
+load(); setInterval(load, 4000); setInterval(tick, 700)
+</script>
+<script>window.DECK_SOUND = { label: 'Fellowship hearth', volume: 0.2, tracks: [{ file: 'sound/hearth-fire.m4a', title: 'Hearth fire' }] }</script>
+<script src="sound.js"></script>
+</body>
+</html>

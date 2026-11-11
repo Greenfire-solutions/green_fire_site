@@ -1,0 +1,318 @@
+{
+ "built": "2026-11-11T19:28:25.955Z",
+ "bots": [
+  {
+   "id": "button-prover",
+   "kind": "agent",
+   "name": "Button Prover",
+   "line": "Presses every button in your web app and tells you which ones do nothing.",
+   "does": [
+    "Clicks every control in a real headless browser",
+    "Checks the change reached the server and came back",
+    "Runs on a sandbox copy, then proves it restored it"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "MousePointerClick",
+   "for": "people who build web apps with AI",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-7d25b2a"
+  },
+  {
+   "id": "change-warden",
+   "kind": "agent",
+   "name": "Change Warden",
+   "line": "Reviews a fix before you trust it, and catches the new bugs the fix just made.",
+   "does": [
+    "Checks each guard sits before the write it protects",
+    "Finds the sibling routes the fix left open",
+    "Gives one verdict: BLOCK, FIX-FIRST or PASS"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "ShieldCheck",
+   "for": "anyone shipping AI-written code changes",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-d471e4c"
+  },
+  {
+   "id": "claim-checker",
+   "kind": "agent",
+   "name": "Claim Checker",
+   "line": "Reads anything you are about to send and stops the claims your own records do not back up.",
+   "does": [
+    "Checks every claim against your own fact record",
+    "Flags numbers that disagree with your one source",
+    "Holds back names nobody has confirmed"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "BadgeCheck",
+   "for": "founders, nonprofits and anyone writing to funders",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-207a2b7"
+  },
+  {
+   "id": "drift-hunter",
+   "kind": "agent",
+   "name": "Drift Hunter",
+   "line": "Finds the things your code defines twice and shows which copies no longer agree.",
+   "does": [
+    "Finds repeated helpers, lists, queries and rules",
+    "Shows the exact difference between drifted copies",
+    "Names the one home each duplicate should move to"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Copy",
+   "for": "people whose AI-built code has grown fast",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-ce28c3b"
+  },
+  {
+   "id": "filter-reviewer",
+   "kind": "agent",
+   "name": "Filter Reviewer",
+   "line": "Finds the filters and gates that quietly throw away good records.",
+   "does": [
+    "Lists every filter, regex, allowlist and gate",
+    "Runs them on real data and reads what was dropped",
+    "Checks every gate refuses what it does not know"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Filter",
+   "for": "people with data pipelines or lead lists",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-cb7c617"
+  },
+  {
+   "id": "first-timer-critic",
+   "kind": "agent",
+   "name": "First-Timer Critic",
+   "line": "Walks your app as a brand new, non-technical user and shows where they get stuck.",
+   "does": [
+    "Uses the app fresh, as a stranger and a regular",
+    "Flags screens that ask before they give",
+    "Ranks every finding KEEP, FIX or CUT"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "UserRoundSearch",
+   "for": "people building apps for non-technical users",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-e0306b0"
+  },
+  {
+   "id": "funder-scout",
+   "kind": "agent",
+   "name": "Funder Scout",
+   "line": "Researches one funder, sponsor or partner and tells you if, why and how to approach them.",
+   "does": [
+    "Finds a real grant or deal that proves the fit",
+    "Names the real door in, not just the contact form",
+    "Gives the honest reasons not to approach"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Telescope",
+   "for": "founders, nonprofits and artists seeking funding",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-23c8bf2"
+  },
+  {
+   "id": "health-check",
+   "kind": "agent",
+   "name": "Health Check",
+   "line": "Tells you whether your system really ran today, not whether it is set up to.",
+   "does": [
+    "Compares scheduled jobs against what actually ran",
+    "Checks logs, backups, pages and credentials",
+    "Answers WORKING, DEGRADED or BROKEN with proof"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "HeartPulse",
+   "for": "people running automations and small apps",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-36cf1a5"
+  },
+  {
+   "id": "human-voice",
+   "kind": "skill",
+   "name": "Human Voice",
+   "line": "The last pass that makes AI writing read like you typed it yourself.",
+   "does": [
+    "Strips the phrases that give AI writing away",
+    "Tunes to your own voice from a few samples",
+    "Never changes a fact, price, date, name or link"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "PenLine",
+   "for": "people who send emails and posts drafted with AI",
+   "price_usd": 19,
+   "buy_url": null,
+   "version": "2026.11.11-79bb4b8"
+  },
+  {
+   "id": "mac-ui-control",
+   "kind": "skill",
+   "name": "Mac App Control",
+   "line": "Lets your AI click, type and drag in any Mac app, even ones scripts cannot reach.",
+   "does": [
+    "Real clicks, drags, scrolls, typing and shortcuts",
+    "Works in Electron apps where AppleScript fails",
+    "Checks what is under a point before clicking"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools, on macOS",
+   "icon": "Mouse",
+   "for": "Mac users automating desktop apps with AI",
+   "price_usd": 19,
+   "buy_url": null,
+   "version": "2026.11.11-6dfdf4c"
+  },
+  {
+   "id": "measured-not-guessed",
+   "kind": "skill",
+   "name": "Measured, Not Guessed",
+   "line": "Makes your AI say where every number came from, and refuse the ones it cannot back.",
+   "does": [
+    "Tags each figure measured, inferred or assumed",
+    "Refuses rates and rankings on too few samples",
+    "Re-checks agent claims before they count"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Ruler",
+   "for": "people who put AI research into pitches and reports",
+   "price_usd": 19,
+   "buy_url": null,
+   "version": "2026.11.11-a564aae"
+  },
+  {
+   "id": "privacy-sentinel",
+   "kind": "agent",
+   "name": "Privacy Sentinel",
+   "line": "Proves your most private data never ends up in a log, a notification, a fixture or the wrong AI call.",
+   "does": [
+    "Builds a sensitivity map with you on first run",
+    "Traces each private field from source to every sink",
+    "Checks logs, pushes, fixtures, exports and screens"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "EyeOff",
+   "for": "people building apps that hold personal data",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-fabf79e"
+  },
+  {
+   "id": "prove-the-page-runs",
+   "kind": "skill",
+   "name": "Prove the Page Runs",
+   "line": "Opens your page in a real headless browser and proves it renders, not just loads.",
+   "does": [
+    "Counts real rendered elements, not strings",
+    "Catches script errors your tests never see",
+    "Clicks a button and checks what appeared"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "MonitorCheck",
+   "for": "people who build web pages and dashboards with AI",
+   "price_usd": 19,
+   "buy_url": null,
+   "version": "2026.11.11-981ebcf"
+  },
+  {
+   "id": "right-app-every-time",
+   "kind": "skill",
+   "name": "Right App, Every Time",
+   "line": "Makes local apps prove who they are, so your tools never open or test the wrong one.",
+   "does": [
+    "Adds a whoami check to your local servers",
+    "Probes a port and refuses any impostor",
+    "Ships a test that proves the refusal works"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Fingerprint",
+   "for": "people running several local apps with AI",
+   "price_usd": 19,
+   "buy_url": null,
+   "version": "2026.11.11-706c79d"
+  },
+  {
+   "id": "security-warden",
+   "kind": "agent",
+   "name": "Security Warden",
+   "line": "Reviews your AI agent system before it touches anyone's email, calendar, money or private data.",
+   "does": [
+    "Finds outward actions that can fire without a yes",
+    "Catches secrets in logs, fixtures and seed data",
+    "Hunts prompt injection and over-broad token scopes"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Lock",
+   "for": "people building AI assistants on real accounts",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-793483a"
+  },
+  {
+   "id": "simplifier",
+   "kind": "agent",
+   "name": "Simplifier",
+   "line": "Finds what your codebase could stop doing, and what you still do by hand.",
+   "does": [
+    "Proves which code and commands nothing reaches",
+    "Lists half-built features: finish or drop",
+    "Spots manual steps worth automating"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Scissors",
+   "for": "people whose project feels too heavy to change",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-2fc7e0d"
+  },
+  {
+   "id": "tech-scout",
+   "kind": "agent",
+   "name": "Tech Scout",
+   "line": "Finds libraries and tools that could improve your project, and only the ones that will run on your machine.",
+   "does": [
+    "Checks your machine, OS and pinned versions first",
+    "Verifies real install support, not README promises",
+    "Gives a one-hour test for every candidate"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Radar",
+   "for": "developers on older or unusual hardware",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-e838765"
+  },
+  {
+   "id": "warm-intro-mapper",
+   "kind": "agent",
+   "name": "Warm Intro Mapper",
+   "line": "Finds who you already know who can introduce you to the person you want to reach.",
+   "does": [
+    "Reads your own contact lists and CRM exports, read-only",
+    "Maps the target's public board, partners and grantees",
+    "Ranks each path and labels how warm every link is"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Route",
+   "for": "founders, fundraisers and sellers who need introductions",
+   "price_usd": 29,
+   "buy_url": null,
+   "version": "2026.11.11-10fa9f0"
+  }
+ ],
+ "bundle": {
+  "name": "Every Greenfire Bot",
+  "line": "Every agent and skill in the store, in one download.",
+  "price_usd": 99,
+  "count": 18,
+  "buy_url": null
+ }
+}

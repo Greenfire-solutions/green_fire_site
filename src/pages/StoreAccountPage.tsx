@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Check, Download, Loader2, Lock } from 'lucide-react';
 import { SOFTWARE_NOTE } from '../data/softwareNote';
+import botsCatalog from '../data/botsCatalog.json';
+
+/* Bots (agents and skills, 2026-11-11) are sold as bot-<id> on the same
+   rails as the apps; their names come from the bot catalogue. */
+const BOT_TITLES = new Map<string, string>([
+  ...botsCatalog.bots.map((b) => [`bot-${b.id}`, b.name] as [string, string]),
+  ['bot-all', botsCatalog.bundle.name],
+]);
 
 /* WHERE A BUYER LANDS (2026-10-27). Stripe sends every store checkout here
    with ?s={CHECKOUT_SESSION_ID}. The page asks /api/store what that checkout
@@ -94,7 +102,8 @@ export function StoreAccountPage() {
   };
 
   const byId = new Map(apps.map((a) => [a.id, a]));
-  const owned = (acct?.owned || []).map((id) => byId.get(id) || ({ id, title: id, line: '', poster: null, access: null, free: false, ready: true, price_usd: 0 } as App));
+  const owned = (acct?.owned || []).map((id) => byId.get(id) || ({ id, title: BOT_TITLES.get(id) || id, line: BOT_TITLES.has(id) ? 'Unzip, open README.md, run the installer for your AI tool.' : '', poster: null, access: null, free: false, ready: true, price_usd: 0 } as App));
+  const onlyBots = owned.length > 0 && owned.every((a) => BOT_TITLES.has(a.id));
   const canPick = acct?.plan === 'store' && acct.active ? apps.filter((a) => a.ready && !a.free && !acct.owned.includes(a.id)) : [];
   const dl = (id: string, arch?: string) => `/api/store?action=download&s=${encodeURIComponent(s)}&app=${encodeURIComponent(id)}${arch ? `&arch=${arch}` : ''}`;
   /* Some apps come ready-made, one zip per kind of Mac, with everything inside. */
@@ -196,7 +205,11 @@ export function StoreAccountPage() {
                     {owned.some((a) => a.builds?.some((b) => b.arch === 'win')) && <> On Windows, take the <b>Windows</b> download: right-click it, Extract All, then double-click Start in the folder.</>}
                   </p>
                 )}
-                <p className="mt-3 text-xs text-stone-400">Open GREENFIRE_START_HERE.md inside the zip first. Something not working? Reply to your email.</p>
+                <p className="mt-3 text-xs text-stone-400">
+                  {onlyBots
+                    ? 'Open README.md inside the zip. On Mac or Linux run sh install.sh, on Windows install.ps1: it installs into Claude Code, Codex, or one project folder for Cursor and other tools. Something not working? Reply to your email.'
+                    : 'Open GREENFIRE_START_HERE.md inside the zip first. Something not working? Reply to your email.'}
+                </p>
                 <p className="mt-2 text-[11px] text-stone-500">{SOFTWARE_NOTE}</p>
               </div>
             )}

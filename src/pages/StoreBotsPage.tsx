@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, Layers } from 'lucide-react';
+import { ArrowRight, Check, Download, Layers, Package, Terminal } from 'lucide-react';
 import { AccessForm, StoreNav } from '../components/store/StoreNav';
 import { botIcon } from '../components/store/botIcons';
-import { BOTS, BOT_KINDS, type BotItem, type BotKind } from '../data/bots';
+import { BOTS, BOT_KINDS, BUNDLE, type BotKind } from '../data/bots';
 
 /* /store/bots (2026-11-11): single agents, skills and tools. The list is
    src/data/bots.ts; see there for how an item gets a price. /store/bots#id
@@ -14,7 +14,7 @@ const KINDS = Object.keys(BOT_KINDS) as BotKind[];
 export function StoreBotsPage() {
   const [kind, setKind] = useState<BotKind | null>(null);
   const [lit, setLit] = useState<string | null>(null);
-  const [ask, setAsk] = useState<BotItem | null>(null);
+  const [ask, setAsk] = useState<{ name: string } | null>(null);
 
   useEffect(() => { document.title = 'Bots: agents, skills and tools · Greenfire Store'; }, []);
   useEffect(() => {
@@ -57,6 +57,26 @@ export function StoreBotsPage() {
             ))}
           </div>
           {kind && <p className="mt-3 max-w-2xl text-sm text-stone-400">{BOT_KINDS[kind].blurb}</p>}
+
+          {/* Every bot in one download */}
+          <div className="mt-8 flex flex-col gap-5 overflow-hidden rounded-3xl border border-sky-400/30 p-6 md:flex-row md:items-center md:justify-between md:p-7" style={{ background: 'linear-gradient(110deg, rgba(56,189,248,.14), rgba(167,139,250,.12) 55%, rgba(251,191,36,.08))' }}>
+            <div className="flex items-start gap-4">
+              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-sky-400/15 text-sky-300 shadow-[0_0_30px_-8px_#38bdf8]"><Package size={26} /></div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-widest text-sky-300">Best value</p>
+                <p className="mt-0.5 text-xl font-bold">{BUNDLE.name}: all {BUNDLE.count} agents and skills</p>
+                <p className="mt-1 text-sm text-stone-300">One download, one command installs the lot. New bots are added to it as they are made.</p>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-4">
+              <span className="text-3xl font-bold">${BUNDLE.price_usd}</span>
+              {BUNDLE.buy_url ? (
+                <a href={BUNDLE.buy_url} className="rounded-full bg-sky-400 px-5 py-3 text-sm font-bold text-neutral-950 hover:bg-sky-300">Get every bot</a>
+              ) : (
+                <button onClick={() => setAsk({ name: BUNDLE.name })} className="rounded-full bg-sky-400 px-5 py-3 text-sm font-bold text-neutral-950 hover:bg-sky-300">Get first access</button>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -96,7 +116,7 @@ export function StoreBotsPage() {
                   </Link>
                 )}
                 <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
-                  <span className="text-sm font-bold">{b.price_usd ? `$${b.price_usd}` : 'Opening soon'}</span>
+                  <span className="text-sm font-bold">{b.kind === 'tool' ? 'In the harness' : b.price_usd ? `$${b.price_usd}` : 'Opening soon'}</span>
                   {b.buy_url ? (
                     <a href={b.buy_url} className="rounded-full px-4 py-2 text-xs font-bold text-neutral-950" style={{ background: k.color }}>Get it</a>
                   ) : (
@@ -106,6 +126,34 @@ export function StoreBotsPage() {
               </article>
             );
           })}
+        </div>
+      </section>
+
+      {/* Works with any AI */}
+      <section className="relative px-4 pb-16 md:px-8">
+        <div className="mx-auto max-w-7xl rounded-3xl border border-white/10 bg-white/[0.02] p-7 md:p-10">
+          <p className="text-xs font-bold uppercase tracking-widest text-sky-300">Works with the AI you already use</p>
+          <h2 className="mt-2 text-2xl font-bold md:text-3xl">One command, and it is in your tools.</h2>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {['Claude Code', 'Codex', 'Cursor', 'Gemini CLI', 'Windsurf', 'Any AI that reads AGENTS.md'].map((t) => (
+              <span key={t} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-stone-200">{t}</span>
+            ))}
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {[
+              { icon: Download, t: 'Download', b: 'Pay once and the zip is yours, with the link emailed so you never lose it.' },
+              { icon: Terminal, t: 'Run the installer', b: 'install.sh on Mac and Linux, install.ps1 on Windows. It finds Claude Code and Codex and installs into each, or into one project.' },
+              { icon: Check, t: 'Ask for it', b: 'Start a new session and say "use the change warden on my last commit". Plain files, MIT licensed, yours to change.' },
+            ].map(({ icon: I, t, b }) => (
+              <div key={t} className="flex gap-4">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-sky-400/10 text-sky-300"><I size={18} /></div>
+                <div>
+                  <p className="font-bold">{t}</p>
+                  <p className="mt-1 text-sm text-stone-400">{b}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
