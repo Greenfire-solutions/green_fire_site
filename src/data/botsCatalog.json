@@ -1,5 +1,5 @@
 {
- "built": "2026-11-11T19:28:25.955Z",
+ "built": "2026-11-11T20:30:37.449Z",
  "bots": [
   {
    "id": "button-prover",
@@ -15,8 +15,25 @@
    "icon": "MousePointerClick",
    "for": "people who build web apps with AI",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/3cI7sNe9M8LBc082Vx1kA1e",
    "version": "2026.11.11-7d25b2a"
+  },
+  {
+   "id": "capcut-music-video",
+   "kind": "skill",
+   "name": "Beat-Synced Music Video",
+   "line": "Your AI cuts a music video to the beat and builds it straight into a CapCut timeline.",
+   "does": [
+    "Finds the real tempo and refuses a wrong one",
+    "Picks the best moments from every clip",
+    "Writes the edit into your CapCut project"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Clapperboard",
+   "for": "musicians and editors who cut in CapCut",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/aFa9AV0iW0f53tC0Np1kA1u",
+   "version": "2026.11.11-a97603a"
   },
   {
    "id": "change-warden",
@@ -32,7 +49,7 @@
    "icon": "ShieldCheck",
    "for": "anyone shipping AI-written code changes",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/7sYfZje9M1j9ggogMn1kA1f",
    "version": "2026.11.11-d471e4c"
   },
   {
@@ -49,7 +66,7 @@
    "icon": "BadgeCheck",
    "for": "founders, nonprofits and anyone writing to funders",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/3cI28t7Lod1Rc0853F1kA1g",
    "version": "2026.11.11-207a2b7"
   },
   {
@@ -66,8 +83,25 @@
    "icon": "Copy",
    "for": "people whose AI-built code has grown fast",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/fZu7sN5Dgge33tC9jV1kA1h",
    "version": "2026.11.11-ce28c3b"
+  },
+  {
+   "id": "event-flyers",
+   "kind": "skill",
+   "name": "Animated Event Flyers",
+   "line": "Turns your event posters into readable animated flyer videos, cut to the beat of your own music.",
+   "does": [
+    "Poster on a 3D card that pulses on every beat",
+    "Flips to an end card with date, price and link",
+    "A new look for every event, never a repeat"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Megaphone",
+   "for": "event hosts, teachers and musicians who promote on social",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/14AeVffdQ2nd5BKeEf1kA1t",
+   "version": "2026.11.11-d37b2c3"
   },
   {
    "id": "filter-reviewer",
@@ -83,7 +117,7 @@
    "icon": "Filter",
    "for": "people with data pipelines or lead lists",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/00w5kF1n0f9Z9S00Np1kA1i",
    "version": "2026.11.11-cb7c617"
   },
   {
@@ -100,7 +134,7 @@
    "icon": "UserRoundSearch",
    "for": "people building apps for non-technical users",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/dRm7sNaXA6Dtc082Vx1kA1j",
    "version": "2026.11.11-e0306b0"
   },
   {
@@ -117,7 +151,7 @@
    "icon": "Telescope",
    "for": "founders, nonprofits and artists seeking funding",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/00w3cxc1E1j90hqgMn1kA1k",
    "version": "2026.11.11-23c8bf2"
   },
   {
@@ -134,7 +168,7 @@
    "icon": "HeartPulse",
    "for": "people running automations and small apps",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/8x2fZjd5I1j99S09jV1kA1l",
    "version": "2026.11.11-36cf1a5"
   },
   {
@@ -151,7 +185,7 @@
    "icon": "PenLine",
    "for": "people who send emails and posts drafted with AI",
    "price_usd": 19,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/aFa9AVd5I0f50hqbs31kA1v",
    "version": "2026.11.11-79bb4b8"
   },
   {
@@ -168,7 +202,7 @@
    "icon": "Mouse",
    "for": "Mac users automating desktop apps with AI",
    "price_usd": 19,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/3cIbJ34zcd1Rd4c53F1kA1w",
    "version": "2026.11.11-6dfdf4c"
   },
   {
@@ -185,8 +219,25 @@
    "icon": "Ruler",
    "for": "people who put AI research into pitches and reports",
    "price_usd": 19,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/00w6oJ6Hk5zpe8g0Np1kA1x",
    "version": "2026.11.11-a564aae"
+  },
+  {
+   "id": "merch-designer",
+   "kind": "skill",
+   "name": "Public Domain Merch Designer",
+   "line": "Finds old art that is truly free to sell and turns it into print-ready all-over-print garments.",
+   "does": [
+    "Searches five open museum collections at once",
+    "Rules out anything not provably free to sell",
+    "Print panels with nothing lost in the seams"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Shirt",
+   "for": "artists and small brands selling print-on-demand merch",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/fZu00lfdQbXN8NW1Rt1kA1z",
+   "version": "2026.11.11-fd2cc7d"
   },
   {
    "id": "privacy-sentinel",
@@ -202,7 +253,7 @@
    "icon": "EyeOff",
    "for": "people building apps that hold personal data",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/00w5kF4zc6DtaW41Rt1kA1m",
    "version": "2026.11.11-fabf79e"
   },
   {
@@ -219,7 +270,7 @@
    "icon": "MonitorCheck",
    "for": "people who build web pages and dashboards with AI",
    "price_usd": 19,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/4gM00l0iW2ndggo7bN1kA1y",
    "version": "2026.11.11-981ebcf"
   },
   {
@@ -236,8 +287,42 @@
    "icon": "Fingerprint",
    "for": "people running several local apps with AI",
    "price_usd": 19,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/8x26oJ5Dg3rh8NW8fR1kA1A",
    "version": "2026.11.11-706c79d"
+  },
+  {
+   "id": "runway-director",
+   "kind": "skill",
+   "name": "AI Video Director",
+   "line": "Your AI directs Runway and other video generators shot by shot, like a film director and editor.",
+   "does": [
+    "Plans the piece around the drop of your song",
+    "Writes a visual bible and storyboard before credits",
+    "Reviews every shot and cuts the final edit to the beat"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Film",
+   "for": "creators and studios making AI video",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/28EeVf5Dg8LB0hqbs31kA1s",
+   "version": "2026.11.11-6b63065"
+  },
+  {
+   "id": "screen-and-face-recorder",
+   "kind": "skill",
+   "name": "Screen and Face Reel",
+   "line": "Records your screen, your face and your app's clean sound in one ask, then cuts a 9:16 reel.",
+   "does": [
+    "Screen, webcam and clean app audio in sync",
+    "Face on top, your app below, ready for Reels",
+    "Full demo reel with beat-synced cuts and captions"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Video",
+   "for": "creators who show their work on social",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/eVq9AV4zc2ndc081Rt1kA1B",
+   "version": "2026.11.11-60ea4f0"
   },
   {
    "id": "security-warden",
@@ -253,7 +338,7 @@
    "icon": "Lock",
    "for": "people building AI assistants on real accounts",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/3cI7sN3v8f9Z2pyfIj1kA1n",
    "version": "2026.11.11-793483a"
   },
   {
@@ -270,8 +355,25 @@
    "icon": "Scissors",
    "for": "people whose project feels too heavy to change",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/bJe9AV7LoaTJ8NWfIj1kA1o",
    "version": "2026.11.11-2fc7e0d"
+  },
+  {
+   "id": "talking-head-explainer",
+   "kind": "skill",
+   "name": "Talking Head Explainer",
+   "line": "Turns a selfie video about your product into an animated explainer, every moment on the word that says it.",
+   "does": [
+    "Real app screens pop up as you mention them",
+    "Name, callouts and banners land on your words",
+    "Captions, ducked music and an end card included"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Presentation",
+   "for": "founders and makers who sell what they built",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/28EdRb6Hk9PF5BK1Rt1kA1D",
+   "version": "2026.11.11-ae505c7"
   },
   {
    "id": "tech-scout",
@@ -287,7 +389,7 @@
    "icon": "Radar",
    "for": "developers on older or unusual hardware",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/aFa28taXA6Dt2py0Np1kA1p",
    "version": "2026.11.11-e838765"
   },
   {
@@ -304,15 +406,32 @@
    "icon": "Route",
    "for": "founders, fundraisers and sellers who need introductions",
    "price_usd": 29,
-   "buy_url": null,
+   "buy_url": "https://buy.stripe.com/4gMeVfaXAd1Re8g67J1kA1q",
    "version": "2026.11.11-10fa9f0"
+  },
+  {
+   "id": "works-registration",
+   "kind": "skill",
+   "name": "Song Registration Helper",
+   "line": "Turns your distributor export into a song registration sheet for your PRO.",
+   "does": [
+    "Folds every recording into one song per title",
+    "Sets aside co-writes, remixes and features",
+    "Walks the PRO form and its costly traps"
+   ],
+   "works_with": "Claude Code, Codex, Cursor and other AI coding tools",
+   "icon": "Music",
+   "for": "independent musicians and songwriters",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/8x2fZjaXA4vlggocw71kA1C",
+   "version": "2026.11.11-d45d09d"
   }
  ],
  "bundle": {
   "name": "Every Greenfire Bot",
   "line": "Every agent and skill in the store, in one download.",
   "price_usd": 99,
-  "count": 18,
-  "buy_url": null
+  "count": 25,
+  "buy_url": "https://buy.stripe.com/3cI3cxghUe5VfckgMn1kA1r"
  }
 }
