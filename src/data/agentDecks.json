@@ -1,0 +1,160 @@
+{
+ "synced": "2026-11-11T18:48:56.212Z",
+ "harness": {
+  "version": "0.3.0",
+  "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
+  "points": [
+   {
+    "title": "One record of what is true",
+    "body": "Your prices, dates, links and claims live in one file. A check names any stale value before the agent can call a job done."
+   },
+   {
+    "title": "Nothing happens without your yes",
+    "body": "The agent can only propose. You approve each action yourself. An approval is tied to the exact content, expires, and runs once."
+   },
+   {
+    "title": "It heals itself, safely",
+    "body": "A watcher checks the whole system, finds out what really happened when an answer was lost, and repairs what is safe. It never approves or retries anything."
+   },
+   {
+    "title": "Ten minutes to start",
+    "body": "Double-click to start. The agent interviews you one question at a time and fills in your business facts."
+   },
+   {
+    "title": "Any AI that can use a folder",
+    "body": "Rules live in a plain file and the tools are ordinary scripts. It runs with Claude Code, with Codex for ChatGPT users, and with similar agent tools."
+   },
+   {
+    "title": "Tested, and still being tested",
+    "body": "We run it through 17 test environments built from real small business work. 687 scored runs so far, every one graded by code, never by another AI."
+   }
+  ],
+  "price_usd": null,
+  "buy_url": null
+ },
+ "bundle": {
+  "price_usd": null,
+  "buy_url": null
+ },
+ "decks": [
+  {
+   "id": "essential",
+   "name": "Essential",
+   "blurb": "No theme, no art. A dense, fast command center for people who leave it open all day: decisions on top, missions by status, a sortable agent table, keyboard shortcuts.",
+   "meta": "Version 1.1.0 · 19 KB · one view · light and dark theme",
+   "version": "1.1.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/essential-command.webp",
+    "phone": "/store/decks/essential-phone.webp"
+   }
+  },
+  {
+   "id": "federation",
+   "name": "The Federation",
+   "blurb": "Alien business command. Ten council species, mineral glass, teal and gold. Five of the council change pose with what they are doing.",
+   "meta": "Version 1.4.0 · 3.0 MB · 2 views · dark theme",
+   "version": "1.4.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/federation-command.webp",
+    "council": "/store/decks/federation-council.webp",
+    "phone": "/store/decks/federation-phone.webp"
+   }
+  },
+  {
+   "id": "fellowship",
+   "name": "The Fellowship",
+   "blurb": "Pixel fantasy realm. Every agent is a character who walks the moonlit map between their workplace and their quest.",
+   "meta": "Version 1.4.0 · 2.9 MB · 2 views · dark theme",
+   "version": "1.4.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/fellowship-command.webp",
+    "council": "/store/decks/fellowship-council.webp",
+    "phone": "/store/decks/fellowship-phone.webp"
+   }
+  },
+  {
+   "id": "goddess-temple",
+   "name": "Goddess Temple",
+   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. First light and moonlight temples.",
+   "meta": "Version 1.2.0 · 3.0 MB · one view · light and dark theme",
+   "version": "1.2.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/goddess-temple-command.webp",
+    "phone": "/store/decks/goddess-temple-phone.webp"
+   }
+  },
+  {
+   "id": "mosswood",
+   "name": "Mosswood",
+   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. Day and nightfall forests.",
+   "meta": "Version 1.2.0 · 3.1 MB · one view · light and dark theme",
+   "version": "1.2.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/mosswood-command.webp",
+    "phone": "/store/decks/mosswood-phone.webp"
+   }
+  },
+  {
+   "id": "neon-underground",
+   "name": "Neon Underground",
+   "blurb": "A glowing night garden. Every agent is a little neon guest who walks to where their work puts them: the dance floor when working, the tea table when resting, the gate when they need you, the bench when stuck. Comes with a dance track that plays softly and switches off with one click.",
+   "meta": "Version 1.1.0 · 4.9 MB · one view · dark theme",
+   "version": "1.1.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/neon-underground-command.webp",
+    "phone": "/store/decks/neon-underground-phone.webp"
+   }
+  },
+  {
+   "id": "petal-desk",
+   "name": "Petal Desk",
+   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. Day and night ateliers. Comes with a gentle song that plays softly and switches off with one click.",
+   "meta": "Version 1.2.0 · 3.5 MB · one view · light and dark theme",
+   "version": "1.2.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/petal-desk-command.webp",
+    "phone": "/store/decks/petal-desk-phone.webp"
+   }
+  },
+  {
+   "id": "pixel-hq",
+   "name": "Pixel HQ",
+   "blurb": "A cozy 8-bit command room. Five little agents work at their desks and walk to the table when they need you. Day and night themes.",
+   "meta": "Version 1.1.0 · 458 KB · one view · dark and light theme",
+   "version": "1.1.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/pixel-hq-command.webp",
+    "phone": "/store/decks/pixel-hq-phone.webp"
+   }
+  },
+  {
+   "id": "quiet-hours",
+   "name": "Quiet Hours",
+   "blurb": "A calm lo-fi anime studio. One companion, Mika, speaks for your whole team: her pose and her words follow what needs you most. Morning and rainy night themes. Comes with three lo-fi songs that play softly and switch off with one click.",
+   "meta": "Version 1.2.0 · 9.2 MB · one view · light and dark theme",
+   "version": "1.2.0",
+   "price_usd": null,
+   "buy_url": null,
+   "images": {
+    "command": "/store/decks/quiet-hours-command.webp",
+    "phone": "/store/decks/quiet-hours-phone.webp"
+   }
+  }
+ ]
+}

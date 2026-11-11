@@ -4,6 +4,7 @@ import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from 
 import { search, suggestions } from '../lib/storeSearch';
 import { MEDIXN_GUMROAD_URL, MEDIXN_PRICE_USD } from '../data/medixn';
 import { SOFTWARE_NOTE } from '../data/softwareNote';
+import { StoreNav } from '../components/store/StoreNav';
 
 /* THE GREENFIRE APP STORE (2026-10-26). Every app Jordan built, as an object
    on a floating island in a 3D night. The catalogue comes from /api/store,
@@ -107,7 +108,7 @@ export function StorePage() {
     if (q.get('view') === 'list') setView('list');
     const fromHash = () => {
       const id = decodeURIComponent(window.location.hash.slice(1));
-      if (id && cat.apps.some((a) => a.id === id)) setTimeout(() => open(id), 400);
+      if (id && cat.apps.some((a) => a.id === id)) setTimeout(() => showApp(id), 400);
     };
     fromHash();
     window.addEventListener('hashchange', fromHash);
@@ -158,6 +159,7 @@ export function StorePage() {
       return;
     }
     worldRef.current = w;
+    w.setZoom(false);
     const fit = () => w?.setInsets((headRef.current?.offsetHeight || 0) - 40, shelfRef.current ? shelfRef.current.offsetHeight - 30 : 0);
     fit();
     const ro = new ResizeObserver(fit);
@@ -183,6 +185,13 @@ export function StorePage() {
     select(id);
     worldRef.current?.focus(id);
   }
+  /* From the icons, the search or a share link: in 3D the app opens on the
+     map below, so the map is brought into view first. */
+  const mapRef = useRef<HTMLElement>(null);
+  function showApp(id: string) {
+    if (view === '3d') mapRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    open(id);
+  }
   const pickGenre = (g: string | null) => {
     setGenre(g);
     select(null);
@@ -195,7 +204,6 @@ export function StorePage() {
   const soon = apps.filter((a) => !a.ready).length;
   const inGenre = (a: StoreApp, g: string) => a.genre === g || !!a.also?.includes(g);
   const shown = (a: StoreApp) => (!genre || inGenre(a, genre)) && (!readyOnly || a.ready);
-  const shelf = apps.filter((a) => a.ready && !a.free && (!genre || inGenre(a, genre))).sort(byRank);
   const memberTop = Math.max(0, ...apps.filter((a) => a.ready && !a.free && a.access === 'member').map((a) => a.price_usd));
   const is3d = view === '3d';
   const plans = cat?.plans || {};
@@ -208,9 +216,104 @@ export function StorePage() {
   };
 
   return (
-    <div className="relative">
-      <section className={is3d ? 'relative h-[calc(100vh-64px)] min-h-[600px] overflow-hidden bg-[#04110f]' : 'relative min-h-[calc(100vh-64px)] bg-[#04110f]'}>
-        {is3d && <canvas ref={canvasRef} className="absolute inset-0 h-full w-full touch-none" style={{ cursor: 'grab' }} aria-label="The Greenfire app store in 3D. Use the list view for the same apps as text." />}
+    <div className="relative bg-[#04110f]">
+      <StoreNav current="apps" />
+
+      {/* THE LIBRARY: every app as an icon, with the search and the "find yours" chips. */}
+      <section className="relative px-4 pb-10 pt-8 md:px-8 md:pt-10">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-emerald-400">Greenfire App Store</p>
+            <h1 className="mt-1 text-2xl font-bold text-white md:text-4xl">Starter kits for people already building with AI</h1>
+            <p className="mt-1 max-w-2xl text-sm text-stone-300">
+              Each one is a working app Jordan built for his own projects, handed over as code you own. Open the folder in Claude Code, say what your version needs, and build from there. Pay once and keep it, or take two kits a month for {usd(MEMBER)}. Everything runs on your own computer.
+            </p>
+            {apps.length > 0 && (
+              <p className="mt-2 text-xs font-semibold text-emerald-300/90">
+                {ready} ready to download today{soon ? `, ${soon} more on the way` : ''}.
+              </p>
+            )}
+            <MedixnStrip />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {mine && (
+              <a href={`/store/account?s=${encodeURIComponent(mine)}`} className="rounded-full border border-white/20 px-4 py-2 text-xs font-bold text-white hover:bg-white/5">
+                My apps
+              </a>
+            )}
+            <button onClick={() => join('membership')} className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300">
+              Membership, {usd(MEMBER)} a month
+            </button>
+            <a href="#pricing" className="rounded-full border border-emerald-400/50 px-4 py-2 text-xs font-bold text-emerald-200 hover:bg-emerald-400/10">
+              Compare plans
+            </a>
+          </div>
+        </div>
+        {apps.length > 0 && (
+          <StoreSearch apps={apps} genreLabel={islandWords} onOpen={showApp} onAsk={() => setWant({ kind: 'setup' })} />
+        )}
+        {genres.length > 0 && (
+          <div className="mx-auto mt-4 flex max-w-7xl flex-wrap items-center gap-2">
+            <span className="mr-1 text-xs font-semibold text-stone-400">Find yours:</span>
+            <button onClick={() => pickGenre(null)} className={`rounded-full px-3 py-1 text-xs font-semibold ${genre === null ? 'bg-white text-neutral-950' : 'bg-white/5 text-stone-300 hover:bg-white/10'}`}>
+              Everything
+            </button>
+            {genres.map(([g, info]) => (
+              <button
+                key={g}
+                onClick={() => pickGenre(genre === g ? null : g)}
+                title={info.label}
+                className="rounded-full px-3 py-1 text-xs font-semibold"
+                style={genre === g ? { background: GENRE_COLOR[g], color: '#0a0a0a' } : { background: `${GENRE_COLOR[g]}1a`, color: GENRE_COLOR[g] }}
+              >
+                {WHO[g] || info.label} <span className="opacity-70">{apps.filter((a) => inGenre(a, g)).length}</span>
+              </button>
+            ))}
+            <label className="ml-1 inline-flex cursor-pointer items-center gap-1.5 text-xs font-semibold text-stone-300">
+              <input type="checkbox" checked={readyOnly} onChange={(e) => setReadyOnly(e.target.checked)} className="accent-emerald-400" />
+              Ready now only
+            </label>
+          </div>
+        )}
+
+        {apps.length > 0 && (
+          <div className="mx-auto mt-8 grid max-w-7xl grid-cols-3 gap-x-3 gap-y-6 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+            {apps.filter(shown).sort(byRank).map((a) => (
+              <button key={a.id} onClick={() => showApp(a.id)} className="group flex flex-col items-center text-center" title={a.line}>
+                <span
+                  className="relative block aspect-square w-full max-w-[112px] overflow-hidden rounded-[24%] bg-neutral-900 shadow-lg ring-1 ring-white/10 transition duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl"
+                  style={{ boxShadow: `0 12px 30px -14px ${GENRE_COLOR[a.genre] || '#34d399'}` }}
+                >
+                  {a.poster ? (
+                    <img src={a.poster} alt="" loading="lazy" className={`h-full w-full object-cover transition duration-500 group-hover:scale-110 ${a.ready ? '' : 'opacity-60 grayscale-[40%]'}`} />
+                  ) : (
+                    <span className="grid h-full w-full place-items-center text-2xl font-black text-white" style={{ background: `${GENRE_COLOR[a.genre] || '#34d399'}55` }}>{a.title.slice(0, 1)}</span>
+                  )}
+                  <span className="pointer-events-none absolute inset-0 rounded-[24%] ring-1 ring-inset ring-white/15" />
+                </span>
+                <span className="mt-2 line-clamp-2 text-xs font-semibold leading-tight text-white">{a.title}</span>
+                <span className="mt-1"><PriceTag a={a} /></span>
+              </button>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* THE MAP: the same apps, on their islands in 3D (or as a list). */}
+      <section
+        ref={mapRef}
+        className={is3d ? 'relative h-[78vh] min-h-[560px] scroll-mt-24 overflow-hidden border-t border-white/5 bg-[#04110f]' : 'relative scroll-mt-24 border-t border-white/5 bg-[#04110f]'}
+        onPointerLeave={() => worldRef.current?.setZoom(false)}
+      >
+        {is3d && (
+          <canvas
+            ref={canvasRef}
+            onPointerDown={() => worldRef.current?.setZoom(true)}
+            className="absolute inset-0 h-full w-full touch-none"
+            style={{ cursor: 'grab' }}
+            aria-label="The Greenfire app store in 3D. Use the list view for the same apps as text."
+          />
+        )}
 
         {is3d &&
           genres.map(([g, info]) => (
@@ -239,105 +342,23 @@ export function StorePage() {
           </div>
         )}
 
-        {/* The header: over the world in 3D, in the page flow in the list. */}
-        <div ref={headRef} className={is3d ? 'pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-[#04110f] via-[#04110f]/75 to-transparent px-4 pb-10 pt-6 md:px-8' : 'relative px-4 pb-2 pt-6 md:px-8'}>
-          <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4">
+        {/* The map's own heading: over the world in 3D, in the page flow in the list. */}
+        <div ref={headRef} className={is3d ? 'pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-[#04110f] via-[#04110f]/70 to-transparent px-4 pb-8 pt-5 md:px-8' : 'relative px-4 pb-2 pt-6 md:px-8'}>
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-emerald-400">Greenfire App Store</p>
-              <h1 className="mt-1 text-2xl font-bold text-white md:text-4xl">Starter kits for people already building with AI</h1>
-              <p className="mt-1 max-w-2xl text-sm text-stone-300">
-                Each one is a working app Jordan built for his own projects, handed over as code you own. Open the folder in Claude Code, say what your version needs, and build from there. Pay once and keep it, or take two kits a month for {usd(MEMBER)}. Everything runs on your own computer.
-              </p>
-              {apps.length > 0 && (
-                <p className="mt-2 text-xs font-semibold text-emerald-300/90">
-                  {ready} ready to download today{soon ? `, ${soon} more on the way` : ''}.
-                </p>
-              )}
-              <MedixnStrip />
+              <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">{is3d ? 'The map' : 'Every app'}</p>
+              {is3d && <p className="mt-0.5 text-[11px] text-stone-400">Drag to look around. Click the map, then scroll to zoom. Click any object for its film and price.</p>}
             </div>
-            <div className="pointer-events-auto flex flex-wrap gap-2">
-              {mine && (
-                <a href={`/store/account?s=${encodeURIComponent(mine)}`} className="rounded-full border border-white/20 px-4 py-2 text-xs font-bold text-white hover:bg-white/5">
-                  My apps
-                </a>
-              )}
-              <button onClick={() => join('membership')} className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300">
-                Membership, {usd(MEMBER)} a month
-              </button>
-              <a href="#pricing" className="rounded-full border border-emerald-400/50 px-4 py-2 text-xs font-bold text-emerald-200 hover:bg-emerald-400/10">
-                Compare plans
-              </a>
-              <button
-                onClick={() => { select(null); setView(is3d ? 'list' : '3d'); }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-2 text-xs font-semibold text-stone-200 hover:bg-white/5"
-                aria-label={is3d ? 'Show the apps as a list' : 'Show the 3D store'}
-              >
-                {is3d ? <LayoutGrid size={14} /> : <Box size={14} />}
-                {is3d ? 'List' : '3D'}
-              </button>
-            </div>
+            <button
+              onClick={() => { select(null); setView(is3d ? 'list' : '3d'); }}
+              className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-neutral-950/60 px-3 py-2 text-xs font-semibold text-stone-200 backdrop-blur hover:bg-white/5"
+              aria-label={is3d ? 'Show the apps as a list' : 'Show the 3D store'}
+            >
+              {is3d ? <LayoutGrid size={14} /> : <Box size={14} />}
+              {is3d ? 'List' : '3D map'}
+            </button>
           </div>
-          {apps.length > 0 && (
-            <StoreSearch apps={apps} genreLabel={islandWords} onOpen={open} onAsk={() => setWant({ kind: 'setup' })} />
-          )}
-          {genres.length > 0 && (
-            <div className="pointer-events-auto mx-auto mt-4 flex max-w-7xl flex-wrap items-center gap-2">
-              <span className="mr-1 text-xs font-semibold text-stone-400">Find yours:</span>
-              <button onClick={() => pickGenre(null)} className={`rounded-full px-3 py-1 text-xs font-semibold ${genre === null ? 'bg-white text-neutral-950' : 'bg-white/5 text-stone-300 hover:bg-white/10'}`}>
-                Everything
-              </button>
-              {genres.map(([g, info]) => (
-                <button
-                  key={g}
-                  onClick={() => pickGenre(genre === g ? null : g)}
-                  title={info.label}
-                  className="rounded-full px-3 py-1 text-xs font-semibold"
-                  style={genre === g ? { background: GENRE_COLOR[g], color: '#0a0a0a' } : { background: `${GENRE_COLOR[g]}1a`, color: GENRE_COLOR[g] }}
-                >
-                  {WHO[g] || info.label} <span className="opacity-70">{apps.filter((a) => inGenre(a, g)).length}</span>
-                </button>
-              ))}
-              {!is3d && (
-                <label className="ml-1 inline-flex cursor-pointer items-center gap-1.5 text-xs font-semibold text-stone-300">
-                  <input type="checkbox" checked={readyOnly} onChange={(e) => setReadyOnly(e.target.checked)} className="accent-emerald-400" />
-                  Ready now only
-                </label>
-              )}
-            </div>
-          )}
         </div>
-
-        {/* The shelf: what can be taken home today, with its price, before anyone has to find it on an island. */}
-        {is3d && !sel && shelf.length > 0 && (
-          <div ref={shelfRef} className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[#04110f] via-[#04110f]/85 to-transparent px-4 pb-4 pt-10 md:px-8">
-            <div className="mx-auto max-w-7xl">
-              <div className="mb-2 flex items-baseline justify-between gap-4">
-                <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">Ready to download today</p>
-                <p className="hidden text-[11px] text-stone-400 sm:block">Drag to look around. Scroll to zoom. Click any object for its film and price.</p>
-              </div>
-              <div className="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:thin]">
-                {shelf.map((a) => (
-                  <button
-                    key={a.id}
-                    onClick={() => open(a.id)}
-                    onMouseEnter={() => setHover(null)}
-                    className="group flex w-[230px] shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-neutral-950/80 p-2 text-left backdrop-blur transition hover:border-emerald-400/50"
-                  >
-                    <div className="h-12 w-20 shrink-0 overflow-hidden rounded-lg bg-neutral-900">
-                      {a.poster && <img src={a.poster} alt="" loading="lazy" className="h-full w-full object-cover" />}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-bold text-white">{a.title}</p>
-                      <p className="text-xs font-semibold" style={{ color: GENRE_COLOR[a.genre] }}>
-                        {usd(a.price_usd)} <span className="font-normal text-stone-400">or in a plan</span>
-                      </p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
 
         {!cat && !error && (
           <div className="absolute inset-0 grid place-items-center text-stone-400">
@@ -701,7 +722,7 @@ function Panel({ a, fixed, onClose, onWant, onJoin, onOpen, genreLabel, more }: 
   const color = GENRE_COLOR[a.genre] || '#8CC63F';
   const [copied, setCopied] = useState(false);
   const share = async () => {
-    const url = `${window.location.origin}/store#${a.id}`;
+    const url = `${window.location.origin}/store/apps#${a.id}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);

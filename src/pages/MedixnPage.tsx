@@ -343,7 +343,7 @@ export function MedixnPage() {
             Questions? Email <a href="mailto:civilizationexplorer@gmail.com" className="underline decoration-white/30 hover:text-white">civilizationexplorer@gmail.com</a>.
           </p>
           <p className="mt-2 text-sm text-stone-500">
-            Looking for Greenfire's apps instead? <Link to="/store" className="underline decoration-white/30 hover:text-white">Open the App Store</Link>.
+            Looking for Greenfire's apps instead? <Link to="/store/apps" className="underline decoration-white/30 hover:text-white">Open the App Store</Link>.
           </p>
         </div>
       </section>

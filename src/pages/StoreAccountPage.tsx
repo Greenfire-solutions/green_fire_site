@@ -120,7 +120,7 @@ export function StoreAccountPage() {
             <h1 className="text-2xl font-bold text-white">We could not open your apps</h1>
             <p className="mt-2 text-sm text-stone-300">{error}</p>
             <p className="mt-4 text-sm text-stone-300">
-              Paid but lost the link? At the bottom of the <a href="/store#pricing" className="text-emerald-300 underline">store page</a>, under Questions, enter the email you paid with and the links are sent again.
+              Paid but lost the link? At the bottom of the <a href="/store/apps#pricing" className="text-emerald-300 underline">store page</a>, under Questions, enter the email you paid with and the links are sent again.
             </p>
           </div>
         )}

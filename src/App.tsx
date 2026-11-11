@@ -23,6 +23,10 @@ import { AdminApp } from './admin/AdminApp';
 const TechPage = lazy(() => import('./pages/TechPage').then((m) => ({ default: m.TechPage })));
 // The 3D store downloads three.js only for visitors who open /store.
 const StorePage = lazy(() => import('./pages/StorePage').then((m) => ({ default: m.StorePage })));
+// The store lobby (/store) and its two newer sections, split out so each loads on its own.
+const StoreLobbyPage = lazy(() => import('./pages/StoreLobbyPage').then((m) => ({ default: m.StoreLobbyPage })));
+const StoreHarnessesPage = lazy(() => import('./pages/StoreHarnessesPage').then((m) => ({ default: m.StoreHarnessesPage })));
+const StoreBotsPage = lazy(() => import('./pages/StoreBotsPage').then((m) => ({ default: m.StoreBotsPage })));
 // Where a store checkout lands: the downloads, checked against Stripe.
 const StoreAccountPage = lazy(() => import('./pages/StoreAccountPage').then((m) => ({ default: m.StoreAccountPage })));
 // The ROOTSIGNAL game page (fonts, art and its own styles) loads only on /rootsignal.
@@ -80,8 +84,32 @@ function PublicSite() {
             <Route
               path="/store"
               element={
+                <Suspense fallback={<div className="min-h-[70vh] bg-[#050807]" />}>
+                  <StoreLobbyPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/store/apps"
+              element={
                 <Suspense fallback={<div className="min-h-[70vh] bg-[#04110f]" />}>
                   <StorePage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/store/harnesses"
+              element={
+                <Suspense fallback={<div className="min-h-[70vh] bg-[#fff7fb]" />}>
+                  <StoreHarnessesPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/store/bots"
+              element={
+                <Suspense fallback={<div className="min-h-[70vh] bg-[#05080f]" />}>
+                  <StoreBotsPage />
                 </Suspense>
               }
             />

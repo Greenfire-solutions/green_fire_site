@@ -45,7 +45,7 @@ export type WorldEvents = {
   onLabels: (labels: { genre: string; x: number; y: number; visible: boolean }[]) => void;
 };
 
-export type World = { dispose: () => void; focus: (id: string | null) => void; focusGenre: (g: string | null) => void; setInsets: (top: number, bottom: number) => void };
+export type World = { dispose: () => void; focus: (id: string | null) => void; focusGenre: (g: string | null) => void; setInsets: (top: number, bottom: number) => void; setZoom: (on: boolean) => void };
 
 export function createWorld(canvas: HTMLCanvasElement, apps: StoreApp[], genres: Record<string, Genre>, ev: WorldEvents): World {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
@@ -303,6 +303,9 @@ export function createWorld(canvas: HTMLCanvasElement, apps: StoreApp[], genres:
   return {
     focus,
     focusGenre,
+    /* Off while the map sits in a scrolling page, so a wheel scrolls the page;
+       the store turns it on once the visitor clicks into the map. */
+    setZoom: (on: boolean) => { controls.enableZoom = on; },
     setInsets: (top: number, bottom: number) => {
       const first = !insets.top && !insets.bottom;
       insets.top = top;

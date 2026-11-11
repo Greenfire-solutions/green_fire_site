@@ -62,7 +62,7 @@ export const PRIMARY_NAV = [
 
 export const FOOTER_NAV = [
   { path: ROUTES.howItWorks, label: 'About' },
-  { path: ROUTES.store, label: 'App Store' },
+  { path: ROUTES.store, label: 'Store' },
   { path: ROUTES.medixn, label: 'MEDIXN synth plugin' },
   { path: ROUTES.games, label: 'Kids Game Lab' },
   { path: ROUTES.rootsignal, label: 'ROOTSIGNAL game' },
