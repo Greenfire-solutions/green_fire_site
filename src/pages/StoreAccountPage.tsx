@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Check, Download, Loader2, Lock } from 'lucide-react';
+import { SOFTWARE_NOTE } from '../data/softwareNote';
 
 /* WHERE A BUYER LANDS (2026-10-27). Stripe sends every store checkout here
    with ?s={CHECKOUT_SESSION_ID}. The page asks /api/store what that checkout
@@ -196,6 +197,7 @@ export function StoreAccountPage() {
                   </p>
                 )}
                 <p className="mt-3 text-xs text-stone-400">Open GREENFIRE_START_HERE.md inside the zip first. Something not working? Reply to your email.</p>
+                <p className="mt-2 text-[11px] text-stone-500">{SOFTWARE_NOTE}</p>
               </div>
             )}
 

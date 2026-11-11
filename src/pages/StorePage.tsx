@@ -3,6 +3,7 @@ import { ArrowLeft, Box, Check, ChevronDown, Github, LayoutGrid, Link2, Loader2,
 import { createWorld, GENRE_COLOR, type Genre, type StoreApp, type World } from '../components/store/world';
 import { search, suggestions } from '../lib/storeSearch';
 import { MEDIXN_GUMROAD_URL, MEDIXN_PRICE_USD } from '../data/medixn';
+import { SOFTWARE_NOTE } from '../data/softwareNote';
 
 /* THE GREENFIRE APP STORE (2026-10-26). Every app Jordan built, as an object
    on a floating island in a 3D night. The catalogue comes from /api/store,
@@ -451,6 +452,7 @@ export function StorePage() {
               </button>
             </div>
           </div>
+          <p className="mt-4 text-[11px] text-stone-500">{SOFTWARE_NOTE}</p>
           <div className="mt-6 flex flex-col items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:flex-row sm:items-center">
             <div>
               <p className="font-bold text-white">Would rather not install anything yourself?</p>
@@ -783,6 +785,7 @@ function Panel({ a, fixed, onClose, onWant, onJoin, onOpen, genreLabel, more }: 
           <button onClick={() => onWant({ kind: 'setup', app: a })} className="w-full rounded-full border border-white/15 px-4 py-2.5 text-xs font-semibold text-stone-200 hover:bg-white/5">
             Want it set up for you? From $5,000
           </button>
+          <p className="text-[11px] leading-relaxed text-stone-500">{SOFTWARE_NOTE}</p>
         </div>
 
         {more.length > 0 && (

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, Download, Headphones, Image as ImageIcon, Monitor, ShieldCheck, Sparkles, Waves } from 'lucide-react';
 import { MEDIXN_GUMROAD_URL, MEDIXN_PRICE_USD } from '../data/medixn';
+import { SOFTWARE_NOTE } from '../data/softwareNote';
 
 /* /medixn: the landing page for MEDIXN, the laser synthesizer plugin.
    Bought on Gumroad only (see data/medixn.ts). The words follow
@@ -148,6 +149,7 @@ export function MedixnPage() {
             <p className="mt-4 text-sm text-stone-400">
               Mac and Windows. VST3, Audio Unit and standalone app. Pay once, free 1.x updates.
             </p>
+            <p className="mt-2 max-w-xl text-xs text-stone-500">{SOFTWARE_NOTE}</p>
             <p className="mt-1 text-xs text-stone-500">Checkout and instant download through Gumroad.</p>
           </div>
           <div className="relative">
