@@ -17,6 +17,10 @@
       "destination": "/api/onboard?form=activation"
     },
     {
+      "source": "/readiness",
+      "destination": "/api/onboard?form=readiness"
+    },
+    {
       "source": "/launch",
       "destination": "/api/store?action=launch"
     },

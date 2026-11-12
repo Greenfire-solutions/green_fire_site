@@ -23,6 +23,26 @@ export type Section = { title: string; help?: string; questions: Question[] };
 
 export const SECTIONS: Section[] = [
   {
+    /* The page puts name, email and phone at the top of this step. */
+    title: 'You',
+    help: 'So I know who you are and how to reach you.',
+    questions: [
+      { id: 'reach', kind: 'one', label: 'Best way to reach you?', choices: ['Email', 'Text', 'A call'] },
+    ],
+  },
+  {
+    /* The page puts the session choice at the top of this step. */
+    title: 'What you are after',
+    help: 'So I know what to prepare and how soon.',
+    questions: [
+      { id: 'timing', kind: 'one', required: true, label: 'When would you like to start?', choices: [
+        'As soon as possible', 'Within a month', 'In the next few months', 'Just exploring for now'] },
+      { id: 'heard', kind: 'one', label: 'How did you find Greenfire?', choices: [
+        'Instagram', 'LinkedIn', 'A friend or someone I know', 'Met Jordan in person', 'A workshop or event', 'Search or the website', 'Somewhere else'] },
+    ],
+  },
+  {
+    /* The page puts business and website at the top of this step. */
     title: 'Your work',
     help: 'This is the part that shapes our time together. Short answers are fine.',
     questions: [
@@ -60,6 +80,7 @@ export const SECTIONS: Section[] = [
   },
   {
     title: 'Before we meet',
+    help: 'All optional except the last tap. A few real details save us time.',
     questions: [
       { id: 'examples', kind: 'long', label: 'Three real examples of the task you picked', help: 'Rough is fine. Change any names you would not want others to see.' },
       { id: 'barriers', kind: 'long', label: 'Anything that could get in the way?', help: 'Reading, hearing, focus, a hard stop, a slow connection, nerves. I would rather plan around it.' },
@@ -67,6 +88,7 @@ export const SECTIONS: Section[] = [
       { id: 'ready', kind: 'many', label: 'Tap to agree', required: true, choices: [
         'I will have my computer and charger', 'I will have one real task in mind',
         'I will never send passwords or keys to anyone, including Jordan'] },
+      { id: 'tz', kind: 'text', hidden: true, label: 'Their time zone' },
     ],
   },
 ];
