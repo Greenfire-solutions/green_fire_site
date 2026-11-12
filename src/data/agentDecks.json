@@ -1,7 +1,7 @@
 {
- "synced": "2026-11-11T19:19:22.647Z",
+ "synced": "2026-11-12T14:32:14.286Z",
  "harness": {
-  "version": "0.3.0",
+  "version": "0.3.1",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
   "points": [
    {
@@ -26,15 +26,15 @@
    },
    {
     "title": "Tested, and still being tested",
-    "body": "We run it through 17 test environments built from real small business work. 687 scored runs so far, every one graded by code, never by another AI."
+    "body": "We run it through 19 test environments built from real small business work. 944 scored runs so far, every one graded by code, never by another AI."
    }
   ],
-  "price_usd": null,
-  "buy_url": null
+  "price_usd": 79,
+  "buy_url": "https://buy.stripe.com/3cIeVf3v85zp6FOanZ1kA1N"
  },
  "bundle": {
-  "price_usd": null,
-  "buy_url": null
+  "price_usd": 149,
+  "buy_url": "https://buy.stripe.com/4gM14p5Dg9PFggoeEf1kA1O"
  },
  "decks": [
   {
@@ -43,8 +43,8 @@
    "blurb": "No theme, no art. A dense, fast command center for people who leave it open all day: decisions on top, missions by status, a sortable agent table, keyboard shortcuts.",
    "meta": "Version 1.1.0 · 19 KB · one view · light and dark theme",
    "version": "1.1.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 9,
+   "buy_url": "https://buy.stripe.com/8x2eVfc1E4vl0hq9jV1kA1E",
    "images": {
     "command": "/store/decks/essential-command.webp",
     "phone": "/store/decks/essential-phone.webp"
@@ -57,8 +57,8 @@
    "blurb": "Alien business command. Ten council species, mineral glass, teal and gold. Five of the council change pose with what they are doing.",
    "meta": "Version 1.4.0 · 3.0 MB · 2 views · dark theme",
    "version": "1.4.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/5kQ6oJaXA5zpd4cbs31kA1F",
    "images": {
     "command": "/store/decks/federation-command.webp",
     "council": "/store/decks/federation-council.webp",
@@ -72,8 +72,8 @@
    "blurb": "Pixel fantasy realm. Every agent is a character who walks the moonlit map between their workplace and their quest.",
    "meta": "Version 1.4.0 · 2.9 MB · 2 views · dark theme",
    "version": "1.4.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/14A4gB5Dg3rhggo9jV1kA1G",
    "images": {
     "command": "/store/decks/fellowship-command.webp",
     "council": "/store/decks/fellowship-council.webp",
@@ -87,8 +87,8 @@
    "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. First light and moonlight temples.",
    "meta": "Version 1.2.0 · 3.0 MB · one view · light and dark theme",
    "version": "1.2.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/fZubJ35Dg0f52pybs31kA1H",
    "images": {
     "command": "/store/decks/goddess-temple-command.webp",
     "phone": "/store/decks/goddess-temple-phone.webp"
@@ -101,8 +101,8 @@
    "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. Day and nightfall forests.",
    "meta": "Version 1.2.0 · 3.1 MB · one view · light and dark theme",
    "version": "1.2.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/14A6oJ5Dg6Dt7JScw71kA1I",
    "images": {
     "command": "/store/decks/mosswood-command.webp",
     "phone": "/store/decks/mosswood-phone.webp"
@@ -115,8 +115,8 @@
    "blurb": "A glowing night garden. Every agent is a little neon guest who walks to where their work puts them: the dance floor when working, the tea table when resting, the gate when they need you, the bench when stuck. Comes with a dance track that plays softly and switches off with one click.",
    "meta": "Version 1.1.0 · 4.9 MB · one view · dark theme",
    "version": "1.1.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/6oU28t2r47Hxd4cbs31kA1J",
    "images": {
     "command": "/store/decks/neon-underground-command.webp",
     "phone": "/store/decks/neon-underground-phone.webp"
@@ -129,8 +129,8 @@
    "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. Day and night ateliers. Comes with a gentle song that plays softly and switches off with one click.",
    "meta": "Version 1.2.0 · 3.5 MB · one view · light and dark theme",
    "version": "1.2.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/6oU6oJc1Ed1R7JSfIj1kA1K",
    "images": {
     "command": "/store/decks/petal-desk-command.webp",
     "phone": "/store/decks/petal-desk-phone.webp"
@@ -143,8 +143,8 @@
    "blurb": "A cozy 8-bit command room. Five little agents work at their desks and walk to the table when they need you. Day and night themes.",
    "meta": "Version 1.1.0 · 458 KB · one view · dark and light theme",
    "version": "1.1.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/4gMcN74zc3rhe8g8fR1kA1L",
    "images": {
     "command": "/store/decks/pixel-hq-command.webp",
     "phone": "/store/decks/pixel-hq-phone.webp"
@@ -157,8 +157,8 @@
    "blurb": "A calm lo-fi anime studio. One companion, Mika, speaks for your whole team: her pose and her words follow what needs you most. Morning and rainy night themes. Comes with three lo-fi songs that play softly and switch off with one click.",
    "meta": "Version 1.2.0 · 9.2 MB · one view · light and dark theme",
    "version": "1.2.0",
-   "price_usd": null,
-   "buy_url": null,
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/00w14pc1E5zpc082Vx1kA1M",
    "images": {
     "command": "/store/decks/quiet-hours-command.webp",
     "phone": "/store/decks/quiet-hours-phone.webp"
