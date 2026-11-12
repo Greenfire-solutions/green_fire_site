@@ -21,6 +21,8 @@ export type BotItem = {
   does: string[];
   works_with: string;
   icon: string;
+  /* The bot's art, made in Jordan's ChatGPT (public/store/bots/<id>.webp). */
+  art?: string | null;
   price_usd?: number | null;
   buy_url?: string | null;
   /* Also inside the harness on /store/harnesses. */
@@ -41,4 +43,4 @@ const TOOLS: BotItem[] = [
 ];
 
 export const BOTS: BotItem[] = [...(catalog.bots as BotItem[]), ...TOOLS];
-export const BUNDLE = catalog.bundle as { name: string; line: string; price_usd: number; count: number; buy_url: string | null };
+export const BUNDLE = catalog.bundle as { name: string; line: string; price_usd: number; count: number; buy_url: string | null; art?: string | null };

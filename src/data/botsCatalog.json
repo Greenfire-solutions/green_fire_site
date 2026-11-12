@@ -1,5 +1,5 @@
 {
- "built": "2026-11-11T20:30:37.449Z",
+ "built": "2026-11-12T04:22:30.419Z",
  "bots": [
   {
    "id": "button-prover",
@@ -16,7 +16,8 @@
    "for": "people who build web apps with AI",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/3cI7sNe9M8LBc082Vx1kA1e",
-   "version": "2026.11.11-7d25b2a"
+   "version": "2026.11.12-67a9878",
+   "art": "/store/bots/button-prover.webp"
   },
   {
    "id": "capcut-music-video",
@@ -33,7 +34,8 @@
    "for": "musicians and editors who cut in CapCut",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/aFa9AV0iW0f53tC0Np1kA1u",
-   "version": "2026.11.11-a97603a"
+   "version": "2026.11.12-a27b53d",
+   "art": "/store/bots/capcut-music-video.webp"
   },
   {
    "id": "change-warden",
@@ -50,7 +52,8 @@
    "for": "anyone shipping AI-written code changes",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/7sYfZje9M1j9ggogMn1kA1f",
-   "version": "2026.11.11-d471e4c"
+   "version": "2026.11.12-27aca43",
+   "art": "/store/bots/change-warden.webp"
   },
   {
    "id": "claim-checker",
@@ -67,7 +70,8 @@
    "for": "founders, nonprofits and anyone writing to funders",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/3cI28t7Lod1Rc0853F1kA1g",
-   "version": "2026.11.11-207a2b7"
+   "version": "2026.11.12-9d9d4e2",
+   "art": "/store/bots/claim-checker.webp"
   },
   {
    "id": "drift-hunter",
@@ -84,7 +88,8 @@
    "for": "people whose AI-built code has grown fast",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/fZu7sN5Dgge33tC9jV1kA1h",
-   "version": "2026.11.11-ce28c3b"
+   "version": "2026.11.12-0abbc3a",
+   "art": "/store/bots/drift-hunter.webp"
   },
   {
    "id": "event-flyers",
@@ -101,7 +106,8 @@
    "for": "event hosts, teachers and musicians who promote on social",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/14AeVffdQ2nd5BKeEf1kA1t",
-   "version": "2026.11.11-d37b2c3"
+   "version": "2026.11.12-851099e",
+   "art": "/store/bots/event-flyers.webp"
   },
   {
    "id": "filter-reviewer",
@@ -118,7 +124,8 @@
    "for": "people with data pipelines or lead lists",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/00w5kF1n0f9Z9S00Np1kA1i",
-   "version": "2026.11.11-cb7c617"
+   "version": "2026.11.12-885a440",
+   "art": "/store/bots/filter-reviewer.webp"
   },
   {
    "id": "first-timer-critic",
@@ -135,7 +142,8 @@
    "for": "people building apps for non-technical users",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/dRm7sNaXA6Dtc082Vx1kA1j",
-   "version": "2026.11.11-e0306b0"
+   "version": "2026.11.12-5acabdf",
+   "art": "/store/bots/first-timer-critic.webp"
   },
   {
    "id": "funder-scout",
@@ -152,7 +160,8 @@
    "for": "founders, nonprofits and artists seeking funding",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/00w3cxc1E1j90hqgMn1kA1k",
-   "version": "2026.11.11-23c8bf2"
+   "version": "2026.11.12-0d5de2e",
+   "art": "/store/bots/funder-scout.webp"
   },
   {
    "id": "health-check",
@@ -169,7 +178,8 @@
    "for": "people running automations and small apps",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/8x2fZjd5I1j99S09jV1kA1l",
-   "version": "2026.11.11-36cf1a5"
+   "version": "2026.11.12-5858427",
+   "art": "/store/bots/health-check.webp"
   },
   {
    "id": "human-voice",
@@ -186,7 +196,8 @@
    "for": "people who send emails and posts drafted with AI",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/aFa9AVd5I0f50hqbs31kA1v",
-   "version": "2026.11.11-79bb4b8"
+   "version": "2026.11.12-6291fc9",
+   "art": "/store/bots/human-voice.webp"
   },
   {
    "id": "mac-ui-control",
@@ -203,7 +214,8 @@
    "for": "Mac users automating desktop apps with AI",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/3cIbJ34zcd1Rd4c53F1kA1w",
-   "version": "2026.11.11-6dfdf4c"
+   "version": "2026.11.12-a7bc2dd",
+   "art": "/store/bots/mac-ui-control.webp"
   },
   {
    "id": "measured-not-guessed",
@@ -220,7 +232,8 @@
    "for": "people who put AI research into pitches and reports",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/00w6oJ6Hk5zpe8g0Np1kA1x",
-   "version": "2026.11.11-a564aae"
+   "version": "2026.11.12-85512ff",
+   "art": "/store/bots/measured-not-guessed.webp"
   },
   {
    "id": "merch-designer",
@@ -237,7 +250,8 @@
    "for": "artists and small brands selling print-on-demand merch",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/fZu00lfdQbXN8NW1Rt1kA1z",
-   "version": "2026.11.11-fd2cc7d"
+   "version": "2026.11.12-c479ccd",
+   "art": "/store/bots/merch-designer.webp"
   },
   {
    "id": "privacy-sentinel",
@@ -254,7 +268,8 @@
    "for": "people building apps that hold personal data",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/00w5kF4zc6DtaW41Rt1kA1m",
-   "version": "2026.11.11-fabf79e"
+   "version": "2026.11.12-c1cac3f",
+   "art": "/store/bots/privacy-sentinel.webp"
   },
   {
    "id": "prove-the-page-runs",
@@ -271,7 +286,8 @@
    "for": "people who build web pages and dashboards with AI",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/4gM00l0iW2ndggo7bN1kA1y",
-   "version": "2026.11.11-981ebcf"
+   "version": "2026.11.12-acfcc5c",
+   "art": "/store/bots/prove-the-page-runs.webp"
   },
   {
    "id": "right-app-every-time",
@@ -288,7 +304,8 @@
    "for": "people running several local apps with AI",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/8x26oJ5Dg3rh8NW8fR1kA1A",
-   "version": "2026.11.11-706c79d"
+   "version": "2026.11.12-d86a69d",
+   "art": "/store/bots/right-app-every-time.webp"
   },
   {
    "id": "runway-director",
@@ -305,7 +322,8 @@
    "for": "creators and studios making AI video",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/28EeVf5Dg8LB0hqbs31kA1s",
-   "version": "2026.11.11-6b63065"
+   "version": "2026.11.12-9ce00d4",
+   "art": "/store/bots/runway-director.webp"
   },
   {
    "id": "screen-and-face-recorder",
@@ -322,7 +340,8 @@
    "for": "creators who show their work on social",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/eVq9AV4zc2ndc081Rt1kA1B",
-   "version": "2026.11.11-60ea4f0"
+   "version": "2026.11.12-6b5f615",
+   "art": "/store/bots/screen-and-face-recorder.webp"
   },
   {
    "id": "security-warden",
@@ -339,7 +358,8 @@
    "for": "people building AI assistants on real accounts",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/3cI7sN3v8f9Z2pyfIj1kA1n",
-   "version": "2026.11.11-793483a"
+   "version": "2026.11.12-73244b6",
+   "art": "/store/bots/security-warden.webp"
   },
   {
    "id": "simplifier",
@@ -356,7 +376,8 @@
    "for": "people whose project feels too heavy to change",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/bJe9AV7LoaTJ8NWfIj1kA1o",
-   "version": "2026.11.11-2fc7e0d"
+   "version": "2026.11.12-3016f04",
+   "art": "/store/bots/simplifier.webp"
   },
   {
    "id": "talking-head-explainer",
@@ -373,7 +394,8 @@
    "for": "founders and makers who sell what they built",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/28EdRb6Hk9PF5BK1Rt1kA1D",
-   "version": "2026.11.11-ae505c7"
+   "version": "2026.11.12-9bd7b81",
+   "art": "/store/bots/talking-head-explainer.webp"
   },
   {
    "id": "tech-scout",
@@ -390,7 +412,8 @@
    "for": "developers on older or unusual hardware",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/aFa28taXA6Dt2py0Np1kA1p",
-   "version": "2026.11.11-e838765"
+   "version": "2026.11.12-2401332",
+   "art": "/store/bots/tech-scout.webp"
   },
   {
    "id": "warm-intro-mapper",
@@ -407,7 +430,8 @@
    "for": "founders, fundraisers and sellers who need introductions",
    "price_usd": 29,
    "buy_url": "https://buy.stripe.com/4gMeVfaXAd1Re8g67J1kA1q",
-   "version": "2026.11.11-10fa9f0"
+   "version": "2026.11.12-f03a648",
+   "art": "/store/bots/warm-intro-mapper.webp"
   },
   {
    "id": "works-registration",
@@ -424,7 +448,8 @@
    "for": "independent musicians and songwriters",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/8x2fZjaXA4vlggocw71kA1C",
-   "version": "2026.11.11-d45d09d"
+   "version": "2026.11.12-337e2c9",
+   "art": "/store/bots/works-registration.webp"
   }
  ],
  "bundle": {
@@ -432,6 +457,7 @@
   "line": "Every agent and skill in the store, in one download.",
   "price_usd": 99,
   "count": 25,
-  "buy_url": "https://buy.stripe.com/3cI3cxghUe5VfckgMn1kA1r"
+  "buy_url": "https://buy.stripe.com/3cI3cxghUe5VfckgMn1kA1r",
+  "art": "/store/bots/all.webp"
  }
 }

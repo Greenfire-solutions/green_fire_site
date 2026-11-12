@@ -61,7 +61,11 @@ export function StoreBotsPage() {
           {/* Every bot in one download */}
           <div className="mt-8 flex flex-col gap-5 overflow-hidden rounded-3xl border border-sky-400/30 p-6 md:flex-row md:items-center md:justify-between md:p-7" style={{ background: 'linear-gradient(110deg, rgba(56,189,248,.14), rgba(167,139,250,.12) 55%, rgba(251,191,36,.08))' }}>
             <div className="flex items-start gap-4">
-              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-sky-400/15 text-sky-300 shadow-[0_0_30px_-8px_#38bdf8]"><Package size={26} /></div>
+              {BUNDLE.art ? (
+                <img src={BUNDLE.art} alt="Every Greenfire Bot, a treasure chest of the whole collection" className="h-24 w-24 shrink-0 rounded-2xl object-cover shadow-[0_0_40px_-8px_#a78bfa] md:h-28 md:w-28" />
+              ) : (
+                <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-sky-400/15 text-sky-300 shadow-[0_0_30px_-8px_#38bdf8]"><Package size={26} /></div>
+              )}
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-sky-300">Best value</p>
                 <p className="mt-0.5 text-xl font-bold">{BUNDLE.name}: all {BUNDLE.count} agents and skills</p>
@@ -95,13 +99,21 @@ export function StoreBotsPage() {
                 onMouseEnter={(e) => (e.currentTarget.style.borderColor = `${k.color}80`)}
                 onMouseLeave={(e) => (e.currentTarget.style.borderColor = on ? k.color : 'rgba(255,255,255,.08)')}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="relative grid h-14 w-14 place-items-center overflow-hidden rounded-2xl" style={{ background: `${k.color}18`, color: k.color, boxShadow: `0 0 30px -8px ${k.color}` }}>
-                    <span className="bt-scan pointer-events-none absolute inset-x-0 h-1/2 opacity-0 group-hover:opacity-100" style={{ background: `linear-gradient(transparent, ${k.color}30, transparent)`, animation: 'btScan 1.6s linear infinite' }} />
-                    <Icon size={26} />
+                {b.art ? (
+                  <div className="relative -mx-5 -mt-5 mb-1 aspect-square overflow-hidden bg-black">
+                    <img src={b.art} alt={`${b.name}, the art for this ${k.label.toLowerCase()}`} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.05]" />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#05080f] to-transparent" />
+                    <span className="absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur" style={{ background: `${k.color}26`, color: k.color }}>{k.label}</span>
                   </div>
-                  <span className="rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest" style={{ background: `${k.color}18`, color: k.color }}>{k.label}</span>
-                </div>
+                ) : (
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="relative grid h-14 w-14 place-items-center overflow-hidden rounded-2xl" style={{ background: `${k.color}18`, color: k.color, boxShadow: `0 0 30px -8px ${k.color}` }}>
+                      <span className="bt-scan pointer-events-none absolute inset-x-0 h-1/2 opacity-0 group-hover:opacity-100" style={{ background: `linear-gradient(transparent, ${k.color}30, transparent)`, animation: 'btScan 1.6s linear infinite' }} />
+                      <Icon size={26} />
+                    </div>
+                    <span className="rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest" style={{ background: `${k.color}18`, color: k.color }}>{k.label}</span>
+                  </div>
+                )}
                 <h2 className="mt-4 text-lg font-bold tracking-tight">{b.name}</h2>
                 <p className="mt-1 text-sm text-stone-300">{b.line}</p>
                 <ul className="mt-4 flex-1 space-y-1.5">
@@ -126,6 +138,34 @@ export function StoreBotsPage() {
               </article>
             );
           })}
+        </div>
+      </section>
+
+      {/* Every bot grows with its owner (_TOOLS/bots/GROWTH.md is the rule they follow). */}
+      <section className="relative px-4 pb-10 md:px-8">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-violet-300/20 p-7 md:p-10" style={{ background: 'radial-gradient(80% 120% at 0% 0%, rgba(167,139,250,.16), transparent 60%), radial-gradient(70% 120% at 100% 100%, rgba(56,189,248,.12), transparent 60%)' }}>
+          <p className="text-xs font-bold uppercase tracking-widest text-violet-300">Grows with you</p>
+          <h2 className="mt-2 max-w-3xl text-2xl font-bold md:text-3xl">Every bot learns who you are, what you are building, and what success means to you.</h2>
+          <p className="mt-3 max-w-3xl text-sm text-stone-300">On its first job it asks three questions. After every job it keeps a short journal, asks if it hit the mark, and turns what keeps working into lessons it uses next time. It all lives in plain files in your project that you can read, edit or wipe. Lessons change how it works for you, never its safety rules.</p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { r: 'Apprentice', w: 'First jobs', d: 'Asks more, assumes less, explains its steps.' },
+              { r: 'Adept', w: '5 jobs, 3 hits', d: 'Uses your lessons by default. Shorter reports.' },
+              { r: 'Expert', w: '20 jobs, 12 hits', d: 'Anticipates your usual next ask and offers it.' },
+              { r: 'Master', w: '50 jobs, 35 hits', d: 'Its whole method is tuned to your projects.' },
+            ].map((x, i) => (
+              <div key={x.r} className="relative rounded-2xl border border-white/10 bg-black/30 p-5">
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: i + 1 }).map((_, j) => (
+                    <span key={j} className="h-2 w-2 rounded-full" style={{ background: ['#38bdf8', '#818cf8', '#a78bfa', '#fbbf24'][i], boxShadow: `0 0 10px ${['#38bdf8', '#818cf8', '#a78bfa', '#fbbf24'][i]}` }} />
+                  ))}
+                </div>
+                <p className="mt-3 text-lg font-bold">{x.r}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">{x.w}</p>
+                <p className="mt-2 text-sm text-stone-300">{x.d}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

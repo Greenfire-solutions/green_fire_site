@@ -112,8 +112,8 @@ export function StoreLobbyPage() {
                   const Icon = botIcon(b.icon);
                   const c = BOT_KINDS[b.kind].color;
                   return (
-                    <div key={b.id} className="gf-anim grid aspect-square place-items-center rounded-2xl ring-1" style={{ background: `${c}14`, color: c, boxShadow: `0 0 24px -8px ${c}`, ['--tw-ring-color' as string]: `${c}40`, animation: `gfFloat ${6 + (i % 4)}s ease-in-out ${(i % 5) * 0.4}s infinite` }}>
-                      <Icon size={22} />
+                    <div key={b.id} className="gf-anim grid aspect-square place-items-center overflow-hidden rounded-2xl ring-1" style={{ background: `${c}14`, color: c, boxShadow: `0 0 24px -8px ${c}`, ['--tw-ring-color' as string]: `${c}40`, animation: `gfFloat ${6 + (i % 4)}s ease-in-out ${(i % 5) * 0.4}s infinite` }}>
+                      {b.art ? <img src={b.art} alt="" loading="lazy" className="h-full w-full object-cover" /> : <Icon size={22} />}
                     </div>
                   );
                 })}
