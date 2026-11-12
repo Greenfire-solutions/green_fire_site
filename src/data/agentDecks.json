@@ -1,7 +1,7 @@
 {
- "synced": "2026-11-12T18:14:23.316Z",
+ "synced": "2026-11-12T19:10:08.615Z",
  "harness": {
-  "version": "0.3.1",
+  "version": "0.4.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
   "points": [
    {
