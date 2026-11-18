@@ -4,7 +4,7 @@ export const siteConfig = {
   operatingModelName: 'Greenfire Creator Commons',
   eventsName: 'Greenfire Sessions',
   shortName: 'Green Fire',
-  tagline: 'Council, creativity, regeneration, and community solutions',
+  tagline: 'The Greenfire Collective: builders, artists and land stewards',
   location: 'Pilot development — location to be announced',
   contactEmail: 'civilizationexplorer@gmail.com',
   seo: {

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Mail, Menu, X } from 'lucide-react';
+import { Mail, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSiteContent } from '../../context/ContentContext';
 import { siteConfig } from '../../config/siteConfig';
-import { PRIMARY_NAV, FOOTER_NAV, TOPIC_NAV, ROUTES, isStaticPath } from '../../lib/routes';
+import { NAV_GROUPS, FOOTER_NAV, TOPIC_NAV, ROUTES, isStaticPath } from '../../lib/routes';
 import { usePageMeta } from '../../lib/usePageMeta';
 
 /* A router Link to the static blog would render an empty app page, so those
@@ -21,6 +21,7 @@ type SiteLayoutProps = {
 
 export function SiteLayout({ children }: SiteLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const { settings } = useSiteContent();
   const location = useLocation();
   usePageMeta();
@@ -57,27 +58,68 @@ export function SiteLayout({ children }: SiteLayoutProps) {
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-            {PRIMARY_NAV.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={`rounded-full px-3 py-2 text-xs font-semibold transition-colors ${
-                  isActive(item.path)
-                    ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/25'
-                    : 'text-stone-400 hover:text-emerald-300 hover:bg-white/5'
-                }`}
-              >
-                {item.label}
-              </NavLink>
-            ))}
+            {NAV_GROUPS.map((group) => {
+              const active = group.items.some((i) => isActive(i.path));
+              const open = openGroup === group.label;
+              return (
+                <div
+                  key={group.label}
+                  className="relative"
+                  onMouseEnter={() => setOpenGroup(group.label)}
+                  onMouseLeave={() => setOpenGroup(null)}
+                >
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-haspopup="true"
+                    onClick={() => setOpenGroup(open ? null : group.label)}
+                    className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs font-semibold transition-colors ${
+                      active
+                        ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/25'
+                        : 'text-stone-300 hover:text-emerald-300 hover:bg-white/5'
+                    }`}
+                  >
+                    {group.label}
+                    <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-180' : ''}`} />
+                  </button>
+                  {open && (
+                    <div className="absolute left-0 top-full pt-2">
+                      <div className="w-72 rounded-2xl border border-white/10 bg-neutral-950/95 p-2 shadow-2xl shadow-black/60 backdrop-blur-md">
+                        {group.items.map((item) => (
+                          <NavLink
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => setOpenGroup(null)}
+                            className={`block rounded-xl px-3 py-2.5 transition-colors ${
+                              isActive(item.path) ? 'bg-emerald-500/10' : 'hover:bg-white/5'
+                            }`}
+                          >
+                            <span className={`block text-sm font-semibold ${isActive(item.path) ? 'text-emerald-300' : 'text-white'}`}>{item.label}</span>
+                            {item.note && <span className="block text-xs text-stone-500">{item.note}</span>}
+                          </NavLink>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
-          <Link
-            to={ROUTES.getInvolved}
-            className="hidden md:inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300 transition-colors shrink-0"
-          >
-            Share a Need
-          </Link>
+          <div className="hidden md:flex items-center gap-2 shrink-0">
+            <Link
+              to={ROUTES.start}
+              className="inline-flex items-center rounded-full border border-orange-400/40 px-4 py-2 text-xs font-bold text-orange-200 hover:bg-orange-400/10 transition-colors"
+            >
+              Hire for AI
+            </Link>
+            <Link
+              to={ROUTES.join}
+              className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-emerald-300 transition-colors"
+            >
+              Join the Collective
+            </Link>
+          </div>
 
           <button
             type="button"
@@ -96,31 +138,47 @@ export function SiteLayout({ children }: SiteLayoutProps) {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-white/5 bg-neutral-950 px-4 py-4"
+              className="lg:hidden max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-white/5 bg-neutral-950 px-4 py-4"
             >
-              <div className="grid grid-cols-2 gap-2">
-                {PRIMARY_NAV.map((item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setMobileOpen(false)}
-                    className={`rounded-xl px-3 py-3 text-left text-sm font-medium ${
-                      isActive(item.path)
-                        ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/25'
-                        : 'text-stone-300 bg-white/5'
-                    }`}
-                  >
-                    {item.label}
-                  </NavLink>
+              <div className="space-y-4">
+                {NAV_GROUPS.map((group) => (
+                  <div key={group.label}>
+                    <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest text-emerald-400/70">{group.label}</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {group.items.map((item) => (
+                        <NavLink
+                          key={item.path}
+                          to={item.path}
+                          onClick={() => setMobileOpen(false)}
+                          className={`rounded-xl px-3 py-3 text-left text-sm font-medium ${
+                            isActive(item.path)
+                              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/25'
+                              : 'text-stone-300 bg-white/5'
+                          }`}
+                        >
+                          {item.label}
+                        </NavLink>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
-              <Link
-                to={ROUTES.getInvolved}
-                onClick={() => setMobileOpen(false)}
-                className="mt-3 block w-full rounded-xl bg-emerald-400 py-3 text-center text-sm font-bold text-neutral-950"
-              >
-                Share a Need
-              </Link>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <Link
+                  to={ROUTES.start}
+                  onClick={() => setMobileOpen(false)}
+                  className="block rounded-xl border border-orange-400/40 py-3 text-center text-sm font-bold text-orange-200"
+                >
+                  Hire for AI
+                </Link>
+                <Link
+                  to={ROUTES.join}
+                  onClick={() => setMobileOpen(false)}
+                  className="block rounded-xl bg-emerald-400 py-3 text-center text-sm font-bold text-neutral-950"
+                >
+                  Join the Collective
+                </Link>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

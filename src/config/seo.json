@@ -66,7 +66,22 @@
   ],
   "routes": {
     "/": {
-      "title": "Green Fire: Solarpunk Tech, Bioregional AI and Land Projects",
+      "title": "Greenfire Collective: Advanced AI Setup, Builders, Artists and Land Stewards",
+      "description": "Greenfire is a collective of builders, artists and land stewards. Jordan builds advanced AI systems and hooks them into your business, and anyone can join the collective free.",
+      "h1": "Builders, artists and land stewards, building with AI",
+      "about": [
+        "The Greenfire Collective brings together people who build software and AI, people who make music, film and games, and people who care for land: farms, gardens and land projects.",
+        "Greenfire builds advanced AI systems on your own computer: agents, dashboards and your email, calendar, site and tools hooked up and working together. Three ways to work together: Learn It, Build It, and Build It Together.",
+        "We build solarpunk technology that runs today: BioRegional OS, an open source operating system for a bioregional commons; Civil X, task and proof of work software for eco villages and land projects; interactive 3D maps for land and fundraising; and AI dashboards for artists, small businesses and communities."
+      ]
+    },
+    "/join": {
+      "title": "Join the Greenfire Collective | Builders, Artists and Land Stewards",
+      "description": "Join the Greenfire Collective free: builders, artists and land stewards making real things with AI. Or become a Builder member for weekly tools and help.",
+      "h1": "Join the Greenfire Collective"
+    },
+    "/vision": {
+      "title": "The Green Fire Vision: Council, Creativity and Community Solutions",
       "description": "Green Fire is a solarpunk research and innovation center building bioregional AI, eco village technology and open source tools for land projects.",
       "h1": "Green Fire Research and Innovation Center",
       "about": [

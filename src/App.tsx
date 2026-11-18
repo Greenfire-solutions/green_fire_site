@@ -4,6 +4,7 @@ import { ContentProvider } from './context/ContentContext';
 import { ContactProvider } from './components/ContactProvider';
 import { SiteLayout } from './components/layout/SiteLayout';
 import { HomePage } from './pages/HomePage';
+import { CollectiveHomePage, JoinPage } from './pages/CollectiveHomePage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
 import { OfferingsPage } from './pages/OfferingsPage';
 import { OpenSourcePage } from './pages/OpenSourcePage';
@@ -66,7 +67,11 @@ function PublicSite() {
       <ContactProvider>
         <SiteLayout>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<CollectiveHomePage />} />
+            {/* The original home page, kept whole since the 2026-11-18 Collective redesign. */}
+            <Route path="/vision" element={<HomePage />} />
+            <Route path="/join" element={<JoinPage />} />
+            <Route path="/collective" element={<Navigate to="/join" replace />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="/offerings" element={<OfferingsPage />} />
             <Route path="/offerings/packages" element={<PackagesPage />} />

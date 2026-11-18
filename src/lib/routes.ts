@@ -1,6 +1,9 @@
 import seo from '../config/seo.json';
 export const ROUTES = {
   home: '/',
+  /** The original home page (council, Elders, the Creator Commons model), kept whole. */
+  vision: '/vision',
+  join: '/join',
   howItWorks: '/how-it-works',
   offerings: '/offerings',
   tech: '/tech',
@@ -38,6 +41,8 @@ export const LEGACY_PAGE_TO_PATH: Record<string, string> = {
   'open-source': ROUTES.openSource,
   'get-involved': ROUTES.getInvolved,
   tech: ROUTES.tech,
+  vision: ROUTES.vision,
+  join: ROUTES.join,
 };
 
 export function resolvePath(pageOrPath?: string): string {
@@ -60,7 +65,52 @@ export const PRIMARY_NAV = [
   { path: ROUTES.getInvolved, label: 'Get Involved' },
 ] as const;
 
+/* The header menus. Every page the old flat bar linked is still in one of
+   these four groups, so nothing became unreachable when the bar was tidied. */
+export type NavItem = { path: string; label: string; note?: string };
+export const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
+  {
+    label: 'AI Services',
+    items: [
+      { path: ROUTES.start, label: 'AI built for you', note: 'Learn It, Build It, Build It Together' },
+      { path: ROUTES.offerings, label: 'All offerings', note: 'Media, studio, events and workshops' },
+      { path: ROUTES.games, label: 'Kids Game Lab', note: 'Kids make their own games with AI' },
+      { path: ROUTES.contact, label: 'Contact', note: 'Ask a question first' },
+    ],
+  },
+  {
+    label: 'Collective',
+    items: [
+      { path: ROUTES.join, label: 'Join the Collective', note: 'Free to join, Builder membership' },
+      { path: ROUTES.getInvolved, label: 'Get Involved', note: 'Bring a need, offer a skill, partner' },
+      { path: ROUTES.howItWorks, label: 'How It Works', note: 'How projects move from need to built' },
+      { path: ROUTES.openSource, label: 'Open Source', note: 'Data, consent and the Creator Commons' },
+    ],
+  },
+  {
+    label: 'Explore',
+    items: [
+      { path: ROUTES.store, label: 'Store', note: 'Apps, harnesses and bots' },
+      { path: ROUTES.tech, label: 'Tech and 3D', note: 'What we build, running live' },
+      { path: ROUTES.rootsignal, label: 'ROOTSIGNAL', note: 'Our game' },
+      { path: ROUTES.medixn, label: 'MEDIXN', note: 'Laser synthesizer plugin' },
+      { path: ROUTES.blog, label: 'Blog', note: 'Notes and guides' },
+    ],
+  },
+  {
+    label: 'About',
+    items: [
+      { path: ROUTES.vision, label: 'The Green Fire Vision', note: 'Council, Elders and the innovation center' },
+      { path: ROUTES.pilotRoadmap, label: 'Pilot Roadmap', note: 'Goals for the first year' },
+      { path: ROUTES.invest, label: 'Funders and Partners', note: 'Land, campuses and backing' },
+    ],
+  },
+];
+
 export const FOOTER_NAV = [
+  { path: ROUTES.join, label: 'Join the Collective' },
+  { path: ROUTES.start, label: 'AI Services' },
+  { path: ROUTES.vision, label: 'The Green Fire Vision' },
   { path: ROUTES.howItWorks, label: 'About' },
   { path: ROUTES.store, label: 'Store' },
   { path: ROUTES.medixn, label: 'MEDIXN synth plugin' },
