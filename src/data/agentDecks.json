@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-21T04:58:25.065Z",
+ "synced": "2026-11-21T06:12:13.811Z",
  "harness": {
   "version": "0.4.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -41,7 +41,7 @@
    "id": "essential",
    "name": "Essential",
    "blurb": "No theme, no art. A dense, fast command center for people who leave it open all day: decisions on top, missions by status, a sortable agent table, keyboard shortcuts.",
-   "meta": "Version 1.1.0 · 19 KB · one view · light and dark theme",
+   "meta": "Version 1.1.0 · 20 KB · one view · light and dark theme",
    "version": "1.1.0",
    "price_usd": 9,
    "buy_url": "https://buy.stripe.com/8x2eVfc1E4vl0hq9jV1kA1E",
@@ -98,9 +98,9 @@
   {
    "id": "mosswood",
    "name": "Mosswood",
-   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. Day and nightfall forests.",
-   "meta": "Version 1.2.0 · 3.1 MB · one view · light and dark theme",
-   "version": "1.2.0",
+   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. The clearing follows the clock from dawn to night, changes with the four seasons, and grows in five stages as the feed reports milestones.",
+   "meta": "Version 1.3.0 · 5.2 MB · one view · light and dark theme",
+   "version": "1.3.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/14A6oJ5Dg6Dt7JScw71kA1I",
    "images": {
@@ -112,9 +112,9 @@
   {
    "id": "neon-underground",
    "name": "Neon Underground",
-   "blurb": "A glowing night garden. Every agent is a little neon guest who walks to where their work puts them: the dance floor when working, the tea table when resting, the gate when they need you, the bench when stuck. Comes with a dance track that plays softly and switches off with one click.",
-   "meta": "Version 1.2.0 · 5.2 MB · one view · dark theme",
-   "version": "1.2.0",
+   "blurb": "A glowing night garden. Every agent is a little neon guest who walks to where their work puts them: the dance floor when working, the tea table when resting, the gate when they need you, the bench when stuck. Comes with a dance track that plays softly and switches off with one click. The garden grows in five stages as the feed reports milestones.",
+   "meta": "Version 1.3.0 · 5.6 MB · one view · dark theme",
+   "version": "1.3.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/6oU28t2r47Hxd4cbs31kA1J",
    "images": {
@@ -141,7 +141,7 @@
    "id": "pixel-hq",
    "name": "Pixel HQ",
    "blurb": "A cozy 8-bit command room. Five little agents work at their desks and walk to the table when they need you. Day and night themes.",
-   "meta": "Version 1.1.0 · 458 KB · one view · dark and light theme",
+   "meta": "Version 1.1.0 · 459 KB · one view · dark and light theme",
    "version": "1.1.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/4gMcN74zc3rhe8g8fR1kA1L",
@@ -155,7 +155,7 @@
    "id": "questline",
    "name": "Questline",
    "blurb": "An 8-bit side-scrolling forest workshop. Five crew sprites work at the tree house, workshop and observatory, and walk to the front when they need you. Quest cards, day and night.",
-   "meta": "Version 1.0.0 · 428 KB · one view · light and dark theme",
+   "meta": "Version 1.0.0 · 429 KB · one view · light and dark theme",
    "version": "1.0.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/8x2bJ38PsaTJ6FOcw71kA1S",
