@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-21T09:30:11.753Z",
+ "synced": "2026-11-21T23:47:18.400Z",
  "harness": {
   "version": "0.5.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -26,7 +26,7 @@
    },
    {
     "title": "Tested, and still being tested",
-    "body": "We run it through 19 test environments built from real small business work. 965 scored runs so far, every one graded by code, never by another AI."
+    "body": "We run it through 19 test environments built from real small business work. 1,145 scored runs so far, every one graded by code, never by another AI."
    }
   ],
   "price_usd": 79,
@@ -41,7 +41,7 @@
    "id": "essential",
    "name": "Essential",
    "blurb": "No theme, no art. A dense, fast command center for people who leave it open all day: decisions on top, missions by status, a sortable agent table, keyboard shortcuts.",
-   "meta": "Version 1.1.0 · 20 KB · one view · light and dark theme",
+   "meta": "Version 1.1.0 · 21 KB · one view · light and dark theme",
    "version": "1.1.0",
    "price_usd": 9,
    "buy_url": "https://buy.stripe.com/8x2eVfc1E4vl0hq9jV1kA1E",
@@ -102,8 +102,8 @@
    "id": "mosswood",
    "name": "Mosswood",
    "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. The clearing follows the clock from dawn to night, changes with the four seasons, and grows in five stages as the feed reports milestones.",
-   "meta": "Version 1.3.0 · 5.2 MB · one view · light and dark theme",
-   "version": "1.3.0",
+   "meta": "Version 1.3.1 · 5.4 MB · one view · light and dark theme",
+   "version": "1.3.1",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/14A6oJ5Dg6Dt7JScw71kA1I",
    "images": {
