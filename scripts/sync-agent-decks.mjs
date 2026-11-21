@@ -63,7 +63,9 @@ for (const m of html.slice(hEnd).matchAll(/<article class="deck">([\s\S]*?)<\/ar
     version: versions.decks?.[id] || '',
     price_usd: typeof c.price_usd === 'number' && c.price_usd > 0 ? c.price_usd : null,
     buy_url: c.price_usd > 0 && /^https:\/\//.test(c.buy_url || '') ? c.buy_url : null,
-    images: Object.fromEntries(views.map((v) => [v, `/store/decks/${id}-${v}.webp`])),
+    /* A living deck (seasons, day and night, growth) also has a 'living' picture: four looks of the same deck,
+       kept in this repo at public/store/decks/<id>-living.webp (made from the real deck, not by the Agent Store build). */
+    images: Object.fromEntries([...views.map((v) => [v, `/store/decks/${id}-${v}.webp`]), ...(fs.existsSync(path.join(imgDir, `${id}-living.webp`)) ? [['living', `/store/decks/${id}-living.webp`]] : [])]),
     demo: LIVE.includes(id) && fs.existsSync(path.join(store, 'site/demo', id, 'index.html')) ? `/store/decks/demo/${id}/index.html` : null,
   });
 }
@@ -92,6 +94,7 @@ if (/\/Users\/|jordanlarsen/i.test(flat)) throw new Error('A local path is in th
 fs.mkdirSync(imgDir, { recursive: true });
 let copied = 0;
 for (const d of decks) for (const v of Object.keys(d.images)) {
+  if (v === 'living') continue; // already in this repo, not an Agent Store screenshot
   fs.copyFileSync(path.join(store, 'site/assets', `${d.id}-${v}.webp`), path.join(imgDir, `${d.id}-${v}.webp`));
   copied++;
 }

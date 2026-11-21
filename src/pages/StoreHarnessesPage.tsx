@@ -36,6 +36,7 @@ const VIEW_LABEL: Record<string, { label: string; icon: typeof LayoutDashboard }
   command: { label: 'Command', icon: LayoutDashboard },
   council: { label: 'Roster', icon: Users },
   phone: { label: 'Phone', icon: Smartphone },
+  living: { label: 'Living', icon: Sparkles },
 };
 
 export function StoreHarnessesPage() {
@@ -186,6 +187,7 @@ export function StoreHarnessesPage() {
                 <button onClick={() => { setPick(i); setView('command'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="relative m-2.5 overflow-hidden rounded-[24px]" style={{ background: tint(d.id) }} aria-label={`Show ${d.name} large`}>
                   <img src={d.images.command} alt={`${d.name} deck`} loading="lazy" className="aspect-[16/10] w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]" />
                   <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-neutral-700 shadow">v{d.version}</span>
+                  {d.images.living && <span className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-neutral-900/85 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow"><Sparkles className="h-3 w-3" />Living</span>}
                 </button>
                 <div className="flex flex-1 flex-col px-5 pb-5 pt-2">
                   <div className="flex items-center gap-2">

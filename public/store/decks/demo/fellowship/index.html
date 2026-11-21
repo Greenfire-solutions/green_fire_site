@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
 <title>The Fellowship · The realm</title>
 <style>
   :root { --night: #0a1612; --wood: #2a1c10; --wood-hi: #4a3219; --parch: #f1e3bd; --parch-lo: #dcc999; --ink: #2b1d0e; --mute: #6d5a3d; --light: #f6ecd2; --gold: #f2c14e;
@@ -73,7 +74,15 @@
   .brand span { animation: candle 3.7s steps(1) infinite; } @keyframes candle { 0%, 100% { opacity: 1; } 17% { opacity: .78; } 31% { opacity: .95; } 58% { opacity: .72; } 74% { opacity: .9; } }
   .count.warn { animation: candle 2.9s steps(1) infinite; }
   @media (max-width: 600px) { .motes i:nth-child(2n) { display: none; } }
-  @media (prefers-reduced-motion: reduce) { .hero { transition: none !important; } .hero.walking .spr, .hero .mark { animation: none !important; } *, *::before, *::after { animation: none !important; } .motes, .burst { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .hero { transition: none !important; } .hero.walking .spr, .hero .mark { animation: none !important; } *, *::before, *::after { animation: none !important; } .motes, .burst, .sweep { display: none; } }
+  /* growth: buildings that join the realm as the feed reports a higher stage. Stage 1 draws none of them. They are scenery:
+     they sit under the firelight, the flags and everyone who walks, each on free ground chosen against the map. */
+  .grown { position: absolute; inset: 0; pointer-events: none; } .bld { position: absolute; height: auto; translate: -50% 0; display: none; image-rendering: pixelated; } .bld.on { display: block; } .bld.rise { animation: raise 1.6s steps(8, end) both; }
+  @keyframes raise { from { opacity: 0; transform: translateY(16%); } }
+  .sweep { position: absolute; inset: 0; z-index: 8; pointer-events: none; background: linear-gradient(100deg, transparent 34%, rgba(255, 240, 190, .16) 50%, transparent 66%); transform: translateX(-100%); animation: pass 6.5s steps(40, end) both; } @keyframes pass { to { transform: translateX(100%); } }
+  .worldline { max-width: 1560px; margin: 0 auto; padding: 0 16px; color: var(--light); } .grew { margin: 10px 0 0; font-weight: 700; color: var(--gold); text-shadow: 2px 2px 0 #000; overflow-wrap: anywhere; }
+  .growth { margin: 10px 0 0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--parch-lo); overflow-wrap: anywhere; } .growth[hidden], .gbar[hidden] { display: none; }
+  .gbar { width: 84px; height: 8px; background: #000; border: 2px solid var(--wood-hi); flex: none; } .gbar i { display: block; height: 100%; background: var(--gold); }
 </style>
 </head>
 <body>
@@ -83,8 +92,9 @@
   <nav aria-label="Views"><a class="on" href="index.html">The realm</a><a href="council.html">Party</a></nav>
 </div>
 <div id="err" role="status"></div>
+<div class="worldline"><p id="grew" class="grew" role="status" hidden></p><p id="growth" class="growth" hidden><span id="gtext"></span><span class="gbar" id="gwrap"><i id="gbar"></i></span></p></div>
 <div class="shell">
-  <div id="realm" aria-label="The realm map. Each character is one agent."><div class="amb" aria-hidden="true">
+  <div id="realm" aria-label="The realm map. Each character is one agent."><div class="grown" id="grown" aria-hidden="true"></div><div class="amb" aria-hidden="true">
       <i class="lamp moon" style="--x: 67.2%; --y: 4%; --w: 12%; --t: 9s"></i><i class="lamp moon" style="--x: 67%; --y: 12%; --w: 8%; --t: 4.2s; --d: -1s"></i>
       <i class="lamp" style="--x: 75.2%; --y: 34.6%; --w: 9%"></i><i class="lamp" style="--x: 79.6%; --y: 45.4%; --w: 11%; --t: 2.9s; --d: -.7s"></i><i class="lamp" style="--x: 51.4%; --y: 87.6%; --w: 8%; --t: 2.6s; --d: -1.3s"></i><i class="lamp" style="--x: 85.4%; --y: 19.5%; --w: 10%; --t: 3.4s; --d: -2s"></i>
       <i class="lamp cold" style="--x: 45.2%; --y: 42.8%; --w: 5%; --t: 3.6s"></i><i class="lamp cold" style="--x: 56.4%; --y: 43.6%; --w: 5%; --t: 3.6s; --d: -1.8s"></i>
@@ -99,6 +109,8 @@
   </aside>
 </div>
 <script src="../demo.js"></script>
+<script>window.DECK_WORLD = {"key":"fellowship","living":{"stages":5,"stage_art":{"2":["art/world/stage-2-market.webp"],"3":["art/world/stage-3-gate.webp"],"4":["art/world/stage-4-windmill.webp"],"5":["art/world/stage-5-keep.webp"]}}}</script>
+<script src="world.js"></script>
 <script>
 // The realm: every agent is a character on the map. Working characters walk between their workplace and their quest's flag;
 // idle ones rest by the tavern; ones that need the owner wait at the tower with a mark. Reads feed.json (agent-deck/1).
@@ -131,6 +143,37 @@ const flags = new Map(), seen = { quests: null, seals: null, chron: null }, was 
   for (let i = 0; i < 16; i++) { const m = el('i', i % 3 === 0 ? 'green' : ''); m.style.left = (4 + rnd() * 92).toFixed(1) + '%'; m.style.top = (14 + rnd() * 80).toFixed(1) + '%'
     m.style.setProperty('--dx', Math.round(rnd() * 70 - 35) + 'px'); m.style.setProperty('--dy', Math.round(-16 - rnd() * 40) + 'px'); m.style.animationDuration = (8 + rnd() * 9).toFixed(1) + 's'; m.style.animationDelay = (-rnd() * 16).toFixed(1) + 's'; box.append(m) } }
 try { pickedQuest = localStorage.getItem('fellowship-quest') } catch {}
+// Growth. world.js works out the stage from the feed; this part only draws it. Each entry: stage, file, then the middle of the
+// building and its foot as a percentage of the map's width and height, and its width as a percentage of the map's width.
+const World = window.DeckWorld
+const GROW = [
+  { stage: 2, file: 'art/world/stage-2-market.webp', left: 22.8, foot: 70.5, width: 9 },
+  { stage: 3, file: 'art/world/stage-3-gate.webp', left: 57.6, foot: 99, width: 8.8 },
+  { stage: 4, file: 'art/world/stage-4-windmill.webp', left: 95.4, foot: 72, width: 8 },
+  { stage: 5, file: 'art/world/stage-5-keep.webp', left: 42, foot: 32.5, width: 9 }
+]
+const BUILT = { 2: 'The realm grew: a market was built.', 3: 'The realm grew: a gatehouse was built on the south road.', 4: 'The realm grew: a windmill was built.', 5: 'The realm grew: a keep was built by the lake.' }
+let ready = false, grewTimer = 0
+function grow(stage, rise) {
+  const box = $('grown')
+  GROW.forEach((g, i) => { let node = box.children[i]
+    if (!node) { node = el('img', 'bld'); node.alt = ''; node.style.left = g.left + '%'; node.style.bottom = (100 - g.foot) + '%'; node.style.width = g.width + '%'; box.append(node) }
+    if (stage < g.stage) { node.classList.remove('on', 'rise'); return }
+    if (node.classList.contains('on')) return
+    if (!node.getAttribute('src')) node.src = g.file
+    node.classList.add('on'); if (rise) { node.classList.add('rise'); node.style.animationDelay = (g.stage - 2) * .35 + 's' } })
+}
+function paintWorld() {
+  if (!World || !ready) return
+  const s = World.state, n = World.pending(), waiting = feed ? feed.approvals.filter(a => a.status === 'pending_approval' || a.status === 'outcome_unknown').length : 0, calm = still || waiting > 0
+  // the one moment per stage on this screen. It stays a plain line when something waits for the owner or motion is reduced.
+  if (n) { World.note('seen', n); const g = $('grew'); g.textContent = BUILT[n] || 'The realm grew.'; g.hidden = false; clearTimeout(grewTimer); grewTimer = setTimeout(() => { g.hidden = true }, 8000)
+    if (!calm) { const sw = el('div', 'sweep'); $('realm').append(sw); setTimeout(() => sw.remove(), 7000) } }
+  grow(s.art_stage, n > 0 && !calm)
+  const show = s.progress != null || s.next_label != null; $('growth').hidden = !show
+  if (show) { $('gtext').textContent = `The realm, stage ${s.stage}` + (s.next_label ? ` · Next: ${s.next_label}` : ''); $('gwrap').hidden = s.progress == null; $('gbar').style.width = Math.round((s.progress || 0) * 100) + '%' }
+}
+if (World) World.on(paintWorld)
 
 function classFor(a, used) { const t = ((a.role || '') + ' ' + (a.id || '')).toLowerCase(); let k = KEYS.find(k => CLASSES[k].test(t) && !used.has(k)); if (!k) { let h = 0; for (const c of String(a.id)) h = (h * 31 + c.charCodeAt(0)) >>> 0; for (let i = 0; i < KEYS.length; i++) { const c = KEYS[(h + i) % KEYS.length]; if (!used.has(c) || used.size >= KEYS.length) { k = c; break } } } used.add(k); return k }
 const jitter = (p, i, n = 3) => [p[0] + ((i * 37) % 7 - 3) * (n / 3), p[1] + ((i * 53) % 5 - 2) * (n / 3)]
@@ -228,8 +271,9 @@ function render() {
 function pickQuest(id) { pickedQuest = id; pickedHero = null; try { localStorage.setItem('fellowship-quest', id) } catch {} last = ''; render() }
 async function load() {
   let f; try { f = await (await fetch('feed.json')).json() } catch { f = { error: 'The deck cannot reach its feed.' } }
-  const err = $('err'); if (f.error) { err.style.display = 'block'; err.textContent = f.error + (f.problems ? ': ' + f.problems.join('; ') : ''); return }
-  err.style.display = 'none'; const sig = JSON.stringify(f); if (sig === last) return; last = sig; feed = f; render()
+  // a feed that cannot be read never changes the place: the world keeps the last good feed
+  const err = $('err'); if (f.error) { err.style.display = 'block'; err.textContent = f.error + (f.problems ? ': ' + f.problems.join('; ') : ''); if (!ready) { ready = true; paintWorld() } return }
+  err.style.display = 'none'; const sig = JSON.stringify(f); if (sig === last) return; last = sig; feed = f; ready = true; if (World) World.feed(f); render()
 }
 load(); setInterval(load, 4000); setInterval(tick, 700)
 </script>
