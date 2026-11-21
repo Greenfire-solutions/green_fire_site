@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-21T06:12:13.811Z",
+ "synced": "2026-11-21T06:44:38.578Z",
  "harness": {
   "version": "0.4.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -84,9 +84,9 @@
   {
    "id": "goddess-temple",
    "name": "Goddess Temple",
-   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. First light and moonlight temples.",
-   "meta": "Version 1.2.0 · 3.0 MB · one view · light and dark theme",
-   "version": "1.2.0",
+   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons.",
+   "meta": "Version 1.3.0 · 4.9 MB · one view · light and dark theme",
+   "version": "1.3.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/fZubJ35Dg0f52pybs31kA1H",
    "images": {
@@ -182,9 +182,9 @@
   {
    "id": "sovereign",
    "name": "Sovereign",
-   "blurb": "A civilization-builder command screen over a painted fortified kingdom. Each agent stands at court as the Steward, Cartographer, Builder, Chronicler, Quartermaster or Envoy and the portrait follows the state. Missions are works of the realm in stone and bronze, approvals are royal decrees awaiting your seal. Day and night.",
-   "meta": "Version 1.0.0 · 2.9 MB · one view · light and dark theme",
-   "version": "1.0.0",
+   "blurb": "A civilization-builder command screen over a painted fortified kingdom. Each agent stands at court as the Steward, Cartographer, Builder, Chronicler, Quartermaster or Envoy and the portrait follows the state. Missions are works of the realm in stone and bronze, approvals are royal decrees awaiting your seal. The kingdom follows the clock from dawn to night and changes with the four seasons.",
+   "meta": "Version 1.1.0 · 5.5 MB · one view · light and dark theme",
+   "version": "1.1.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/7sYcN7d5I4vl2py1Rt1kA1T",
    "images": {
