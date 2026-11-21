@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-21T08:46:03.189Z",
+ "synced": "2026-11-21T09:30:11.753Z",
  "harness": {
   "version": "0.5.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -62,7 +62,8 @@
    "images": {
     "command": "/store/decks/federation-command.webp",
     "council": "/store/decks/federation-council.webp",
-    "phone": "/store/decks/federation-phone.webp"
+    "phone": "/store/decks/federation-phone.webp",
+    "living": "/store/decks/federation-living.webp"
    },
    "demo": null
   },
@@ -77,7 +78,8 @@
    "images": {
     "command": "/store/decks/fellowship-command.webp",
     "council": "/store/decks/fellowship-council.webp",
-    "phone": "/store/decks/fellowship-phone.webp"
+    "phone": "/store/decks/fellowship-phone.webp",
+    "living": "/store/decks/fellowship-living.webp"
    },
    "demo": "/store/decks/demo/fellowship/index.html"
   },
