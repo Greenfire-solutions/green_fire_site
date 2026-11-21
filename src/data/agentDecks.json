@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-12T19:10:08.615Z",
+ "synced": "2026-11-21T04:58:25.065Z",
  "harness": {
   "version": "0.4.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -26,7 +26,7 @@
    },
    {
     "title": "Tested, and still being tested",
-    "body": "We run it through 19 test environments built from real small business work. 944 scored runs so far, every one graded by code, never by another AI."
+    "body": "We run it through 19 test environments built from real small business work. 965 scored runs so far, every one graded by code, never by another AI."
    }
   ],
   "price_usd": 79,
@@ -54,9 +54,9 @@
   {
    "id": "federation",
    "name": "The Federation",
-   "blurb": "Alien business command. Ten council species, mineral glass, teal and gold. Five of the council change pose with what they are doing.",
-   "meta": "Version 1.4.0 · 3.0 MB · 2 views · dark theme",
-   "version": "1.4.0",
+   "blurb": "Alien business command. Ten council species, mineral glass, teal and gold. All ten change pose with what they are doing.",
+   "meta": "Version 1.5.0 · 4.4 MB · 2 views · dark theme",
+   "version": "1.5.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/5kQ6oJaXA5zpd4cbs31kA1F",
    "images": {
@@ -113,8 +113,8 @@
    "id": "neon-underground",
    "name": "Neon Underground",
    "blurb": "A glowing night garden. Every agent is a little neon guest who walks to where their work puts them: the dance floor when working, the tea table when resting, the gate when they need you, the bench when stuck. Comes with a dance track that plays softly and switches off with one click.",
-   "meta": "Version 1.1.0 · 4.9 MB · one view · dark theme",
-   "version": "1.1.0",
+   "meta": "Version 1.2.0 · 5.2 MB · one view · dark theme",
+   "version": "1.2.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/6oU28t2r47Hxd4cbs31kA1J",
    "images": {
@@ -152,6 +152,20 @@
    "demo": null
   },
   {
+   "id": "questline",
+   "name": "Questline",
+   "blurb": "An 8-bit side-scrolling forest workshop. Five crew sprites work at the tree house, workshop and observatory, and walk to the front when they need you. Quest cards, day and night.",
+   "meta": "Version 1.0.0 · 428 KB · one view · light and dark theme",
+   "version": "1.0.0",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/8x2bJ38PsaTJ6FOcw71kA1S",
+   "images": {
+    "command": "/store/decks/questline-command.webp",
+    "phone": "/store/decks/questline-phone.webp"
+   },
+   "demo": null
+  },
+  {
    "id": "quiet-hours",
    "name": "Quiet Hours",
    "blurb": "A calm lo-fi anime studio. One companion, Mika, speaks for your whole team: her pose and her words follow what needs you most. Morning and rainy night themes. Comes with three lo-fi songs that play softly and switch off with one click.",
@@ -162,6 +176,20 @@
    "images": {
     "command": "/store/decks/quiet-hours-command.webp",
     "phone": "/store/decks/quiet-hours-phone.webp"
+   },
+   "demo": null
+  },
+  {
+   "id": "sovereign",
+   "name": "Sovereign",
+   "blurb": "A civilization-builder command screen over a painted fortified kingdom. Each agent stands at court as the Steward, Cartographer, Builder, Chronicler, Quartermaster or Envoy and the portrait follows the state. Missions are works of the realm in stone and bronze, approvals are royal decrees awaiting your seal. Day and night.",
+   "meta": "Version 1.0.0 · 2.9 MB · one view · light and dark theme",
+   "version": "1.0.0",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/7sYcN7d5I4vl2py1Rt1kA1T",
+   "images": {
+    "command": "/store/decks/sovereign-command.webp",
+    "phone": "/store/decks/sovereign-phone.webp"
    },
    "demo": null
   }
