@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-22T04:55:53.720Z",
+ "synced": "2026-11-22T05:54:25.023Z",
  "harness": {
   "version": "0.6.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -40,9 +40,9 @@
   {
    "id": "elemental",
    "name": "The Elementals",
-   "blurb": "A real 3D scene you can turn and move through. A stone ring at night: every agent is an elemental spirit at its own stone (a sage, fire, water, earth and air), and every mission is a crystal that grows inside the ring. Rain, snow, fog and storm pass over when the harness reports weather. The circle grows in five stages as the feed reports milestones: standing stones, stone dragons, a lit forge, then light in the sky. Small dots beside each name count the finished work you accepted. A still picture stands in on computers without 3D.",
-   "meta": "Version 1.1.0 · 9.6 MB · one view · dark theme",
-   "version": "1.1.0",
+   "blurb": "A real 3D scene you can turn and move through. A stone ring at night: every agent is an elemental spirit at its own stone (a sage, fire, water, earth and air), and every mission is a crystal that grows inside the ring. Rain, snow, fog and storm pass over when the harness reports weather. The circle grows in five stages as the feed reports milestones: standing stones, stone dragons, a lit forge, then light in the sky. Small dots beside each name count the finished work you accepted. Its own UI kit: carved stone frames with ember cracks, a rune icon set, stone tablets and ember progress bars. A still picture stands in on computers without 3D.",
+   "meta": "Version 1.2.0 · 9.7 MB · one view · dark theme",
+   "version": "1.2.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/eVq9AVghUbXNaW49jV1kA1U",
    "images": {
@@ -85,9 +85,9 @@
   {
    "id": "fellowship",
    "name": "The Fellowship",
-   "blurb": "Pixel fantasy realm. Every agent is a character who walks the moonlit map between their workplace and their quest. The realm grows in five stages as the feed reports milestones: a market, a gatehouse, a windmill, a keep. Rain, snow, fog and wind pass over the scene when the feed reports them.",
-   "meta": "Version 1.6.1 · 3.1 MB · 2 views · dark theme",
-   "version": "1.6.1",
+   "blurb": "Pixel fantasy realm. Every agent is a character who walks the moonlit map between their workplace and their quest. The realm grows in five stages as the feed reports milestones: a market, a gatehouse, a windmill, a keep. Rain, snow, fog and wind pass over the scene when the feed reports them. Panels sit in a pixel-art oak frame with brass corners.",
+   "meta": "Version 1.7.0 · 3.2 MB · 2 views · dark theme",
+   "version": "1.7.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/14A4gB5Dg3rhggo9jV1kA1G",
    "images": {
@@ -101,9 +101,9 @@
   {
    "id": "goddess-temple",
    "name": "Goddess Temple",
-   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm pass over the scene when the harness reports weather.",
-   "meta": "Version 1.6.0 · 5.1 MB · one view · light and dark theme",
-   "version": "1.6.0",
+   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm pass over the scene when the harness reports weather. Panels are framed in white marble with gold filigree and a lotus at each corner.",
+   "meta": "Version 1.7.0 · 5.1 MB · one view · light and dark theme",
+   "version": "1.7.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/fZubJ35Dg0f52pybs31kA1H",
    "images": {
@@ -116,9 +116,9 @@
   {
    "id": "mosswood",
    "name": "Mosswood",
-   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. The clearing follows the clock from dawn to night, changes with the four seasons, and grows in five stages as the feed reports milestones. Rain, snow, fog and wind pass over the scene when the feed reports them. Small dots beside each name count the finished work you accepted.",
-   "meta": "Version 1.5.0 · 5.4 MB · one view · light and dark theme",
-   "version": "1.5.0",
+   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. The clearing follows the clock from dawn to night, changes with the four seasons, and grows in five stages as the feed reports milestones. Rain, snow, fog and wind pass over the scene when the feed reports them. Small dots beside each name count the finished work you accepted. Painted sprigs of twig, mushroom and acorn hang on the corners of every panel.",
+   "meta": "Version 1.6.0 · 5.5 MB · one view · light and dark theme",
+   "version": "1.6.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/14A6oJ5Dg6Dt7JScw71kA1I",
    "images": {
@@ -131,9 +131,9 @@
   {
    "id": "neon-underground",
    "name": "Neon Underground",
-   "blurb": "A glowing night garden. Every agent is a little neon guest who walks to where their work puts them: the dance floor when working, the tea table when resting, the gate when they need you, the bench when stuck. Comes with a dance track that plays softly and switches off with one click. The garden grows in five stages as the feed reports milestones.",
-   "meta": "Version 1.3.0 · 5.6 MB · one view · dark theme",
-   "version": "1.3.0",
+   "blurb": "A glowing night garden. Every agent is a little neon guest who walks to where their work puts them: the dance floor when working, the tea table when resting, the gate when they need you, the bench when stuck. Comes with a dance track that plays softly and switches off with one click. The garden grows in five stages as the feed reports milestones. Every card is a neon sign in its own colour, with a string of small lights inside it and an icon for every state.",
+   "meta": "Version 1.4.0 · 5.6 MB · one view · dark theme",
+   "version": "1.4.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/6oU28t2r47Hxd4cbs31kA1J",
    "images": {
@@ -146,9 +146,9 @@
   {
    "id": "petal-desk",
    "name": "Petal Desk",
-   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. The atelier follows the clock from day to night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with a gentle song that plays softly and switches off with one click. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm show in the window when the harness reports weather.",
-   "meta": "Version 1.6.0 · 4.7 MB · one view · light and dark theme",
-   "version": "1.6.0",
+   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. The atelier follows the clock from day to night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with a gentle song that plays softly and switches off with one click. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm show in the window when the harness reports weather. Every panel is trimmed with satin ribbon, scalloped lace and pearls, with a bow on each corner.",
+   "meta": "Version 1.7.0 · 4.7 MB · one view · light and dark theme",
+   "version": "1.7.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/6oU6oJc1Ed1R7JSfIj1kA1K",
    "images": {
@@ -161,9 +161,9 @@
   {
    "id": "pixel-hq",
    "name": "Pixel HQ",
-   "blurb": "A cozy 8-bit command room. Five little agents work at their desks and walk to the table when they need you. The room follows the clock: day by day, night by night. Small dots beside each name count the finished work you accepted.",
-   "meta": "Version 1.3.0 · 468 KB · one view · dark and light theme",
-   "version": "1.3.0",
+   "blurb": "A cozy 8-bit command room. Five little agents work at their desks and walk to the table when they need you. The room follows the clock: day by day, night by night. Small dots beside each name count the finished work you accepted. Panels are square pixel windows with a bright bracket on every corner.",
+   "meta": "Version 1.4.0 · 468 KB · one view · dark and light theme",
+   "version": "1.4.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/4gMcN74zc3rhe8g8fR1kA1L",
    "images": {
