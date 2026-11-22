@@ -42,7 +42,7 @@
   .card { display: grid; grid-template-columns: 60px 1fr; gap: 8px; background: var(--parch-lo); border: 2px solid #000; box-shadow: 3px 3px 0 #000; padding: 8px; } .card .spr { width: 56px; height: 74px; background: center bottom / contain no-repeat; image-rendering: pixelated; }
   .cast { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--mute); } .name { font-weight: 700; overflow-wrap: anywhere; } .role { font-size: 11px; color: var(--mute); overflow-wrap: anywhere; } .doing { margin-top: 4px; overflow-wrap: anywhere; }
   .seal, .act { display: flex; gap: 8px; align-items: start; justify-content: space-between; padding: 6px 0; border-top: 2px dotted var(--parch-lo); } .seal div { font-weight: 700; overflow-wrap: anywhere; min-width: 0; } .act div { overflow-wrap: anywhere; min-width: 0; } .act small { color: var(--mute); white-space: nowrap; font-size: 10px; }
-  .hint { font-size: 10px; color: var(--mute); margin: 4px 0 0; } .none { color: var(--mute); font-style: italic; }
+  .hint { font-size: 10px; color: var(--mute); margin: 4px 0 0; } .none { color: var(--mute); font-style: italic; display: flex; align-items: center; gap: 10px; } .none img { width: 54px; height: auto; image-rendering: pixelated; flex: none; }
   @media (max-width: 1080px) { .shell { grid-template-columns: 1fr; } }
   /* ambient life, in the pixel style: stepped flicker for firelight, soft drift for fireflies. Opacity and transform only. */
   .amb, .motes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; } .motes { z-index: 150; }
@@ -208,7 +208,7 @@ function tick() {
 
 function heroCard(a, k) { const c = el('div', 'card ' + a.state), s = el('div', 'spr'), b = el('div'); sprite(s, k); s.setAttribute('role', 'img'); s.setAttribute('aria-label', k)
   b.append(el('div', 'cast', k), el('div', 'name', a.name), el('div', 'role', a.role || ''), el('span', 'tag ' + a.state, words(a.state)), el('div', 'doing', a.current || 'Resting by the fire')); c.append(s, b); return c }
-const fill = (id, items, none) => $(id).replaceChildren(...(items.length ? items : [el('div', 'none', none)]))
+const fill = (id, items, none, art) => { if (items.length) return $(id).replaceChildren(...items); const n = el('div', 'none'); if (art) { const i = el('img'); i.src = `art/${art}.webp`; i.alt = ''; n.append(i) } n.append(el('span', null, none)); $(id).replaceChildren(n) }
 
 function render() {
   const f = feed, realm = $('realm'), missions = f.missions || []
@@ -252,23 +252,23 @@ function render() {
     const steps = el('div', 'steps'); for (const s of q.steps || []) { const r = el('div', 'step' + (s.done ? ' done' : '')), t = el('i', 'tick'); r.append(t, document.createTextNode(s.text)); steps.append(r)
       if (s.done && done && !done.has(s.text)) go(t, [{ transform: 'scale(2)' }, { transform: 'scale(1)' }], 500, { easing: 'steps(4, end)' }) }
     if (fresh('quests', q.id)) go(b, [{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], 500)
-    b.append(row, bar, el('div', 'party', `${pct}% · ${names.join(', ') || 'no one assigned'}`), steps); return b }), 'No quests in this feed yet.')
+    b.append(row, bar, el('div', 'party', `${pct}% · ${names.join(', ') || 'no one assigned'}`), steps); return b }), 'No quests in this feed yet.', 'empty-quests')
   was.progress = {}; was.status = {}; was.steps = {}
   for (const q of missions) { was.progress[q.id] = Math.round(q.progress * 100); was.status[q.id] = q.status; was.steps[q.id] = new Set((q.steps || []).filter(s => s.done).map(s => s.text)) }
   seen.quests = new Set(missions.map(q => q.id))
   const hero = f.agents.find(a => a.id === pickedHero) || (m && f.agents.find(a => a.id === (m.lead || (m.agents || [])[0]))) || f.agents[0]
-  fill('chosen', hero ? [heroCard(hero, keyOf[hero.id])] : [], 'No one has joined the party yet.')
+  fill('chosen', hero ? [heroCard(hero, keyOf[hero.id])] : [], 'No one has joined the party yet.', 'empty-heroes')
   if (hero) { const card = $('chosen').firstChild
     if (was.hero && was.hero !== hero.id) go(card, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], 400, { easing: 'steps(4, end)' })
     else if (was.hero && was.heroState !== hero.state) go(card.querySelector('.tag'), [{ transform: 'scale(1.35)' }, { transform: 'scale(1)' }], 500, { easing: 'steps(4, end)' })
     was.hero = hero.id; was.heroState = hero.state }
   const pend = f.approvals.filter(a => a.status === 'pending_approval' || a.status === 'outcome_unknown')
   fill('seals', pend.slice(0, 5).map(a => { const r = el('div', 'seal'); r.append(el('div', null, a.summary), el('span', 'tag ' + a.status, words(a.status)))
-    if (fresh('seals', a.id)) go(r, [{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], 500); return r }), 'Nothing awaits your seal.')
+    if (fresh('seals', a.id)) go(r, [{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], 500); return r }), 'Nothing awaits your seal.', 'empty-seal')
   seen.seals = new Set(pend.map(a => a.id))
   // a new line in the chronicle is written in from the left, like a quill crossing the page
   fill('chron', f.activity.slice(0, 5).map(a => { const r = el('div', 'act'); r.append(el('div', null, a.text), el('small', null, when(a.at)))
-    if (fresh('chron', a.at + a.text)) go(r, [{ clipPath: 'inset(0 100% 0 0)', opacity: .3 }, { clipPath: 'inset(0 0 0 0)', opacity: 1 }], 900, { easing: 'steps(18, end)' }); return r }), 'The chronicle is blank.')
+    if (fresh('chron', a.at + a.text)) go(r, [{ clipPath: 'inset(0 100% 0 0)', opacity: .3 }, { clipPath: 'inset(0 0 0 0)', opacity: 1 }], 900, { easing: 'steps(18, end)' }); return r }), 'The chronicle is blank.', 'empty-connections')
   seen.chron = new Set(f.activity.map(a => a.at + a.text))
 }
 function pickQuest(id) { pickedQuest = id; pickedHero = null; try { localStorage.setItem('fellowship-quest', id) } catch {} last = ''; render() }
