@@ -5,6 +5,7 @@
 // It reads nothing but what it is handed, fetches nothing, and writes only this screen's own choices to localStorage.
 // A deck sets window.DECK_WORLD = { key: 'deck-name', living: the same block as in deck.json } before loading this file.
 // URL settings: ?phase=day|night|dawn|dusk &season=spring|summer|autumn|winter &stage=1..10 &weather=off|rain|storm|snow|fog|wind|cloudy &private=on &living=off
+// Level marks: a deck that declares "agent_levels": true can ask DeckWorld.levelMark(agent) for five small dots to put beside a name.
 // Weather is drawn by this file, on one small canvas inside the element the deck marks with data-weather-layer. A deck with no such element, or with no "weather" list in its living block, shows none.
 (function () {
   'use strict'
@@ -129,6 +130,15 @@
   api.note = function (name, value) { if (!cfg || NOTES.indexOf(name) < 0) return; if (value == null) delete store[name]; else store[name] = value; write() }
   api.noted = function (name) { return NOTES.indexOf(name) >= 0 && store[name] != null ? store[name] : null }
   api.pending = function () { return moment(api.state, store.seen) }
+  // a level mark for one agent: five small dots, with the count in words for anyone who points at it or uses a screen reader.
+  // A level is a count of finished work the owner accepted. It is history, never rank, and it changes no permission.
+  api.levelMark = function (a) {
+    var lv = isObj(a) && typeof a.id === 'string' ? api.state.levels[a.id] : null; if (!lv) return null
+    var who = typeof a.name === 'string' && a.name ? a.name : 'This agent', said = who + ': ' + (lv.accepted != null && !api.state.private ? lv.accepted + ' jobs you accepted' : 'level ' + lv.level + ' of 5') + '. Levels count finished work you accepted. They do not change what an agent is allowed to do.'
+    var m = make('span', null, 'display:inline-flex;gap:3px;margin-left:7px;vertical-align:middle;cursor:help'); m.className = 'lvmark'; m.setAttribute('role', 'img'); m.setAttribute('aria-label', said); m.title = said
+    for (var i = 1; i <= 5; i++) m.appendChild(make('i', null, 'width:5px;height:5px;border-radius:50%;background:currentColor;opacity:' + (i <= lv.level ? '.9' : '.22')))
+    return m
+  }
   document.addEventListener('visibilitychange', function () { if (!cfg) return; run(); if (!document.hidden) refresh() })
 
   // the World control: season (when the deck has seasons) and Still. Same look as the sound pill, bottom left.

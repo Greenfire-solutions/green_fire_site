@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-22T03:10:06.861Z",
+ "synced": "2026-11-22T03:33:55.140Z",
  "harness": {
   "version": "0.6.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -100,9 +100,9 @@
   {
    "id": "goddess-temple",
    "name": "Goddess Temple",
-   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones.",
-   "meta": "Version 1.4.0 · 5.1 MB · one view · light and dark theme",
-   "version": "1.4.0",
+   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Small dots beside each name count the finished work you accepted.",
+   "meta": "Version 1.5.0 · 5.1 MB · one view · light and dark theme",
+   "version": "1.5.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/fZubJ35Dg0f52pybs31kA1H",
    "images": {
@@ -115,9 +115,9 @@
   {
    "id": "mosswood",
    "name": "Mosswood",
-   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. The clearing follows the clock from dawn to night, changes with the four seasons, and grows in five stages as the feed reports milestones. Rain, snow, fog and wind pass over the scene when the feed reports them.",
-   "meta": "Version 1.4.0 · 5.4 MB · one view · light and dark theme",
-   "version": "1.4.0",
+   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. The clearing follows the clock from dawn to night, changes with the four seasons, and grows in five stages as the feed reports milestones. Rain, snow, fog and wind pass over the scene when the feed reports them. Small dots beside each name count the finished work you accepted.",
+   "meta": "Version 1.5.0 · 5.4 MB · one view · light and dark theme",
+   "version": "1.5.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/14A6oJ5Dg6Dt7JScw71kA1I",
    "images": {
@@ -145,9 +145,9 @@
   {
    "id": "petal-desk",
    "name": "Petal Desk",
-   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. The atelier follows the clock from day to night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with a gentle song that plays softly and switches off with one click.",
-   "meta": "Version 1.4.0 · 4.7 MB · one view · light and dark theme",
-   "version": "1.4.0",
+   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. The atelier follows the clock from day to night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with a gentle song that plays softly and switches off with one click. Small dots beside each name count the finished work you accepted.",
+   "meta": "Version 1.5.0 · 4.7 MB · one view · light and dark theme",
+   "version": "1.5.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/6oU6oJc1Ed1R7JSfIj1kA1K",
    "images": {
@@ -160,9 +160,9 @@
   {
    "id": "pixel-hq",
    "name": "Pixel HQ",
-   "blurb": "A cozy 8-bit command room. Five little agents work at their desks and walk to the table when they need you. The room follows the clock: day by day, night by night.",
-   "meta": "Version 1.2.0 · 467 KB · one view · dark and light theme",
-   "version": "1.2.0",
+   "blurb": "A cozy 8-bit command room. Five little agents work at their desks and walk to the table when they need you. The room follows the clock: day by day, night by night. Small dots beside each name count the finished work you accepted.",
+   "meta": "Version 1.3.0 · 468 KB · one view · dark and light theme",
+   "version": "1.3.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/4gMcN74zc3rhe8g8fR1kA1L",
    "images": {
@@ -174,9 +174,9 @@
   {
    "id": "questline",
    "name": "Questline",
-   "blurb": "An 8-bit side-scrolling forest workshop. Five crew sprites work at the tree house, workshop and observatory, and walk to the front when they need you. Quest cards. The workshop follows the clock and the seasons: day and night, blossom, autumn leaves and snow. It grows in five stages as the feed reports milestones: a well, a garden, a windmill, a lookout tower. Rain, snow, fog and wind pass over the scene when the feed reports them.",
-   "meta": "Version 1.3.0 · 1.3 MB · one view · light and dark theme",
-   "version": "1.3.0",
+   "blurb": "An 8-bit side-scrolling forest workshop. Five crew sprites work at the tree house, workshop and observatory, and walk to the front when they need you. Quest cards. The workshop follows the clock and the seasons: day and night, blossom, autumn leaves and snow. It grows in five stages as the feed reports milestones: a well, a garden, a windmill, a lookout tower. Rain, snow, fog and wind pass over the scene when the feed reports them. Small dots beside each name count the finished work you accepted.",
+   "meta": "Version 1.4.0 · 1.3 MB · one view · light and dark theme",
+   "version": "1.4.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/8x2bJ38PsaTJ6FOcw71kA1S",
    "images": {
@@ -189,9 +189,9 @@
   {
    "id": "quiet-hours",
    "name": "Quiet Hours",
-   "blurb": "A calm lo-fi anime studio. One companion, Mika, speaks for your whole team: her pose and her words follow what needs you most. The studio follows the clock from morning to rainy night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with three lo-fi songs that play softly and switch off with one click.",
-   "meta": "Version 1.4.0 · 10.4 MB · one view · light and dark theme",
-   "version": "1.4.0",
+   "blurb": "A calm lo-fi anime studio. One companion, Mika, speaks for your whole team: her pose and her words follow what needs you most. The studio follows the clock from morning to rainy night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with three lo-fi songs that play softly and switch off with one click. Small dots beside each name count the finished work you accepted.",
+   "meta": "Version 1.5.0 · 10.4 MB · one view · light and dark theme",
+   "version": "1.5.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/00w14pc1E5zpc082Vx1kA1M",
    "images": {
@@ -204,9 +204,9 @@
   {
    "id": "sovereign",
    "name": "Sovereign",
-   "blurb": "A civilization-builder command screen over a painted fortified kingdom. Each agent stands at court as the Steward, Cartographer, Builder, Chronicler, Quartermaster or Envoy and the portrait follows the state. Missions are works of the realm in stone and bronze, approvals are royal decrees awaiting your seal. The kingdom follows the clock from dawn to night and changes with the four seasons, and the crest of the realm grows in five stages as the feed reports milestones. Rain, snow, fog and wind pass over the scene when the feed reports them.",
-   "meta": "Version 1.3.0 · 5.7 MB · one view · light and dark theme",
-   "version": "1.3.0",
+   "blurb": "A civilization-builder command screen over a painted fortified kingdom. Each agent stands at court as the Steward, Cartographer, Builder, Chronicler, Quartermaster or Envoy and the portrait follows the state. Missions are works of the realm in stone and bronze, approvals are royal decrees awaiting your seal. The kingdom follows the clock from dawn to night and changes with the four seasons, and the crest of the realm grows in five stages as the feed reports milestones. Rain, snow, fog and wind pass over the scene when the feed reports them. Small dots beside each name count the finished work you accepted.",
+   "meta": "Version 1.4.0 · 5.7 MB · one view · light and dark theme",
+   "version": "1.4.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/7sYcN7d5I4vl2py1Rt1kA1T",
    "images": {
