@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-22T04:03:27.983Z",
+ "synced": "2026-11-22T04:55:53.720Z",
  "harness": {
   "version": "0.6.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -146,9 +146,9 @@
   {
    "id": "petal-desk",
    "name": "Petal Desk",
-   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. The atelier follows the clock from day to night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with a gentle song that plays softly and switches off with one click. Small dots beside each name count the finished work you accepted.",
-   "meta": "Version 1.5.0 · 4.7 MB · one view · light and dark theme",
-   "version": "1.5.0",
+   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. The atelier follows the clock from day to night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with a gentle song that plays softly and switches off with one click. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm show in the window when the harness reports weather.",
+   "meta": "Version 1.6.0 · 4.7 MB · one view · light and dark theme",
+   "version": "1.6.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/6oU6oJc1Ed1R7JSfIj1kA1K",
    "images": {
@@ -190,9 +190,9 @@
   {
    "id": "quiet-hours",
    "name": "Quiet Hours",
-   "blurb": "A calm lo-fi anime studio. One companion, Mika, speaks for your whole team: her pose and her words follow what needs you most. The studio follows the clock from morning to rainy night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with three lo-fi songs that play softly and switch off with one click. Small dots beside each name count the finished work you accepted.",
-   "meta": "Version 1.5.0 · 10.4 MB · one view · light and dark theme",
-   "version": "1.5.0",
+   "blurb": "A calm lo-fi anime studio. One companion, Mika, speaks for your whole team: her pose and her words follow what needs you most. The studio follows the clock from morning to rainy night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with three lo-fi songs that play softly and switch off with one click. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm show in the window when the harness reports weather.",
+   "meta": "Version 1.6.0 · 10.4 MB · one view · light and dark theme",
+   "version": "1.6.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/00w14pc1E5zpc082Vx1kA1M",
    "images": {
