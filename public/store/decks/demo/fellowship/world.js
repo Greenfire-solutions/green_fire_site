@@ -4,7 +4,8 @@
 // Authority, highest first: a URL setting, the choice saved on this screen, the feed, the clock, the base look.
 // It reads nothing but what it is handed, fetches nothing, and writes only this screen's own choices to localStorage.
 // A deck sets window.DECK_WORLD = { key: 'deck-name', living: the same block as in deck.json } before loading this file.
-// URL settings: ?phase=day|night|dawn|dusk &season=spring|summer|autumn|winter &stage=1..10 &weather=off &private=on &living=off
+// URL settings: ?phase=day|night|dawn|dusk &season=spring|summer|autumn|winter &stage=1..10 &weather=off|rain|storm|snow|fog|wind|cloudy &private=on &living=off
+// Weather is drawn by this file, on one small canvas inside the element the deck marks with data-weather-layer. A deck with no such element, or with no "weather" list in its living block, shows none.
 (function () {
   'use strict'
   var PHASES = ['dawn', 'day', 'dusk', 'night'], SEASONS = ['spring', 'summer', 'autumn', 'winter'], WEATHER = ['clear', 'cloudy', 'rain', 'storm', 'snow', 'fog', 'wind']
@@ -72,9 +73,10 @@
     if (!live) return out
     // season: the feed says it, or the date plus the hemisphere does. With neither, the season stays off.
     if (Array.isArray(decl.season)) out.season = first(word(SEASONS, url.season, decl.season), word(SEASONS, saved.season, decl.season), word(SEASONS, w.season, decl.season), word(SEASONS, seasonByDate(c.month, w.hemisphere), decl.season))
-    // weather: only what the feed observed in the last three hours
-    var x = isObj(w.weather) ? w.weather : {}, seenAt = when(x.observed_at), cond = word(WEATHER, x.condition)
-    if (cond && seenAt != null && Math.abs(c.now - seenAt) <= STALE_WEATHER && onOff(url.weather) !== false && onOff(saved.weather) !== false) { out.weather = cond; out.intensity = typeof x.intensity === 'number' && x.intensity >= 0 && x.intensity <= 1 ? x.intensity : 0.5 }
+    // weather: only what the feed observed in the last three hours (or a URL setting for kiosks and screenshots)
+    var x = isObj(w.weather) ? w.weather : {}, seenAt = when(x.observed_at), cond = word(WEATHER, x.condition), shown = word(WEATHER, url.weather)
+    if (shown) { out.weather = shown; out.intensity = 0.6 }
+    else if (cond && seenAt != null && Math.abs(c.now - seenAt) <= STALE_WEATHER && onOff(url.weather) !== false && onOff(saved.weather) !== false) { out.weather = cond; out.intensity = typeof x.intensity === 'number' && x.intensity >= 0 && x.intensity <= 1 ? x.intensity : 0.5 }
     // growth: the stage comes only from the feed (or a URL setting for kiosks and screenshots). Stage 1 is the deck as shipped.
     var max = whole(decl.stages, 1, 10) ? decl.stages : 1, g = isObj(w.growth) ? w.growth : {}
     if (max > 1) {
@@ -115,7 +117,7 @@
     mark(el, 'data-stage', isObj(cfg.living) && cfg.living.stages ? s.art_stage : null); mark(el, 'data-weather', isObj(cfg.living) && has(cfg.living.weather, s.weather) ? s.weather : null)
     el.style.setProperty('--daylight', s.daylight == null ? '1' : s.daylight.toFixed(3)); el.style.setProperty('--glow', s.glow.toFixed(3))
     subs.forEach(function (f) { try { f(s, prev) } catch (e) { if (window.console) console.error(e) } })
-    paint()
+    paint(); weather()
     return s
   }
   function run() { clearInterval(tick); if (!document.hidden) tick = setInterval(refresh, 60000) }
@@ -138,10 +140,12 @@
   function paint() {
     if (!box) return
     var s = api.state, seasons = isObj(cfg.living) && Array.isArray(cfg.living.season) ? cfg.living.season.filter(function (x) { return SEASONS.indexOf(x) >= 0 }) : [], still = store.living === 'off'
-    pill.textContent = s.living ? 'World' : 'World: still'; pill.setAttribute('aria-expanded', String(open)); panel.style.display = open ? 'grid' : 'none'
+    var sky = isObj(cfg.living) && has(cfg.living.weather, s.weather) && s.weather !== 'clear' ? s.weather : null, skies = isObj(cfg.living) && Array.isArray(cfg.living.weather) && cfg.living.weather.length > 0
+    pill.textContent = s.living ? 'World' + (sky ? ' \u00b7 ' + sky.charAt(0).toUpperCase() + sky.slice(1) : '') : 'World: still'; pill.setAttribute('aria-expanded', String(open)); panel.style.display = open ? 'grid' : 'none'
     while (panel.firstChild) panel.removeChild(panel.firstChild)
     if (!open) return
     if (seasons.length && s.living) panel.appendChild(row('Season', [button('Auto', !store.season, function () { api.choose('season', null) })].concat(seasons.map(function (x) { return button(x.charAt(0).toUpperCase() + x.slice(1), store.season === x, function () { api.choose('season', x) }) }))))
+    if (skies && s.living) panel.appendChild(row('Weather', [button('On', store.weather !== 'off', function () { api.choose('weather', null) }), button('Off', store.weather === 'off', function () { api.choose('weather', 'off') })]))
     panel.appendChild(row('Motion', [button('Living', !still, function () { api.choose('living', null) }), button('Still', still, function () { api.choose('living', 'off') })]))
     if (!s.living && !still) panel.appendChild(make('span', 'The world is held still for this screen.', 'font:12px ui-sans-serif,-apple-system,Segoe UI,sans-serif;color:rgba(255,255,255,.75)'))
   }
@@ -155,6 +159,57 @@
     document.addEventListener('pointerdown', function (e) { if (open && !box.contains(e.target)) { open = false; paint() } })
     document.addEventListener('keydown', function (e) { if (open && e.key === 'Escape') { open = false; paint(); pill.focus() } })
     paint()
+  }
+
+  // ---- weather: haze plus a few particles on one canvas. The budget is 150 particles on a wide screen and 60 on a phone, 30 frames a second,
+  // nothing while the tab is hidden. A front eases in and out over 20 seconds. With reduced motion there are no particles: the haze and the word on the World pill remain.
+  var SKY = { rain: { n: 1, haze: [70, 90, 120, 0.18] }, storm: { n: 1, haze: [40, 50, 76, 0.3] }, snow: { n: 1, haze: [226, 232, 245, 0.12] }, fog: { n: 0, haze: [214, 220, 228, 0.36] }, cloudy: { n: 0, haze: [120, 130, 150, 0.15] }, wind: { n: 0.4, haze: [0, 0, 0, 0] } }
+  var wx = { host: null, cv: null, g: null, parts: [], amt: 0, want: 0, kind: null, raf: 0, last: 0, t: 0 }
+  var calmly = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false }
+  function weather() {
+    var s = api.state, kind = s.living && isObj(cfg.living) && has(cfg.living.weather, s.weather) && SKY[s.weather] ? s.weather : null
+    if (!wx.host) wx.host = document.querySelector('[data-weather-layer]')
+    if (!wx.host || (!kind && !wx.cv)) return
+    if (!wx.cv) { wx.cv = make('canvas', null, 'position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none'); wx.cv.setAttribute('aria-hidden', 'true'); wx.host.appendChild(wx.cv); wx.g = wx.cv.getContext('2d'); wx.amt = kind ? 0.35 + 0.65 * s.intensity : 0 }
+    if (kind) { if (kind !== wx.kind) wx.parts = []; wx.kind = kind; wx.want = 0.35 + 0.65 * s.intensity } else wx.want = 0
+    if (!wx.g) return
+    if (calmly.matches) { wx.amt = wx.want; draw(0) } else if (!wx.raf && !document.hidden) wx.raf = requestAnimationFrame(frame)
+  }
+  function frame(now) {
+    wx.raf = 0
+    if (document.hidden || calmly.matches) return
+    if (now - wx.last >= 33) { var dt = Math.min(0.1, wx.last ? (now - wx.last) / 1000 : 0.033), step = dt / 20; wx.last = now; wx.amt += Math.max(-step, Math.min(step, wx.want - wx.amt)); draw(dt) }
+    if (wx.want > 0 || wx.amt > 0.001) wx.raf = requestAnimationFrame(frame); else { wx.amt = 0; wx.last = 0; draw(0) }
+  }
+  function draw(dt) {
+    var cv = wx.cv, g = wx.g, w = cv.clientWidth | 0, h = cv.clientHeight | 0, look = SKY[wx.kind]
+    if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h }
+    g.clearRect(0, 0, w, h)
+    if (!look || wx.amt <= 0 || w < 2 || h < 2) return
+    var z = look.haze, k = wx.kind, i, p
+    if (z[3]) { g.fillStyle = 'rgba(' + z[0] + ',' + z[1] + ',' + z[2] + ',' + (z[3] * wx.amt).toFixed(3) + ')'; g.fillRect(0, 0, w, h) }
+    if (calmly.matches || !look.n) return
+    var n = Math.round((w < 700 ? 60 : 150) * look.n * wx.amt)
+    while (wx.parts.length < n) wx.parts.push({ x: Math.random() * 1.3 - 0.15, y: Math.random(), v: 0.6 + Math.random() * 0.8, r: Math.random() })
+    if (wx.parts.length > n) wx.parts.length = n
+    wx.t += dt
+    g.lineCap = 'round'
+    if (k === 'snow') {
+      g.fillStyle = 'rgba(255,255,255,.92)'
+      for (i = 0; i < n; i++) { p = wx.parts[i]; p.y += dt * 0.09 * p.v; p.x += dt * 0.02 * Math.sin(wx.t * (0.6 + p.r) + p.r * 9); if (p.y > 1.03) { p.y = -0.03; p.x = Math.random() * 1.3 - 0.15 }
+        g.beginPath(); g.arc(p.x * w, p.y * h, 1.6 + p.r * 3, 0, 6.2832); g.fill() }
+    } else if (k === 'wind') {
+      g.strokeStyle = 'rgba(255,255,255,.34)'; g.lineWidth = 1.6; g.beginPath()
+      for (i = 0; i < n; i++) { p = wx.parts[i]; p.x += dt * 0.7 * p.v; p.y += dt * 0.03 * Math.sin(wx.t * 2 + p.r * 9); if (p.x > 1.15) { p.x = -0.15; p.y = Math.random() }
+        g.moveTo(p.x * w, p.y * h); g.lineTo(p.x * w + 50 + p.r * 80, p.y * h + 2) }
+      g.stroke()
+    } else {
+      var lean = k === 'storm' ? 0.34 : 0.12, fall = k === 'storm' ? 1.9 : 1.35
+      g.strokeStyle = 'rgba(226,236,255,' + (k === 'storm' ? '.78' : '.66') + ')'; g.lineWidth = k === 'storm' ? 2 : 1.6; g.beginPath()
+      for (i = 0; i < n; i++) { p = wx.parts[i]; p.y += dt * fall * p.v; p.x -= dt * fall * p.v * lean * h / w; if (p.y > 1.05) { p.y = -0.05; p.x = Math.random() * 1.3 - 0.15 }
+        var len = (k === 'storm' ? 34 : 24) + p.r * 30; g.moveTo(p.x * w, p.y * h); g.lineTo(p.x * w - len * lean, p.y * h + len) }
+      g.stroke()
+    }
   }
   if (isObj(window.DECK_WORLD)) api.start(window.DECK_WORLD)
 })()
