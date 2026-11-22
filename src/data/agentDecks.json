@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-22T03:33:55.140Z",
+ "synced": "2026-11-22T03:53:09.794Z",
  "harness": {
   "version": "0.6.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -40,9 +40,9 @@
   {
    "id": "elemental",
    "name": "The Elementals",
-   "blurb": "A real 3D scene you can turn and move through. A stone ring at night: every agent is an elemental spirit at its own stone (a sage, fire, water, earth and air), and every mission is a crystal that grows inside the ring. Rain, snow, fog and storm pass over when the harness reports weather. A still picture stands in on computers without 3D.",
-   "meta": "Version 1.0.0 · 7.8 MB · one view · dark theme",
-   "version": "1.0.0",
+   "blurb": "A real 3D scene you can turn and move through. A stone ring at night: every agent is an elemental spirit at its own stone (a sage, fire, water, earth and air), and every mission is a crystal that grows inside the ring. Rain, snow, fog and storm pass over when the harness reports weather. The circle grows in five stages as the feed reports milestones: standing stones, stone dragons, a lit forge, then light in the sky. Small dots beside each name count the finished work you accepted. A still picture stands in on computers without 3D.",
+   "meta": "Version 1.1.0 · 9.6 MB · one view · dark theme",
+   "version": "1.1.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/eVq9AVghUbXNaW49jV1kA1U",
    "images": {
