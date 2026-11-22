@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-22T06:18:23.857Z",
+ "synced": "2026-11-22T06:59:33.622Z",
  "harness": {
   "version": "0.6.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -101,9 +101,9 @@
   {
    "id": "goddess-temple",
    "name": "Goddess Temple",
-   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm pass over the scene when the harness reports weather. Panels are framed in white marble with gold filigree and a lotus at each corner.",
-   "meta": "Version 1.7.0 · 5.1 MB · one view · light and dark theme",
-   "version": "1.7.0",
+   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm pass over the scene when the harness reports weather. Panels are framed in white marble with gold filigree and a lotus at each corner. Buttons are white marble with a gold rim and a lotus at each end.",
+   "meta": "Version 1.8.0 · 5.1 MB · one view · light and dark theme",
+   "version": "1.8.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/fZubJ35Dg0f52pybs31kA1H",
    "images": {
@@ -116,9 +116,9 @@
   {
    "id": "mosswood",
    "name": "Mosswood",
-   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. The clearing follows the clock from dawn to night, changes with the four seasons, and grows in five stages as the feed reports milestones. Rain, snow, fog and wind pass over the scene when the feed reports them. Small dots beside each name count the finished work you accepted. Painted sprigs of twig, mushroom and acorn hang on the corners of every panel.",
-   "meta": "Version 1.6.0 · 5.5 MB · one view · light and dark theme",
-   "version": "1.6.0",
+   "blurb": "A gentle woodland clearing. One companion, Fern the fox, speaks for your whole team: her pose and her words follow what needs you most. The clearing follows the clock from dawn to night, changes with the four seasons, and grows in five stages as the feed reports milestones. Rain, snow, fog and wind pass over the scene when the feed reports them. Small dots beside each name count the finished work you accepted. Painted sprigs of twig, mushroom and acorn hang on the corners of every panel. Buttons are small painted wooden plaques with a leaf at each end.",
+   "meta": "Version 1.7.0 · 5.5 MB · one view · light and dark theme",
+   "version": "1.7.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/14A6oJ5Dg6Dt7JScw71kA1I",
    "images": {
@@ -146,9 +146,9 @@
   {
    "id": "petal-desk",
    "name": "Petal Desk",
-   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. The atelier follows the clock from day to night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with a gentle song that plays softly and switches off with one click. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm show in the window when the harness reports weather. Every panel is trimmed with satin ribbon, scalloped lace and pearls, with a bow on each corner.",
-   "meta": "Version 1.7.0 · 4.7 MB · one view · light and dark theme",
-   "version": "1.7.0",
+   "blurb": "A strawberry pink, ribbon trimmed workspace. One helper, Petal, speaks for your whole team: her pose and her words follow what needs you most. The atelier follows the clock from day to night and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Comes with a gentle song that plays softly and switches off with one click. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm show in the window when the harness reports weather. Every panel is trimmed with satin ribbon, scalloped lace and pearls, with a bow on each corner. Buttons are pink satin with a lace edge and a pearl at each end.",
+   "meta": "Version 1.8.0 · 4.8 MB · one view · light and dark theme",
+   "version": "1.8.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/6oU6oJc1Ed1R7JSfIj1kA1K",
    "images": {
