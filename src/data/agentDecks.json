@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-22T03:53:09.794Z",
+ "synced": "2026-11-22T04:03:27.983Z",
  "harness": {
   "version": "0.6.0",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -47,7 +47,8 @@
    "buy_url": "https://buy.stripe.com/eVq9AVghUbXNaW49jV1kA1U",
    "images": {
     "command": "/store/decks/elemental-command.webp",
-    "phone": "/store/decks/elemental-phone.webp"
+    "phone": "/store/decks/elemental-phone.webp",
+    "living": "/store/decks/elemental-living.webp"
    },
    "demo": null
   },
@@ -100,9 +101,9 @@
   {
    "id": "goddess-temple",
    "name": "Goddess Temple",
-   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Small dots beside each name count the finished work you accepted.",
-   "meta": "Version 1.5.0 · 5.1 MB · one view · light and dark theme",
-   "version": "1.5.0",
+   "blurb": "A marble and gold sanctuary. Each agent is seated as one of five goddesses, Athena, Isis, Saraswati, Amaterasu or Oshun, and her pose follows what she is doing. The temple follows the clock from first light to moonlight and changes with the four seasons, and a shelf of keepsakes fills in five stages as the feed reports milestones. Small dots beside each name count the finished work you accepted. Rain, snow, fog and storm pass over the scene when the harness reports weather.",
+   "meta": "Version 1.6.0 · 5.1 MB · one view · light and dark theme",
+   "version": "1.6.0",
    "price_usd": 19,
    "buy_url": "https://buy.stripe.com/fZubJ35Dg0f52pybs31kA1H",
    "images": {
