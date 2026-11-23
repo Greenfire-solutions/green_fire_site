@@ -1,5 +1,5 @@
 {
- "synced": "2026-11-22T21:18:41.008Z",
+ "synced": "2026-11-23T18:35:37.473Z",
  "harness": {
   "version": "0.6.1",
   "lede": "Most agents fail the same four ways: they use old facts, they act without a clear yes, they fail silently, and they are hard to steer. The harness fixes each one in code, not in a prompt.",
@@ -214,6 +214,22 @@
     "command": "/store/decks/sovereign-command.webp",
     "phone": "/store/decks/sovereign-phone.webp",
     "living": "/store/decks/sovereign-living.webp"
+   },
+   "demo": null
+  },
+  {
+   "id": "sunroot",
+   "name": "Sunroot",
+   "blurb": "A solarpunk town drawn in bold ink, seen from above. The map is the whole screen: twelve places of work, from the Sun Tower to the Market, the Workshop, the Library and the Seed Bank. Every agent is a townsperson who stands where their kind of work is done and walks to the place their job is led from. A bubble over each one says what they are doing, a gold bubble means they need you, and resting workers sit at the Tea House. Click a worker to open their card: where they are, what they are doing, the job they are on and what they did lately. Click a sign to see who is working there. The town grows in five stages as the feed reports milestones: beehives, a treehouse lookout, a sky dock and a sun spire. Rain, snow, fog and wind pass over the town when the feed reports them. Small dots beside each name count the finished work you accepted. Panels sit in a timber frame with solar tiles and leaves in the corners, with painted timber, sun and paper buttons. Garden birdsong plays softly and switches off with one click.",
+   "meta": "Version 1.0.0 · 3.5 MB · 2 views · light theme",
+   "version": "1.0.0",
+   "price_usd": 19,
+   "buy_url": "https://buy.stripe.com/aFa9AV1n0ge34xG8fR1kA1W",
+   "images": {
+    "command": "/store/decks/sunroot-command.webp",
+    "council": "/store/decks/sunroot-council.webp",
+    "phone": "/store/decks/sunroot-phone.webp",
+    "living": "/store/decks/sunroot-living.webp"
    },
    "demo": null
   }
