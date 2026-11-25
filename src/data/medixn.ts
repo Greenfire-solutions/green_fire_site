@@ -7,4 +7,4 @@
    one constant. Copy source of truth: Cymatic Laser/store/listing.md. */
 
 export const MEDIXN_GUMROAD_URL = 'https://greenfireaudio.gumroad.com/l/medixn';
-export const MEDIXN_PRICE_USD = 49;
+export const MEDIXN_PRICE_USD = 22;
