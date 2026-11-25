@@ -16,13 +16,28 @@ export async function notify(subject: string, text: string): Promise<void> {
   const pass = (process.env.NOTIFY_GMAIL_APP_PASSWORD || '').replace(/\s+/g, '');
   if (!pass) return;
   try {
-    await send(pass, clean(subject), String(text || '').slice(0, 6000));
+    await send(pass, clean(subject), String(text || '').slice(0, 6000), TO);
   } catch (e) {
     console.error('notify failed:', (e as Error).message);
   }
 }
 
-function send(pass: string, subject: string, text: string): Promise<void> {
+/* One email to someone else (a confirmation for a person who just booked a call),
+   from the same Gmail account, so a reply lands in Jordan's inbox. `ics` adds a
+   calendar file they can tap to save the event. Returns whether it went. */
+export async function mailTo(to: string, subject: string, text: string, ics?: string): Promise<boolean> {
+  const pass = (process.env.NOTIFY_GMAIL_APP_PASSWORD || '').replace(/\s+/g, '');
+  if (!pass || !/^[^\s@<>,;]+@[^\s@<>,;]+\.[^\s@<>,;]{2,}$/.test(to)) return false;
+  try {
+    await send(pass, clean(subject), String(text || '').slice(0, 6000), to, ics, 'Jordan at Greenfire');
+    return true;
+  } catch (e) {
+    console.error('mailTo failed:', (e as Error).message);
+    return false;
+  }
+}
+
+function send(pass: string, subject: string, text: string, to: string, ics?: string, fromName = 'Greenfire site'): Promise<void> {
   return new Promise((resolve, reject) => {
     const sock = connect({ host: 'smtp.gmail.com', port: 465, servername: 'smtp.gmail.com' });
     const timer = setTimeout(() => { sock.destroy(); reject(new Error('timeout')); }, 8000);
@@ -54,20 +69,35 @@ function send(pass: string, subject: string, text: string): Promise<void> {
       await cmd(b64(FROM), [334]);
       await cmd(b64(pass), [235]);
       await cmd(`MAIL FROM:<${FROM}>`, [250]);
-      await cmd(`RCPT TO:<${TO}>`, [250, 251]);
+      await cmd(`RCPT TO:<${to}>`, [250, 251]);
       await cmd('DATA', [354]);
       /* The body is base64, so no line can start with a dot: no dot stuffing needed. */
-      const body = text;
-      const msg = [
-        `From: Greenfire site <${FROM}>`,
-        `To: ${TO}`,
+      const wrap = (x: string) => (b64(x).match(/.{1,76}/g) || []).join('\r\n');
+      const head = [
+        `From: ${fromName} <${FROM}>`,
+        `To: ${to}`,
         `Subject: =?UTF-8?B?${b64(subject)}?=`,
         'MIME-Version: 1.0',
-        'Content-Type: text/plain; charset=UTF-8',
-        'Content-Transfer-Encoding: base64',
-        '',
-        (b64(body).match(/.{1,76}/g) || []).join('\r\n'),
-      ].join('\r\n');
+      ];
+      const msg = ics
+        ? [
+            ...head,
+            'Content-Type: multipart/mixed; boundary="gfb1"',
+            '',
+            '--gfb1',
+            'Content-Type: text/plain; charset=UTF-8',
+            'Content-Transfer-Encoding: base64',
+            '',
+            wrap(text),
+            '--gfb1',
+            'Content-Type: text/calendar; charset=UTF-8; method=PUBLISH; name="greenfire-call.ics"',
+            'Content-Disposition: attachment; filename="greenfire-call.ics"',
+            'Content-Transfer-Encoding: base64',
+            '',
+            wrap(ics),
+            '--gfb1--',
+          ].join('\r\n')
+        : [...head, 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: base64', '', wrap(text)].join('\r\n');
       await cmd(msg + '\r\n.', [250]);
       sock.write('QUIT\r\n');
       sock.end();

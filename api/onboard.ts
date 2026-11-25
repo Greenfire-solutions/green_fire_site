@@ -5,7 +5,8 @@ import { writeIntake, writeLead, readSettings } from './_lib/storage.js';
 import { SECTIONS, ACTIVATION, type Question } from './_lib/onboardQuestions.js';
 import { activatePage } from './_lib/activatePage.js';
 import { esc, wizardPage } from './_lib/wizard.js';
-import { notify } from './_lib/notify.js';
+import { notify, mailTo } from './_lib/notify.js';
+import * as sched from './_lib/schedule.js';
 import { READINESS, READINESS_QUESTIONS, type RQ } from './_lib/readinessQuestions.js';
 import { shows, analyse, type Given } from './_lib/readiness.js';
 
@@ -52,6 +53,12 @@ function answerOf(q: Question, v: unknown): string {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  /* The free times the form offers after someone finishes: asked of Book It live, never cached. */
+  if (req.method === 'GET' && req.query.slots) {
+    res.setHeader('Cache-Control', 'no-store');
+    const r = await sched.slots(Number(req.query.length) || 30);
+    return res.status(r.ok ? 200 : 503).json(r.ok ? { ok: true, length: r.length, slots: r.slots } : { ok: false });
+  }
   if (req.method === 'GET' || req.method === 'HEAD') {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     if (req.query.form === 'activation') {
@@ -76,6 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   if (line(b.website_hp, 200)) return res.status(200).json({ ok: true });
   if (b.form === 'readiness') return readiness(b, res);
+  if (b.form === 'schedule') return schedule(b, res);
 
   const name = line(b.name, 120);
   const email = line(b.email, 160).toLowerCase();
@@ -101,6 +109,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       pick('timing') ? `Wants to start: ${pick('timing')}.` : '',
       pick('heard') ? `Found Greenfire through: ${pick('heard')}.` : '',
       pick('reach') ? `Best way to reach them: ${pick('reach')}.` : '',
+      [pick('city'), pick('state'), pick('country')].filter(Boolean).length ? `Lives in: ${[pick('city'), pick('state'), pick('country')].filter(Boolean).join(', ')}.` : '',
     ].filter(Boolean).join(' ');
     try {
       await writeLead({
@@ -136,10 +145,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       `${name} <${email}>`, line(b.phone, 40) ? `Phone: ${line(b.phone, 40)}` : '', line(b.business, 160) ? `Business: ${line(b.business, 160)}` : '', line(b.site, 200) ? `Site: ${line(b.site, 200)}` : '',
       `Package: ${offer}`, say('timing') ? `Wants to start: ${say('timing')}` : '', say('heard') ? `Found you through: ${say('heard')}` : '', say('reach') ? `Best way to reach: ${say('reach')}` : '',
       say('one_task') ? `First job: ${say('one_task')}` : '', say('week') ? `Their work: ${say('week').slice(0, 400)}` : '', '', 'The full answers load into the Clients tab on your Mac.'].filter((x) => x !== '').join('\n'));
-    return res.status(200).json({ ok: true });
+    /* The stamp lets this person pick a Zoom time on the done screen; no stamp, no picker. */
+    return res.status(200).json({ ok: true, sched: activation ? '' : sched.stamp(email) });
   } catch {
     return res.status(500).json({ error: 'Could not save that just now. Please try again in a minute, or email civilizationexplorer@gmail.com.' });
   }
+}
+
+/* The Zoom call, picked on the done screen after the form is in. Book It checks
+   the time is still free, makes the Zoom meeting, puts it on Jordan's calendar
+   and alerts his phone; this then emails the person the link and a calendar file. */
+async function schedule(b: Record<string, unknown>, res: VercelResponse) {
+  const name = line(b.name, 120);
+  const email = line(b.email, 160).toLowerCase();
+  if (!name || !EMAIL.test(email)) return res.status(400).json({ error: 'Please check your name and email.' });
+  if (!sched.stampOk(email, b.sched)) return res.status(403).json({ error: 'Please send the form first, then pick a time.' });
+  const start = String(b.start || '');
+  if (Number.isNaN(Date.parse(start))) return res.status(400).json({ error: 'Pick a time first.' });
+  const tz = line(b.visitorTz, 60);
+  const r = await sched.book({ name, email, phone: line(b.phone, 40), business: line(b.business, 160), start, length: Number(b.length) || 30, visitorTz: tz, notes: line(b.notes, 400) });
+  const j = r.json as { ok?: boolean; error?: string; id?: string; start?: string; end?: string; joinUrl?: string | null; moved?: boolean };
+  if (r.status === 503 || (r.status >= 500 && !j.ok)) {
+    await notify(`Booking down: ${name} tried to pick a time`, `${name} <${email}> finished the form and tried to book a call at ${start}, but Book It could not be reached (${r.status}). Write to them to set a time.`);
+    return res.status(503).json({ error: 'I could not reach my calendar just now. Your answers are in, and I will email you to set a time.' });
+  }
+  if (!j.ok) return res.status(r.status === 409 || r.status === 429 ? r.status : 400).json({ error: j.error || 'That did not go through. Please pick another time.' });
+  const when = sched.whenIn(j.start as string, tz);
+  const first = name.split(' ')[0];
+  const sent = await mailTo(email, `Your Greenfire call is booked: ${when}`, [
+    `Hi ${first},`, '',
+    j.moved ? `Your call is moved. It is now ${when}.` : `You are booked for ${when}.`, '',
+    j.joinUrl ? `Join on Zoom: ${j.joinUrl}` : 'I will send you the Zoom link before we meet.',
+    '', 'The calendar file attached will put it on your calendar. If the time stops working, just reply to this email and we will move it.', '', 'Jordan', 'Greenfire'].join('\n'),
+    sched.ics({ id: String(j.id), start: j.start as string, end: j.end as string, url: j.joinUrl || null, name }));
+  return res.status(200).json({ ok: true, when, joinUrl: j.joinUrl || null, moved: Boolean(j.moved), emailed: sent });
 }
 
 /* The readiness form: filled in after a person has chosen a package. Every
@@ -246,7 +285,7 @@ function page(list: Offer[]): string {
   return wizardPage({
     key: 'gf-onboard-v2', title: 'Get started', ogTitle: "Let's get you started | Greenfire", ogDesc: 'A few short steps so our time is spent on your work, not on setup.',
     steps, n: SECTIONS.length, partialAt: 1, form: '', submit: 'Send to Jordan',
-    doneIntro: 'I read every answer myself.',
+    doneIntro: 'I read every answer myself.', schedule: true,
     doneList: `<li><b>1</b><span><strong>I read your answers.</strong> Every one, so our time goes to your work and not to setup.</span></li>
     <li><b>2</b><span><strong id="reachline">I will reach out</strong> to set a time that suits you.</span></li>
     <li><b>3</b><span><strong>We meet.</strong> If anything is unclear I will write to you first.</span></li>`,

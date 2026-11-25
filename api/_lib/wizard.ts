@@ -16,6 +16,7 @@ export type WizardCfg = {
   form: string;       // sent with every post so the handler knows which form this is
   submit: string;     // the last button
   doneIntro: string; doneList: string;
+  schedule?: boolean; // after sending, offer to pick a Zoom time (the server hands back a stamp when it is on)
 };
 
 export const wizardCss = `
@@ -114,6 +115,22 @@ noscript p{color:var(--bad);text-align:center;margin:30px 0}
 .field[hidden]{display:none}
 .group{margin:30px 0 0;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g)}
 .group:first-of-type{margin-top:24px;padding-top:0;border-top:0}
+.sched{margin:26px 0 0;text-align:left;border:1px solid var(--line2);border-radius:20px;padding:18px 16px 16px;background:rgba(52,211,153,.06)}
+.sched h2{font-size:18px;margin:0 0 4px;color:#fff;letter-spacing:-.01em}
+.sched .sub{margin:0 0 14px;color:var(--soft);font-size:14.5px}
+.sched .zone{margin:12px 0 0;font-size:12.5px;color:var(--mute)}
+.days,.times{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.days{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.dchip,.tchip{font:600 14.5px Inter,system-ui,sans-serif;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line2);border-radius:12px;min-height:46px;padding:0 14px;cursor:pointer;flex:none}
+.dchip small{display:block;font-weight:500;font-size:11.5px;color:var(--mute)}
+.dchip[aria-pressed=true],.tchip[aria-pressed=true]{background:linear-gradient(135deg,#34d399,#10b981);color:#04130c;border-color:transparent}
+.dchip[aria-pressed=true] small{color:#064e3b}
+.tchip:focus-visible,.dchip:focus-visible{outline:none;box-shadow:0 0 0 4px rgba(52,211,153,.3)}
+.sched .btn{width:100%;margin-top:6px}
+.sched .skip{display:block;margin:12px auto 0;background:none;border:0;color:var(--mute);font:500 13.5px Inter,system-ui,sans-serif;text-decoration:underline;cursor:pointer;min-height:40px}
+.sched [hidden]{display:none!important}
+.sched .ok{margin:0;color:var(--soft);font-size:15px}
+.sched .ok a{color:var(--g);font-weight:600;word-break:break-all}
 .prepbox{margin:26px 0 0;text-align:left}
 .prepbox h2{font-size:17px;margin:0 0 10px;color:#fff;letter-spacing:-.01em}
 .prep{list-style:none;margin:0;padding:0;display:grid;gap:9px}
@@ -155,6 +172,16 @@ ${cfg.steps}
   <div class="ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
   <h1 id="doneh" tabindex="-1">Thank you</h1>
   <p class="intro" id="donep">${cfg.doneIntro}</p>
+  ${cfg.schedule ? `<div class="sched" id="sched" hidden aria-live="polite">
+    <h2 id="sch-h">Pick a time for our Zoom call</h2>
+    <p class="sub" id="sch-sub">Choose a day, then a time. You will get the Zoom link by email, and it lands on my calendar too.</p>
+    <div class="days" id="sch-days" role="group" aria-label="Day"></div>
+    <div class="times" id="sch-times" role="group" aria-label="Time" hidden></div>
+    <p class="msg" id="sch-err" role="alert"></p>
+    <button type="button" class="btn go" id="sch-go" hidden>Book my Zoom call</button>
+    <p class="zone" id="sch-zone"></p>
+    <button type="button" class="skip" id="sch-skip">I would rather you reach out to me</button>
+  </div>` : ''}
   <div class="prepbox" id="prepbox" hidden><h2>Before we start, gather these</h2><ul class="prep" id="prep"></ul></div>
   <ol class="next">${cfg.doneList}</ol>
 </div>
@@ -164,7 +191,7 @@ ${cfg.steps}
 <nav class="bar" id="bar" aria-label="Form navigation"><div><button type="button" class="btn back" id="back" hidden>Back</button><button type="button" class="btn go" id="next">Continue</button></div></nav>
 <script>
 (function () {
-  var N = ${cfg.n}, KEY = ${JSON.stringify(cfg.key)}, PARTIAL_AT = ${cfg.partialAt}, FORM = ${JSON.stringify(cfg.form)}, SUBMIT = ${JSON.stringify(cfg.submit)}
+  var N = ${cfg.n}, KEY = ${JSON.stringify(cfg.key)}, PARTIAL_AT = ${cfg.partialAt}, FORM = ${JSON.stringify(cfg.form)}, SUBMIT = ${JSON.stringify(cfg.submit)}, SCHEDULE = ${cfg.schedule ? 'true' : 'false'}
   var steps = [].slice.call(document.querySelectorAll('.step'))
   var segs = [].slice.call(document.querySelectorAll('#prog i'))
   var cur = 0, partialSent = false, busy = false
@@ -296,6 +323,61 @@ ${cfg.steps}
   })
   $('f').addEventListener('input', function (e) { var f = e.target.closest ? e.target.closest('.field') : null; if (f && f.classList.contains('missing')) msg(f, ''); save() })
 
+  /* ---- after the form is in: pick a Zoom time, shown in THEIR time zone ---- */
+  var stamp = '', vtz = ''
+  try { vtz = Intl.DateTimeFormat().resolvedOptions().timeZone || '' } catch (e) {}
+  function fmt(iso, o) { try { return new Intl.DateTimeFormat('en-US', Object.assign({ timeZone: vtz || undefined }, o)).format(new Date(iso)) } catch (e) { return new Intl.DateTimeFormat('en-US', o).format(new Date(iso)) } }
+  function dayKey(iso) { return fmt(iso, { year: 'numeric', month: '2-digit', day: '2-digit' }) }
+  function pressOne(box, btn) { [].forEach.call(box.children, function (x) { x.setAttribute('aria-pressed', x === btn ? 'true' : 'false') }) }
+  function openScheduler(stampIn) {
+    stamp = stampIn
+    var box = $('sched'); if (!box) return
+    fetch('/api/onboard?slots=1&length=30').then(function (r) { return r.json() }).then(function (j) {
+      if (!j || !j.ok || !j.slots || !j.slots.length) return
+      var byDay = {}, order = []
+      j.slots.forEach(function (iso) { var k = dayKey(iso); if (!byDay[k]) { byDay[k] = []; order.push(k) } byDay[k].push(iso) })
+      var days = $('sch-days'), times = $('sch-times'), go = $('sch-go'), chosenIso = ''
+      order.slice(0, 10).forEach(function (k) {
+        var first = byDay[k][0], b = document.createElement('button')
+        b.type = 'button'; b.className = 'dchip'; b.setAttribute('aria-pressed', 'false')
+        b.innerHTML = fmt(first, { weekday: 'short' }) + '<small>' + fmt(first, { month: 'short', day: 'numeric' }) + '</small>'
+        b.addEventListener('click', function () {
+          pressOne(days, b); chosenIso = ''; go.hidden = true; times.innerHTML = ''; $('sch-err').textContent = ''
+          byDay[k].forEach(function (iso) {
+            var t = document.createElement('button')
+            t.type = 'button'; t.className = 'tchip'; t.setAttribute('aria-pressed', 'false'); t.textContent = fmt(iso, { hour: 'numeric', minute: '2-digit' })
+            t.addEventListener('click', function () { pressOne(times, t); chosenIso = iso; go.hidden = false })
+            times.appendChild(t)
+          })
+          times.hidden = false
+        })
+        days.appendChild(b)
+      })
+      $('sch-zone').textContent = 'Times are in your time zone' + (vtz ? ' (' + vtz.replace('_', ' ') + ')' : '') + '. Calls are 30 minutes.'
+      go.addEventListener('click', function () {
+        if (!chosenIso || go.disabled) return
+        go.disabled = true; go.textContent = 'Booking...'; $('sch-err').textContent = ''
+        fetch('/api/onboard', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ form: 'schedule', name: val('name'), email: val('email'), phone: val('phone'), business: val('business'), start: chosenIso, length: 30, visitorTz: vtz, sched: stamp, website_hp: val('website_hp') }) })
+          .then(function (r) { return r.json().catch(function () { return {} }).then(function (b) { return { ok: r.ok && b.ok, b: b } }) })
+          .then(function (x) {
+            if (!x.ok) { $('sch-err').textContent = x.b.error || 'That did not go through. Please pick another time.'; go.disabled = false; go.textContent = 'Book my Zoom call'; return }
+            $('sch-h').textContent = 'You are booked'
+            $('sch-sub').textContent = ''
+            days.hidden = true; times.hidden = true; go.hidden = true; $('sch-skip').hidden = true; $('sch-zone').hidden = true
+            var p = document.createElement('p'); p.className = 'ok'
+            p.textContent = x.b.when + '. '
+            if (x.b.joinUrl) { var a = document.createElement('a'); a.href = x.b.joinUrl; a.textContent = 'Open your Zoom link'; a.rel = 'noopener'; p.appendChild(a); p.appendChild(document.createTextNode('.')) }
+            p.appendChild(document.createTextNode(x.b.emailed ? ' I also emailed it to you, with a calendar file.' : ' I will email you the details.'))
+            box.appendChild(p)
+            var rl = $('reachline'); if (rl && rl.parentNode) rl.parentNode.innerHTML = '<strong>Your Zoom call is booked.</strong> The link is above and in your email.'
+          })
+          .catch(function () { $('sch-err').textContent = 'That did not go through. Please try again.'; go.disabled = false; go.textContent = 'Book my Zoom call' })
+      })
+      $('sch-skip').addEventListener('click', function () { box.hidden = true })
+      box.hidden = false
+    }).catch(function () {})
+  }
+
   function send() {
     busy = true; var n = $('next'); n.disabled = true; n.textContent = 'Sending...'
     post(body({}), false)
@@ -308,6 +390,7 @@ ${cfg.steps}
         if ($('reachline')) $('reachline').textContent = r === 'Text' ? 'I will text you' : r === 'A call' ? 'I will call you' : 'I will email you'
         if (j && j.prep && j.prep.length) { $('prep').innerHTML = ''; j.prep.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; $('prep').appendChild(li) }); $('prepbox').hidden = false }
         if (j && j.headline) $('donep').textContent = j.headline
+        if (SCHEDULE && j && j.sched) openScheduler(j.sched)
         $('wrap').hidden = true; $('bar').hidden = true; $('done').hidden = false
         window.scrollTo(0, 0); $('doneh').focus({ preventScroll: true })
       })
